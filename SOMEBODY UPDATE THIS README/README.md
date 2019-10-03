@@ -28,3 +28,20 @@
 | 21 | Insurance Provider | Patients | Provides patients with which insurance and if it's covered when paying for their therapist | 0 |
 | 22 | Finance Option | Patients | Shows patients their payment plans if they pay out of pocket | 0 |
 | 23 | Insurance Claim | Patients | Requests the health insurance company to make a bill | 0 |
+| 24 | Appointment Scheduler | Patients + Therapist | Schedules appointments for a patient | 0 |
+| 25 | Treatments | Patient + Therapist | Based on diagnostic; recommended treatments | 0 |
+| 26 | Edit Profile | Patient | Patients can edit their profile, choose what information they want to make public to their therapist. | 0 |
+| 27 | Analyze journal entry | User + Patients | Users and patients can use a sentiment analysis tool to interpret their journal entry | 0 |
+| 28 | Take to AI Chatbot therapist | Users + Patient | Users and patients can speak to a chatbot about their day etc | 0 |
+| 29 | Save chatbot conversation to profile | User + Patient | Saves the chatbot conversation to a list in profile | 0 |
+| 30 | Save conversation to text file | User + Patient | Creates a copy of chat to a text file and saves it locally on device | 0 |
+| 31 | Save journal entry to text file | User + Patient | Creates a copy of journal entry to text file and saves it locally on device | 0 |
+| 32 | Sign up for text reminders to fill out daily journal | User + Patient | Users and patients can optionally sign up to receive SMS text reminders to fill out daily journal | 0 |
+| 33 | Share journal | User + Patient | Users and patients can share journals to a professional, friend etc. | 0 |
+| 34 | Refer app to a friend | User + Patient | Users and patients can share the app to invite friends to sign up. | 0 |
+| 35 | Sign up to be a voluntary counselor | User + Patient | User and patient can sign up to be in a network of voluntary counselors | 0 |
+| 36 | Talk to a voluntary counselor | User + Patient | Both have the ability to talk to someone if they need to | 0 |
+| 37 | Talk to a suicide prevention specialist | Patient | Patient can message an online suicide prevention specialist instantly | 0 |
+| 38 | Modify your good or bad day (track bar) | User + Patient | If the program says that the user had a good day but the user had a bad day, the user can modify how it looks in the overall track bar for a certain duration | 0 |
+| 39 | View track bar/progress | User + Patient | Users and patients can view their overall progress (good day, bad day, etc) in a calendar type of format | 0 |
+| 40 | Daily Affirmations | User + Patient | User can set mental health goals, and reminders for words of motivation | 0 |
