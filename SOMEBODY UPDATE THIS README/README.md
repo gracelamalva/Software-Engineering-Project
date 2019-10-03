@@ -45,3 +45,4 @@
 | 38 | Modify your good or bad day (track bar) | User + Patient | If the program says that the user had a good day but the user had a bad day, the user can modify how it looks in the overall track bar for a certain duration | 0 |
 | 39 | View track bar/progress | User + Patient | Users and patients can view their overall progress (good day, bad day, etc) in a calendar type of format | 0 |
 | 40 | Daily Affirmations | User + Patient | User can set mental health goals, and reminders for words of motivation | 0 |
+| 41 | Recommended Health Exercises | Patient | Patient can receive recommended health exercised based on their diagnostic | 0 |
