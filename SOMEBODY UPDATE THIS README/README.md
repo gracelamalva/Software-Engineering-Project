@@ -1,10 +1,30 @@
-# Ref-Photos-App-1156
+# App-Promoting-Mental-Health-1156
 ### Description
 
-[Title] is a web application intended to be a centralized hub for visual artists. Users will be able to search for reference photos, favorite them,respond to them, and perhaps upload their own version for the public to respond to. This application will provide a tool for artists to find a muse, network,and increase their skills.
+[Title] is a web application that helps promote mental health awareness. There are two parts to this app. One aspect is the journals where users and patients can create an account and write their thoughts in a web journal. The journal also has a feature that tracks users good or bad days through a sentiment analysis and allows them to see their overall progress on a calendar. However, the main feature is the chat-box AI that acts like a therapist and allows users and patients to talk to the chat-box whenever they want to. There is a difference between users and patients because with this app, patients have the ability to locate a therapist outside the web application.
 
 | ID  | Use Case  | Users/Actors | Description | Priority |
 |---|---|---|---|---|
-| 1 | Search for reference photo  |  User of service | A user enters a search term and search criteria, the system searchers for matches in the database and returns items matching the query.  | 0 |
-|   |   |   |   |   |
-|   |   |   |   |   |
+| 1 | Sign Up |  Users + Patients | Users and patients can create an account | 0 |
+| 2 | Log In | Users + Patients | User and patients can log into the website | 0 |
+| 3 | Create Entry | Users + Patients | Users and patients can input a journal entry | 0 |
+| 4 | Edit Entry | Users + Patients | Users and patients can go back and edit their journal entries | 0 |
+| 5 | Delete Entry | Users + Patients | Users and patients can decide to delete a journal entry | 0 |
+| 6 | View Journals | Users + Patients | Users and patients have the ability to view their journal entries | 0 |
+| 7 | Find a local therapist | Patients | Patients have the ability to look for therapists in their area | 0 |
+| 8 | Track progress | Users + Patients | Users and patients have the ability to track and see their good and bad days | 0 |
+| 9 | Support ticket | Users + Patients | If users or patients encounter a problem, they can email or report it to the company, the issue gets assigned a ticket, and after the issue is resolved, the ticket is no longer working | 0 |
+| 10 | Delete account | Users + Patients | Users and patients have the ability to delete their account | 0 |
+| 11 | Patient history | Therapist + Patients | Therapists can view journals and other information about the patient, if they allow it | 0 |
+| 12 | Visited history | Therapist | Therapists can view which patients they recently visited | 0 |
+| 13 | Prescribed medication | Therapist + Patient | Both therapist and patient can view the prescribed medicine history | 0 |
+| 14 | View patient profile | Therapist | Therapists can view their patients profile | 0 |
+| 15 | Create Profile | Users + Patients | Users and patients can create a profile for the website | 0 |
+| 16 | View Profile | Users + Patients | Users and patients can view their own profile | 0 |
+| 17 | Delete Profile | Users + Patients | Users and patients can delete their account profile | 0 |
+| 18 | Share Profile | Patients | Patients can share their profile with different therapists for a second opinion | 0 |
+| 19 | Compare Symptoms | Therapists | If therapists want to schedule a group therapy option, they can use this option to find patients | 0 |
+| 20 | Find Local ER | Patients | Patients can search for local emergency rooms in their area | 0 |
+| 21 | Insurance Provider | Patients | Provides patients with which insurance and if it's covered when paying for their therapist | 0 |
+| 22 | Finance Option | Patients | Shows patients their payment plans if they pay out of pocket | 0 |
+| 23 | Insurance Claim | Patients | Requests the health insurance company to make a bill | 0 |
