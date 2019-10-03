@@ -44,5 +44,15 @@
 | 37 | Talk to a suicide prevention specialist | Patient | Patient can message an online suicide prevention specialist instantly | 0 |
 | 38 | Modify your good or bad day (track bar) | User + Patient | If the program says that the user had a good day but the user had a bad day, the user can modify how it looks in the overall track bar for a certain duration | 0 |
 | 39 | View track bar/progress | User + Patient | Users and patients can view their overall progress (good day, bad day, etc) in a calendar type of format | 0 |
-| 40 | Daily Affirmations | User + Patient | User can set mental health goals, and reminders for words of motivation | 0 |
-| 41 | Recommended Health Exercises | Patient | Patient can receive recommended health exercised based on their diagnostic | 0 |
+| 40 | Add Daily Affirmations | User + Patient | User can set reminders for words of motivation | 0 |
+| 41 | Recommended Health Exercises | Patient | Patient can receive recommended health exercises based on their diagnostic | 0 |
+| 42 | Search for specific entry | User | Users can search for a specific journal | 0 |
+| 43 | Receive daily affirmations via text | User |  Register phone number to get reminders via SMS text about daily affirmations | 0 |
+| 44 | View Daily Affirmations | User + Patient | User can view all things they want to be reminded of | 0 |
+| 45 | Create mental health goal checklist | User + Patient | User can create a series of mental health goals which they can add, view, complete, and delete goals | 2 |
+| 46 | Add mental health goal | User | User can set a mental health goal like meditate for 15 minutes, deep breathing etc. | 3 |
+| 47 | View mental health goals | User | User can view all mental health goals | 3 |
+| 48 | Auto-generate daily affirmations | User | User can auto-generate a random list of x daily affirmations | 0 |
+| 49 | Deep-breathing exercises | User | Users can follow instructions on screen teaching them deep-breathing exercises | 0 |
+| 50 | Unsubscribe from daily reminders | Users who signed up for DA | Users can remove their phone number from receiving messages through SMS text | 0 |
+
