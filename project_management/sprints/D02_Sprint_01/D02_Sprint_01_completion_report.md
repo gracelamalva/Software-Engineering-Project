@@ -1,3 +1,3 @@
 | ID  | Use Case  | Users/Actors | Description | Priority |
 |---|---|---|---|---|
-| 1 | Create Journal | User | Creates a journal for the user to enter in entries daily. | 3 |
+| 1 | Create Journal | User | Creates a journal for the user to enter in entries daily. The user logs in and then have the option to create a new journal entry. This feature will be implemented using a database that creates a new table that allows the user to create a new entry. The database saves each journal entry and each user has their own specific table in the database; it is created once the user makes a new entry. We are planning on creating the backend and database for this feature and a frontend of how it will look from the user's perspective when they create a journal entry. Refer to the other use cases that specify how to create an entry, modify an entry and delete an entry. | 3 |
