@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Journal</title>
+    </head>
+    <body>
+        <h1 style= "color:green;">This is the view journal entry page for the app</h1>
+        <div class="journal-entry">
+            <form action="{{url_for('main.journal')}}" method="post">
+              <input type="text" name="entry" placeholder="Tell me about your day">
+            
+              <button type="submit"> Add Entry </button>
+            </form>
+        </div>
+
+        <form method = "POST" action = "{{url_for('main.add')}}"><button>Click to go to add page</button> </form>
+        
+        <ul>list
+            {% for entry in entries %}
+            <li>{{entries[entry]}} </li>
+            {% endfor %}
+        </ul>
+    
+
+    </body>
+</html>

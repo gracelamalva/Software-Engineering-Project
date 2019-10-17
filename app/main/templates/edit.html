@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Journal</title>
+    </head>
+    <body>
+            <ul>list
+                    {% for entry in entries %}
+                    <li> {{entries[entry]}} </li>
+                    {% endfor %}
+                </ul>
+        
+        <h1 style= "color:yellowgreen;">This is the edit journal entry page for the app</h1>
+        <div class="journal-entry">
+            <form action="{{url_for('main.edit')}}" method="post">
+              <input type="text" name="entry" placeholder="This is the retrieved journal entry to be editted">
+              
+              <button type="submit"> Edit Updated Entry </button>
+            </form>
+        </div>
+
+
+        
+        
+    
+
+    </body>
+</html>

@@ -7,4 +7,8 @@ def create_app():
     #
     from app.main import bp as main_routes_bp
     app.register_blueprint(main_routes_bp)
+    from app.api import mod
+    app.register_blueprint(api.routes.mod)
     return app
+
+    
