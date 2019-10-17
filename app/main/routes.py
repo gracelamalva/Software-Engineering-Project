@@ -21,13 +21,13 @@ def journal():
     #entry = request.form.get("entry")
     entries = ['sample']
 
-    if request.method == 'POST':
-        result = request.form.get("entry")
-        entries.append(result)
-        return redirect(url_for('main.edit'))
+    #if request.method == 'POST':
+     #   result = request.form.get("entry")
+      #  entries.append(result)
+       # return redirect(url_for('main.edit'))
     
-    if request.method == 'GET':
-      return redirect(url_for('main.view'))
+   # if request.method == 'GET':
+    #  return redirect(url_for('main.view'))
 
     return render_template('journal.html', entries = entries)
 

@@ -14,14 +14,11 @@
         {% endfor %}
     </ul>
 
-    <form method = "post" action = "{{url_for(main.add)}}">
+    <form method = "post" action = "{{url_for('main.add')}}">
     <button>Add entry</button>
     </form>
 
    
-
-   <form method = "get" action = "{{url_for('main.view')}}" > <button>view all entries</button>
-    </form>
 
 
 
