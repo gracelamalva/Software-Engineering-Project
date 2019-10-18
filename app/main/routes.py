@@ -1,6 +1,6 @@
 from app.main import bp
 from flask import Flask, redirect, render_template, request, Blueprint, url_for, jsonify
-
+from main_project.app.models import *
 #from flask_sqlalchemy import SQLAlchemy
 
 #app = Flask(__name__)
@@ -64,6 +64,10 @@ def view():
 
     return render_template('view.html', entries = entries)
 
+@bp.route('/delete', methods = ['POST', 'GET'])
+def delete():
+
+    return render_template('delete.html')
 """
 @app.route("/")
 def index():

@@ -6,11 +6,11 @@
 </head>
 
 <body>
-    
+    <h1 style="color:darkcyan">This is the main journal page</h1>
     <ul>list
         {% for entry in entries %}
         <li>a {{entries[entry]}} <form  action = "{{url_for('main.edit')}}"><button>Edit </button></form>
-            <button>Delete</button></li>
+            <a type = "button" href="{{url_for('main.delete')}}" >Delete</a></li>
         {% endfor %}
     </ul>
 

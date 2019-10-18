@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>{% block title %}  Journal {% endblock %}</title>
+</head>
+
+<body>
+   <div id = "content">
+    <ul>list
+        {% for entry in entries %}
+        <li>a {{entries[entry]}} <a type = "button" href = "{{url_for('main.edit')}}">Edit</a>
+            <a type = "button" href="{{url_for('main.delete')}}" >Delete</a></li>
+        {% endfor %}
+    </ul>
+
+    <a type = "button" href = "{{url_for('main.add')}}">Add entry</a>
+    <a type = "button" href = "{{url_for('main.view')}}">View all entries</a>
+    {% block content %} {% endblock %}
+   
+    </div>
+</body>
+
+</html>
