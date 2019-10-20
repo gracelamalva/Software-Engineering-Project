@@ -5,7 +5,7 @@
         <title>{% block title %} Journal {% endblock %}</title>
     </head>
     <body>
-        {% block content %} {% endblock %}
+        {% block content %} 
         <h1 style= "color:green;">This is the view journal entry page for the app</h1>
         <div class="journal-entry">
             <form action="{{url_for('main.journal')}}" method="post">
@@ -22,7 +22,7 @@
             <li>{{entries[entry]}} </li>
             {% endfor %}
         </ul>
-    
+        {% endblock %}
 
     </body>
 </html>

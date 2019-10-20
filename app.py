@@ -1,6 +1,13 @@
 from app import create_app
-from flask import Flask
-#from main import models
+import sys
+from flask import Flask, render_template, request
+from flask_sqlalchemy import SQLAlchemy
+
+
+from app.main.config import Config
+
+from app.main.models import *
+
 
 def main():
     if (len(sys.argv) == 2):
@@ -12,3 +19,5 @@ def main():
         print("To create a database use 'python app.py createdb")
 
 app = create_app
+
+#app.config.from_object(Config)

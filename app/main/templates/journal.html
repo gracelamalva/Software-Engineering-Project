@@ -11,19 +11,15 @@
     <h1 style="color:darkcyan">This is the main journal page</h1>
     <ul>list
         {% for entry in entries %}
-        <li>a {{entries[entry]}} <form  action = "{{url_for('main.edit')}}"><button>Edit </button></form>
+        <li>a {{entries[entry]}} <a type = "button" href="{{url_for('main.edit')}}" >Edit </a>
             <a type = "button" href="{{url_for('main.delete')}}" >Delete</a></li>
         {% endfor %}
     </ul>
 
-    <form method = "post" action = "{{url_for('main.add')}}">
-    <button>Add entry</button>
-    </form>
-
+    <a type = "button" href="{{url_for('main.add')}}" >Add entry</a>
    
-
+  
     {% endblock %}
-
 
 </body>
 

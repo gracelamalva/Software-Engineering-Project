@@ -2,9 +2,10 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Journal</title>
+        <title>{% block title %} Edit {% endblock %}</title>
     </head>
     <body>
+        {%block content%}
             <ul>list
                     {% for entry in entries %}
                     <li> {{entries[entry]}} </li>
@@ -20,6 +21,7 @@
             </form>
         </div>
 
+        {% endblock %}
 
     </body>
 </html>

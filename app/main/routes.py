@@ -1,12 +1,14 @@
 import sys
 from app.main import bp
 from flask import Flask, redirect, render_template, request, Blueprint, url_for, jsonify
-#import Config
-#from models import *
-#from flask_sqlalchemy import SQLAlchemy
+from app.main.models import *
+from flask_sqlalchemy import SQLAlchemy
 
 #app = Flask(__name__)
 #bp = Blueprint("site", __name__)
+
+
+#db.init_app(app)
 
 @bp.route('/', methods=['GET','POST'])
 def index():
@@ -29,6 +31,20 @@ def journal():
 
     return render_template('journal.html', entries = entries)
 
+@bp.route('/createjournal', methods = ['POST', 'GET'])
+def createjournal():
+
+    title = request.form.get("title")
+
+    journal = Journal(title = title)
+    db.session.add(journal)
+    db.session.commit()
+    # Query database.
+
+    journal=Journal.query.all()
+    return render_template('createjournal.html',journal = journal)
+
+
 @bp.route('/edit', methods = ['GET', 'POST'])
 def edit():
     entry = ['entry']
@@ -39,27 +55,31 @@ def edit():
     
     return render_template('edit.html', entry = entry)
 
-@bp.route('/add', methods = ['GET', 'POST'])
-def add():
+@bp.route('/add/<int:JournalID>', methods = ['GET', 'POST'])
+def add(JournalID):
 
-    entry = ['entry']
-
-    if request == 'POST':
-        result = request.form.get("entry")
-        return render_template('view.html')
-        #update db
+    journal = Journal.query.get(JournalID)
     
-    return render_template('add.html', entry = entry)
+    if request.method == 'POST':
+       
+        entrytitle = request.form.get("entrytitle")
+        entrytext = request.form.get("entrytext")
+        datetime = request.form.get("datetime")
+        journal.add_entry(entrytitle,entrytext,datetime)
+        # Equivalent to:
+        # INSERT INTO flights (flight_number, origin, destination, durations) VALUES (origin,...)
+        entry = journal.entries
 
-@bp.route('/view', methods = ['POST','GET'])
+        db.session.add(entry)
+        db.session.commit()
+        # Query database.
+
+        return render_template('view.html', journal = journal, entry = entry)
+    return render_template('add.html', journal = journal, entry = entry)
+
+@bp.route('/view/<int:JournalID>', methods = ['POST','GET'])
 def view():
-    entries = ['sample1']
-    result = request.form.get("entry")
-    entries.append(result)
-
-    if request == 'POST':
-        return render_template('add.html')
-
+    entries = JournalEntry.query.all()
     return render_template('view.html', entries = entries)
 
 @bp.route('/delete', methods = ['POST', 'GET'])
