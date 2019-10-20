@@ -8,7 +8,7 @@ verify_ssl = true
 [packages]
 pytest = "*"
 flask = "*"
-flask-sqlalchemny = "*"
+flask-sqlalchemy = "*"
 
 [requires]
 python_version = "3.7"

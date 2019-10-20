@@ -1,6 +1,6 @@
 from app import create_app
 from flask import Flask
-from app.main_project.app.models import db
+#from main import models
 
 def main():
     if (len(sys.argv) == 2):

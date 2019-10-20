@@ -1,6 +1,8 @@
+import sys
 from app.main import bp
 from flask import Flask, redirect, render_template, request, Blueprint, url_for, jsonify
-from main_project.app.models import *
+#import Config
+#from models import *
 #from flask_sqlalchemy import SQLAlchemy
 
 #app = Flask(__name__)
@@ -8,13 +10,8 @@ from main_project.app.models import *
 
 @bp.route('/', methods=['GET','POST'])
 def index():
-    #return "This is a basic route."
-
-    if (request.method == 'POST'):
-       return redirect(url_for('main.journal'))
-
+   
     return render_template('index.html')
-
 
 @bp.route('/journal', methods = ['GET', 'POST'])    
 def journal():
@@ -24,6 +21,7 @@ def journal():
     #if request.method == 'POST':
      #   result = request.form.get("entry")
       #  entries.append(result)
+
        # return redirect(url_for('main.edit'))
     
    # if request.method == 'GET':
