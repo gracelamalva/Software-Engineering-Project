@@ -18,25 +18,16 @@ def index():
 @bp.route('/journal', methods = ['GET', 'POST'])    
 def journal():
     #entry = request.form.get("entry")
-    entries = ['sample']
-
-    #if request.method == 'POST':
-     #   result = request.form.get("entry")
-      #  entries.append(result)
-
-       # return redirect(url_for('main.edit'))
-    
-   # if request.method == 'GET':
-    #  return redirect(url_for('main.view'))
-
+    entries = JournalEntry.query.all()
     return render_template('journal.html', entries = entries)
 
 @bp.route('/createjournal', methods = ['POST', 'GET'])
 def createjournal():
 
     title = request.form.get("title")
-
     journal = Journal(title = title)
+    Users.add_journal(journal, title = title)
+
     db.session.add(journal)
     db.session.commit()
     # Query database.
@@ -55,8 +46,8 @@ def edit():
     
     return render_template('edit.html', entry = entry)
 
-@bp.route('/add/<int:JournalID>', methods = ['GET', 'POST'])
-def add(JournalID):
+@bp.route('/add/', methods = ['GET', 'POST'])
+def add():
 
     journal = Journal.query.get(JournalID)
     
@@ -78,8 +69,10 @@ def add(JournalID):
     return render_template('add.html', journal = journal, entry = entry)
 
 @bp.route('/view/<int:JournalID>', methods = ['POST','GET'])
-def view():
-    entries = JournalEntry.query.all()
+def view(JournalID):
+    journal = Journal.query.get(JournalID)
+    entries = JournalEntry.query.all(journal)
+
     return render_template('view.html', entries = entries)
 
 @bp.route('/delete', methods = ['POST', 'GET'])
@@ -87,10 +80,11 @@ def delete():
 
     return render_template('delete.html')
 """
-@app.route("/")
-def index():
-    #journal = Journal.query.all() #Jornal from db
-    return render_template('index.html') #, journal = journal)
+@bp.route('/analyze', methods = ['GET', 'POST'])
+def analyze():
+    #template for the analyzed text -- the results from watson api
+
+    return render_template('analyze.html')
 
 @app.route("/<string:username>/journal")
 def journal():

@@ -3,11 +3,12 @@ import sys
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 
-
 from app.main.config import Config
 
 from app.main.models import *
 
+# app = Flask(__name__)
+app = create_app()
 
 def main():
     if (len(sys.argv) == 2):
@@ -18,6 +19,8 @@ def main():
         print("Run app using 'flask run'")
         print("To create a database use 'python app.py createdb")
 
-app = create_app
 
+if __name__ == "__main__":
+    with app.app_context():
+        main()
 #app.config.from_object(Config)

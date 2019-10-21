@@ -9,9 +9,10 @@
 <body>
     {% block content %}
     <h1 style="color:darkcyan">This is the main journal page</h1>
+    <a type = "button" href ="{{url_for('main.createjournal')}}">Create a journal</a>
     <ul>list
         {% for entry in entries %}
-        <li>a {{entries[entry]}} <a type = "button" href="{{url_for('main.edit')}}" >Edit </a>
+        <li>Entry: {{entries[entry]}} <a type = "button" href="{{url_for('main.edit')}}" >Edit </a>
             <a type = "button" href="{{url_for('main.delete')}}" >Delete</a></li>
         {% endfor %}
     </ul>

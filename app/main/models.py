@@ -8,11 +8,11 @@ class Users(db.Model):
     passwordHash = db.Column(db.String, nullable = False)
     Email = db.Column(db.String, nullable = False)
 
-    journal = db.relationship("Journal", uselist=False, back_populates="Users")
+    journal = db.relationship("Journal", uselist=False, backref="Users")
 
 
     def add_journal(self, title):
-        new_journal = Journal(title = title, J_ID = self.Username)
+        new_journal = Journal(title = title, UserID = self.Username)
         db.session.add(new_journal)
         db.session.commit()
     
@@ -23,7 +23,7 @@ class Journal(db.Model):
     title = db.Column(db.String, nullable = False)
     UserID = db.Column(db.String, db.ForeignKey('Users.Username'), nullable = False)
     
-    entries = db.relationship("JournalEntry", back_populates = "Journal")
+    entries = db.relationship("JournalEntry", backref = "Journal")
 
     def add_entry(self, entrytitle, entrytext, date_time):
         new_entry = JournalEntry(Entrytitle = entrytitle, EntryText = entrytext, Date_Time = date_time, J_ID = self.JournalID)
