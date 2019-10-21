@@ -9,7 +9,7 @@
 <body>
     {% block content %}
     <h1 style="color:darkcyan">This is the main journal page</h1>
-    <a type = "button" href ="{{url_for('main.createjournal')}}">Create a journal</a>
+    <a type = "button" href ="{{url_for('main.create_journal')}}">Create a journal</a>
     <ul>list
         {% for entry in entries %}
         <li>Entry: {{entries[entry]}} <a type = "button" href="{{url_for('main.edit')}}" >Edit </a>

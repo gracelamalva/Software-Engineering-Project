@@ -6,20 +6,17 @@ from .models import Users
 from .models import Journal
 from .models import JournalEntry
 from flask_sqlalchemy import SQLAlchemy
+from app.main.config import Config
 
-from config import Config
-from sqlalchemy.testing import db
+#bp = Blueprint("site", __name__)
+db = SQLAlchemy()
 
-app = Flask(__name__)
-app.config.from_object(Config)
-bp = Blueprint("site", __name__)
-
-db.init_app(app)
 
 @bp.route('/', methods=['GET','POST'])
 def index():
-   
-    return render_template('index.html')
+    users = Users.query.all()
+    return render_template('index.html', users = users)
+
 
 @bp.route('/journal', methods = ['GET', 'POST'])    
 def journal():
@@ -33,8 +30,6 @@ def create_journal():
 
     journal = Journal(title = title)
     Users.add_journal(journal, title = title)
-
-
     username = request.form.get("username")
     journal = Journal(title=title, username=username)
 
@@ -55,7 +50,7 @@ def edit(EntryID):
     
     return render_template('edit.html', entry = entry)
 
-@bp.route('/add/', methods = ['GET', 'POST'])
+@bp.route('/add', methods = ['GET', 'POST'])
 def add():
 
     journal = Journal.query.get(JournalID)
