@@ -11,7 +11,6 @@ from app.main.config import Config
 #bp = Blueprint("site", __name__)
 db = SQLAlchemy()
 
-
 @bp.route('/', methods=['GET','POST'])
 def index():
     users = Users.query.all()
@@ -67,17 +66,16 @@ def add(JournalID):
         print("taken in entry")
         entrytitle = request.form.get("title")
         entrytext = request.form.get("entry")
-        datetime = request.form.get("datetime")
-        #ts = datetime
-        #f = '%Y-%m-%d : %H:%M:%S'
-
-
+        dt = request.form.get("datetime")
+        ft = '%Y-%m-%dT%H:%M'
+        result = datetime.datetime.strptime(dt, ft)
+        print (result)
         #now = datetime.datetime.now()
 
         #datetime.datetime.strptime(ts, f)
         #datetime.datetime.strptime
 
-        journal.add_entry(entrytitle, entrytext, datetime)
+        journal.add_entry(entrytitle, entrytext, result)
 
         entries = journal.entries
        # entry = JournalEntry(EntryTitle = entrytitle, EntryText = entrytext, Date_Time = datetime)
@@ -100,16 +98,10 @@ def view(JournalID):
 def delete():
     return render_template('journal.html')
 
-
 """
 @bp.route('/analyze', methods = ['GET', 'POST'])
 def analyze():
     #template for the analyzed text -- the results from watson api
 
     return render_template('analyze.html')
-
-@app.route("/<string:username>/journal")
-def journal():
-    #username = username
-    return render_template('journal.html', username = username)
 """
