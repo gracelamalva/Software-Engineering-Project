@@ -25,6 +25,7 @@
         </form>
     </div>
 
+    
     <ul>List of Entries
         {% for entry in entries %}
         <li>Entry title: {{entry.title}} <a type = "button" href="{{url_for('main.edit')}}" >Edit </a>

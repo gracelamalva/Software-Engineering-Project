@@ -24,7 +24,7 @@ class Journal(db.Model):
     entries = db.relationship("JournalEntry", backref = "Journal")
     
     def add_entry(self, entrytitle, entrytext, date_time):
-        new_entry = JournalEntry(Entrytitle = entrytitle, EntryText = entrytext, Date_Time = date_time, J_ID = self.JournalID)
+        new_entry = JournalEntry(EntryTitle = entrytitle, EntryText = entrytext, Date_Time = date_time, J_ID = self.JournalID)
         db.session.add(new_entry)
         db.session.commit()
 

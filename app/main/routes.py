@@ -1,4 +1,4 @@
-import sys, csv, os
+import sys, csv, os, datetime
 from app.main import bp
 from flask import Flask, redirect, render_template, request, Blueprint, url_for, jsonify
 from app.main.models import *
@@ -62,12 +62,21 @@ def add(JournalID):
     journal =Journal.query.get(JournalID)
     #entries = JournalEntry.query.all()
 
-    if request == "POST":
+    if request.method == "POST":
         #journal =Journal.query.get(JournalID)
         print("taken in entry")
-        entrytitle = request.form.get("entrytitle")
-        entrytext = request.form.get("entrytext")
+        entrytitle = request.form.get("title")
+        entrytext = request.form.get("entry")
         datetime = request.form.get("datetime")
+        #ts = datetime
+        #f = '%Y-%m-%d : %H:%M:%S'
+
+
+        #now = datetime.datetime.now()
+
+        #datetime.datetime.strptime(ts, f)
+        #datetime.datetime.strptime
+
         journal.add_entry(entrytitle, entrytext, datetime)
 
         entries = journal.entries
@@ -85,13 +94,13 @@ def view(JournalID):
     journal = Journal.query.get(JournalID)
     entries = JournalEntry.query.all(journal)
 
-
     return render_template('view.html', entries = entries)
 
-@bp.route('/delete', methods = ['POST', 'GET'])
+@bp.route('/delete', methods = ['POST','GET', 'DELETE'])
 def delete():
+    return render_template('journal.html')
 
-    return render_template('delete.html')
+
 """
 @bp.route('/analyze', methods = ['GET', 'POST'])
 def analyze():
