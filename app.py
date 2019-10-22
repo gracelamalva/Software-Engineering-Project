@@ -1,5 +1,5 @@
 from app import create_app
-import sys, csv
+import os, sys, csv
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 from app.main.config import Config
@@ -8,14 +8,6 @@ from app.main.models import *
 app = Flask(__name__)
 app = create_app()
 
-def populate():
-    f = open("user.csv")
-    reader = csv.reader(f)
-
-    for Username, fullName, Email, passwordHash in reader: 
-        db.execute("INSERT INTO User (Username, fullName, Email, passwordHash) VALUES (:Username, :fullName, :Email, :passwordHash)",
-        {"Username" : Username, "fullName": fullName, "Email": Email, "passwordHash": passwordHash})
-    db.commit()
 
 def main():
     if (len(sys.argv) == 2):

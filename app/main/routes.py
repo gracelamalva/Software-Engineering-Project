@@ -1,4 +1,4 @@
-import sys
+import sys, csv, os
 from app.main import bp
 from flask import Flask, redirect, render_template, request, Blueprint, url_for, jsonify
 from app.main.models import *
@@ -17,6 +17,16 @@ def index():
     users = Users.query.all()
     return render_template('index.html', users = users)
 
+@bp.route('/populate', methods= ['GET','POST'])
+def populate():
+    query = db.insert(Users).values(Username = "glamalva", fullName='grace', passwordHash="dfsfs34", Email = "gracegmailcom") 
+   # db.session.execute( "INSERT INTO Users (Username, fullName, passwordHash, Email) VALUES ('glamalva', 'gracelamalva', 'adfa43', 'glamalvagmailcom')")
+    db.session.execute(query)
+    db.commit()
+
+    print("record inserted.")
+
+    return render_template (url_for('index'))
 
 @bp.route('/journal', methods = ['GET', 'POST'])    
 def journal():
@@ -39,12 +49,12 @@ def create_journal():
     journal=Journal.query.all()
     return render_template('createjournal.html', journal=journal)
 
-@bp.route('/edit', methods = ['GET', 'POST'])
+@bp.route('/edit', methods = ['GET', 'POST', 'PUT'])
 def edit(EntryID):
-    entry = ['entry']
 
-    if request == 'POST':
+    if request == 'PUT':
         result = request.form.get("entry")
+        
         #update db
         #looks for Journal Entry (using user login and journal id) deletes old entry and replaces with new one
     
