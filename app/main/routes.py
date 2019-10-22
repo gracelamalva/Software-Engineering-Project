@@ -46,15 +46,16 @@ def create_journal():
     return render_template('createjournal.html', journal=journal)
 
 @bp.route('/edit', methods = ['GET', 'POST', 'PUT'])
-def edit(EntryID):
-
-    if request == 'PUT':
-        result = request.form.get("entry")
-        
+def edit(entry):
+    entry=JournalEntry.query.get(entry)
+    if request.method == 'POST':
+        entry = request.form.get("entry")
+        db.session.add("entry")
+        db.session.commit()
         #update db
         #looks for Journal Entry (using user login and journal id) deletes old entry and replaces with new one
     
-    return render_template('edit.html', entry = entry)
+    return render_template('edit.html', entry=entry)
 
 @bp.route('/add/<int:JournalID>', methods = ['GET', 'POST'])
 def add(JournalID):
@@ -75,11 +76,17 @@ def add(JournalID):
         #datetime.datetime.strptime(ts, f)
         #datetime.datetime.strptime
 
-        journal.add_entry(entrytitle, entrytext, result)
+        entry = JournalEntry(EntryTitle = entrytitle, EntryText = entrytext, Date_Time = result, J_ID = JournalID)
+        db.session.add(entry)
+        db.session.commit()
 
-        entries = journal.entries
-       # entry = JournalEntry(EntryTitle = entrytitle, EntryText = entrytext, Date_Time = datetime)
-        #db.session.add(entry)   
+
+        #journal.add_entry(entrytitle, entrytext, result)
+
+        #entries = journal.entries
+        #entry = JournalEntry(EntryTitle = entrytitle, EntryText = entrytext, Date_Time = datetime)
+        #entry = journal.add_entry(entrytitle, entrytext, result)
+        #db.session.add(entry)
         #db.session.commit()
   
     entries = JournalEntry.query.all()
@@ -95,7 +102,9 @@ def view(JournalID):
     return render_template('view.html', entries = entries)
 
 @bp.route('/delete', methods = ['POST','GET', 'DELETE'])
-def delete():
+def delete(JournalID):
+    db.session.delete(JournalID)
+    db.session.commit()
     return render_template('journal.html')
 
 """

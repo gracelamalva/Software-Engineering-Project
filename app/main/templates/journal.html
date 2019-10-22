@@ -17,7 +17,7 @@
 
     <div class="journal-entry">
         <h3>Add an entry</h3>
-        <form action="{{url_for('main.add', JournalID = 1 )}}" method="post">
+        <form action="{{url_for('main.add', JournalID = 1 )}}" method="POST">
            <input type = "text" name = "title" placeholder="Entry Title">
             <input type="text" name="entry" placeholder="Tell me about your day">
             <input type = "datetime-local" name="datetime" placeholder="datetime-local">
@@ -28,7 +28,7 @@
 
     <ul>List of Entries
         {% for entry in entries %}
-        <li>Entry title: {{entry.title}} <a type = "button" href="{{url_for('main.edit')}}" >Edit </a>
+        <li>Entry Title: {{entry.title}} <a type = "button" href="{{url_for('main.edit')}}" >Edit </a>
             <a type = "button" href="{{url_for('main.delete')}}" >Delete</a></li>
         {% endfor %}
     </ul>
