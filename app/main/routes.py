@@ -22,11 +22,11 @@ def populate():
     query = db.insert(Users).values(Username = "glamalva", fullName='grace', passwordHash="dfsfs34", Email = "gracegmailcom") 
    # db.session.execute( "INSERT INTO Users (Username, fullName, passwordHash, Email) VALUES ('glamalva', 'gracelamalva', 'adfa43', 'glamalvagmailcom')")
     db.session.execute(query)
-    db.commit()
+    db.session.commit()
 
     print("record inserted.")
 
-    return render_template (url_for('index'))
+    return render_template (url_for('main.index'))
 
 @bp.route('/journal', methods = ['GET', 'POST'])    
 def journal():
@@ -36,17 +36,14 @@ def journal():
 
 @bp.route('/createjournal', methods = ['POST', 'GET'])
 def create_journal():
+
     title = request.form.get("title")
-
-    journal = Journal(title = title)
-    Users.add_journal(journal, title = title)
-    username = request.form.get("username")
-    journal = Journal(title=title, username=username)
-
+    journal = Journal(title=title, UserID = "glamalva")
     db.session.add(journal)
     db.session.commit()
     # Query database.
     journal=Journal.query.all()
+
     return render_template('createjournal.html', journal=journal)
 
 @bp.route('/edit', methods = ['GET', 'POST', 'PUT'])
@@ -60,34 +57,34 @@ def edit(EntryID):
     
     return render_template('edit.html', entry = entry)
 
-@bp.route('/add', methods = ['GET', 'POST'])
-def add():
+@bp.route('/add/<int:JournalID>', methods = ['GET', 'POST'])
+def add(JournalID):
+    journal =Journal.query.get(JournalID)
+    #entries = JournalEntry.query.all()
 
-    journal = Journal.query.get(JournalID)
-    
-    if request.method == 'POST':
-       
+    if request == "POST":
+        #journal =Journal.query.get(JournalID)
+        print("taken in entry")
         entrytitle = request.form.get("entrytitle")
         entrytext = request.form.get("entrytext")
         datetime = request.form.get("datetime")
         journal.add_entry(entrytitle, entrytext, datetime)
-        # Equivalent to:
-        # INSERT INTO flights (flight_number, origin, destination, durations) VALUES (origin,...)
-        entry = journal.entries
 
-        db.session.add(entry)
-        db.session.commit()
-        # Query database.
-        entry = JournalEntry.query.all()
+        entries = journal.entries
+       # entry = JournalEntry(EntryTitle = entrytitle, EntryText = entrytext, Date_Time = datetime)
+        #db.session.add(entry)   
+        #db.session.commit()
+  
+    entries = JournalEntry.query.all()
+    #return render_template('journal.html', journal=journal, entries=entries)
 
-
-        return render_template('view.html', journal=journal, entry=entry)
-    return render_template('add.html', journal=journal, entry=entry)
+    return render_template('journal.html', journal=journal, entries = entries)
 
 @bp.route('/view/<int:JournalID>', methods = ['POST','GET'])
 def view(JournalID):
     journal = Journal.query.get(JournalID)
     entries = JournalEntry.query.all(journal)
+
 
     return render_template('view.html', entries = entries)
 

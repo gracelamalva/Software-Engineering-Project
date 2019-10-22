@@ -10,16 +10,14 @@ class Users(db.Model):
 
     journal = db.relationship("Journal", uselist=False, backref="Users")
 
-
     def add_journal(self, title):
         new_journal = Journal(title = title, UserID = self.Username)
         db.session.add(new_journal)
         db.session.commit()
-    
 
 class Journal(db.Model):
     __tablename__ = "Journal"
-    JournalID = db.Column(db.Integer, primary_key=True, nullable = False) 
+    JournalID = db.Column(db.Integer, primary_key=True, unique = True, autoincrement = True) 
     title = db.Column(db.String, nullable = False)
     UserID = db.Column(db.String, db.ForeignKey('Users.Username'), nullable = False)
     
@@ -32,7 +30,7 @@ class Journal(db.Model):
 
 class JournalEntry(db.Model):
     __tablename__ = "JournalEntry"
-    EntryID = db.Column(db.Integer, primary_key=True, nullable = False)
+    EntryID = db.Column(db.Integer, primary_key=True, nullable = False, autoincrement = True)
     EntryTitle = db.Column(db.String)
     EntryText = db.Column(db.String)
     Date_Time = db.Column(db.DateTime)
