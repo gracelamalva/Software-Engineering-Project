@@ -28,11 +28,17 @@
 
     <ul>List of Entries
         {% for entry in entries %}
-        <li>Entry title: {{entry.title}} <a type = "button" href="{{url_for('main.edit')}}" >Edit </a>
-            <a type = "button" href="{{url_for('main.delete')}}" >Delete</a></li>
+        <li>Entry title: {{entry.EntryTitle}} <a type = "button" href="{{url_for('main.edit' , EntryID = entry.EntryID )}}" >Edit </a>
+             <form name = "formtext" method = "DELETE" action = "{{url_for('main.delete', EntryID = entry.EntryID)}}">
+                 <button type = "submit" action = "{{url_for('main.delete', EntryID = entry.EntryID)}}">Delete</button>
+                </form></li>
+             <ul>
+                 <li>Entry text: {{entry.EntryText}} </li>
+            </ul>
         {% endfor %}
     </ul>
 
+    <a type = "button" href = "{{url_for('main.analyze')}}">Analyze an entry</a>
 
 </body>
 
