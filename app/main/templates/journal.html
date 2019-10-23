@@ -1,4 +1,4 @@
-{% extends 'template.html' %}
+{% extends 'template.html' %}{% block content %}
 <!DOCTYPE html>
 <html>
 
@@ -7,35 +7,41 @@
 </head>
 
 <body>
-    {% block content %}
-    <h1 style="color:darkcyan">This is the main journal page</h1>
+
+    
     <h3>Add a journal</h3>
     <form action="{{url_for('main.create_journal')}}" method="post">
-        <input type = "text" name = "title" placeholder="Journal Title">
+        <input type="text" name="title" placeholder="Journal Title">
         <button type="submit"> Create Journal </button>
     </form>
 
     <div class="journal-entry">
         <h3>Add an entry</h3>
-        <form action="{{url_for('main.add', JournalID = 1 )}}" method="post">
-           <input type = "text" name = "title" placeholder="Entry Title">
+        <form action="{{url_for('main.add', JournalID = 1 )}}" method="POST">
+            <input type="text" name="title" placeholder="Entry Title">
             <input type="text" name="entry" placeholder="Tell me about your day">
-            <input type = "datetime-local" name="datetime" placeholder="datetime-local">
-            <button type="submit" action = "{{url_for('main.add', JournalID = 1)}}"> Add Entry </button>
+            <input type="datetime-local" name="datetime" placeholder="datetime-local">
+            <button type="submit" action="{{url_for('main.add', JournalID = 1)}}"> Add Entry </button>
         </form>
     </div>
 
-    
+
     <ul>List of Entries
         {% for entry in entries %}
-        <li>Entry title: {{entry.title}} <a type = "button" href="{{url_for('main.edit')}}" >Edit </a>
-            <a type = "button" href="{{url_for('main.delete')}}" >Delete</a></li>
+        <li>Entry title: {{entry.EntryTitle}} <a type="button"
+                href="{{url_for('main.edit' , EntryID = entry.EntryID )}}">Edit </a>
+            <form name="formtext" method="DELETE" action="{{url_for('main.delete', EntryID = entry.EntryID)}}">
+                <button type="submit" action="{{url_for('main.delete', EntryID = entry.EntryID)}}">Delete</button>
+            </form>
+        </li>
+        <ul>
+            <li>Entry text: {{entry.EntryText}} </li>
+        </ul>
         {% endfor %}
     </ul>
-   
-  
-    {% endblock %}
+
+    <a type="button" href="{{url_for('main.analyze_text')}}">Analyze an entry</a>
 
 </body>
 
-</html>
+</html>{% endblock %}

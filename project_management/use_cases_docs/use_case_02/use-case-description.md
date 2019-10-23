@@ -1,0 +1,1 @@
+Integration of Watson API and analyzing entries

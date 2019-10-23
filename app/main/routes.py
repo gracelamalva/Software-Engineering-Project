@@ -7,26 +7,15 @@ from .models import Journal
 from .models import JournalEntry
 from flask_sqlalchemy import SQLAlchemy
 from app.main.config import Config
+#from app.api.request import analyze
 
 #bp = Blueprint("site", __name__)
 db = SQLAlchemy()
-
 
 @bp.route('/', methods=['GET','POST'])
 def index():
     users = Users.query.all()
     return render_template('index.html', users = users)
-
-@bp.route('/populate', methods= ['GET','POST'])
-def populate():
-    query = db.insert(Users).values(Username = "glamalva", fullName='grace', passwordHash="dfsfs34", Email = "gracegmailcom") 
-   # db.session.execute( "INSERT INTO Users (Username, fullName, passwordHash, Email) VALUES ('glamalva', 'gracelamalva', 'adfa43', 'glamalvagmailcom')")
-    db.session.execute(query)
-    db.session.commit()
-
-    print("record inserted.")
-
-    return render_template (url_for('main.index'))
 
 @bp.route('/journal', methods = ['GET', 'POST'])    
 def journal():
@@ -44,18 +33,24 @@ def create_journal():
     # Query database.
     journal=Journal.query.all()
 
-    return render_template('createjournal.html', journal=journal)
+    return render_template('journal.html', journal=journal)
 
-@bp.route('/edit', methods = ['GET', 'POST', 'PUT'])
+@bp.route('/edit/<int:EntryID>', methods = ['GET', 'POST', 'PUT'])
 def edit(EntryID):
 
-    if request == 'PUT':
-        result = request.form.get("entry")
-        
-        #update db
+    entry = JournalEntry.query.get(EntryID)
+    entries = JournalEntry.query.all()
+    if (request.method == "POST"):
+        entry.EntryTitle = request.form.get("newtitle")
+        entry.EntryText = request.form.get("newtext")
+
+    #entries = JournalEntry.query.all()
         #looks for Journal Entry (using user login and journal id) deletes old entry and replaces with new one
+
+        return render_template('journal.html', entries = entries)
+
+    return render_template('edit.html' , entries = entries)
     
-    return render_template('edit.html', entry = entry)
 
 @bp.route('/add/<int:JournalID>', methods = ['GET', 'POST'])
 def add(JournalID):
@@ -64,52 +59,63 @@ def add(JournalID):
 
     if request.method == "POST":
         #journal =Journal.query.get(JournalID)
-        print("taken in entry")
         entrytitle = request.form.get("title")
         entrytext = request.form.get("entry")
-        datetime = request.form.get("datetime")
-        #ts = datetime
-        #f = '%Y-%m-%d : %H:%M:%S'
+        dt = request.form.get("datetime")
+        ft = '%Y-%m-%dT%H:%M'
+        result = datetime.datetime.strptime(dt, ft)
+        
+        journal.add_entry(entrytitle, entrytext, result)
 
-
-        #now = datetime.datetime.now()
-
-        #datetime.datetime.strptime(ts, f)
-        #datetime.datetime.strptime
-
-        journal.add_entry(entrytitle, entrytext, datetime)
-
-        entries = journal.entries
-       # entry = JournalEntry(EntryTitle = entrytitle, EntryText = entrytext, Date_Time = datetime)
-        #db.session.add(entry)   
+        #entries = journal.entries
+        #entry = JournalEntry(EntryTitle = entrytitle, EntryText = entrytext, Date_Time = datetime)
+        #entry = journal.add_entry(entrytitle, entrytext, result)
+        #db.session.add(entry)
         #db.session.commit()
   
     entries = JournalEntry.query.all()
-    #return render_template('journal.html', journal=journal, entries=entries)
-
     return render_template('journal.html', journal=journal, entries = entries)
 
+@bp.route('/delete/<int:EntryID>', methods = ['POST','GET', 'DELETE'])
+def delete(EntryID):
+    entry = JournalEntry.query.get(EntryID)
+
+    JournalEntry.query.filter_by(EntryID = EntryID).delete()
+    db.session.commit()
+        
+    entries = JournalEntry.query.all()
+
+    return render_template('journal.html', entries = entries)
+
+
+@bp.route('/analyze', methods = ['GET', 'POST'])
+def analyze_text():
+    #template for the analyzed text -- the results from watson api
+
+    text = request.form['formtext']
+
+    if (method.request == "post"):
+        analyzed_text =  analyze(text)
+    
+    return render_template('analyze.html', analyzed_text = analyzed_text)
+
+"""
+@bp.route('/populate', methods= ['GET','POST'])
+def populate():
+    query = db.insert(Users).values(Username = "glamalva", fullName='grace', passwordHash="dfsfs34", Email = "gracegmailcom") 
+   # db.session.execute( "INSERT INTO Users (Username, fullName, passwordHash, Email) VALUES ('glamalva', 'gracelamalva', 'adfa43', 'glamalvagmailcom')")
+    db.session.execute(query)
+    db.session.commit()
+
+    print("record inserted.")
+
+    return render_template (url_for('main.index'))
+
+    
 @bp.route('/view/<int:JournalID>', methods = ['POST','GET'])
 def view(JournalID):
     journal = Journal.query.get(JournalID)
     entries = JournalEntry.query.all(journal)
 
     return render_template('view.html', entries = entries)
-
-@bp.route('/delete', methods = ['POST','GET', 'DELETE'])
-def delete():
-    return render_template('journal.html')
-
-
-"""
-@bp.route('/analyze', methods = ['GET', 'POST'])
-def analyze():
-    #template for the analyzed text -- the results from watson api
-
-    return render_template('analyze.html')
-
-@app.route("/<string:username>/journal")
-def journal():
-    #username = username
-    return render_template('journal.html', username = username)
 """

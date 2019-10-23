@@ -1,0 +1,27 @@
+{% extends 'template.html' %}{% block content %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Analyze</title>
+</head>
+
+<body>
+    
+
+    <div class="journal-entry">
+        <h3>Analyze an entry</h3>
+        <form action="{{url_for('main.analyze')}}" method="post">
+           
+            <input type="text" name="entry" placeholder="Tell me about your day">
+            <button type="submit" action = "{{url_for('main.analyze')}}"> Analyze Entry </button>
+        </form>
+    </div>
+
+
+  
+
+
+</body>
+
+</html>{% endblock %}
