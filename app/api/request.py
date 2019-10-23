@@ -10,29 +10,28 @@ natural_language_understanding = NaturalLanguageUnderstandingV1(
 
 natural_language_understanding.set_service_url('https://gateway.watsonplatform.net/natural-language-understanding/api')
 
-response = natural_language_understanding.analyze(
-    text='I hate Mondays just as much as mornings'
-    'My foot hurts and my hair is frizzy '
-    'Mustard is disgusting',
-
-    features = Features(
-        entities=EntitiesOptions(emotion=True, sentiment=True, limit=2),
-       # keywords=KeywordsOptions(emotion=True, sentiment=True,
-        #                         limit=2))).get_result()
-        emotion = EmotionOptions())).get_result()
-
-print(json.dumps(response, indent=2))
-
-emotion = json.dumps(response)
-
-loaded_json = json.loads(emotion)
-
-#for x in loaded_json:
-	#print("%s: %s" % (x, loaded_json[x]))
-
-emotions = loaded_json['emotion']['document']['emotion']
 
 def analyze(text):
+    response = natural_language_understanding.analyze(
+        text=text,
+
+        features = Features(
+            entities=EntitiesOptions(emotion=True, sentiment=True, limit=2),
+        # keywords=KeywordsOptions(emotion=True, sentiment=True,
+            #                         limit=2))).get_result()
+            emotion = EmotionOptions())).get_result()
+
+    print(json.dumps(response, indent=2))
+
+    emotion = json.dumps(response)
+
+    loaded_json = json.loads(emotion)
+
+    #for x in loaded_json:
+        #print("%s: %s" % (x, loaded_json[x]))
+
+    emotions = loaded_json['emotion']['document']['emotion']
+
     max = 0
     emo = 0
     for key , value in emotions.items():
@@ -46,7 +45,10 @@ def analyze(text):
             print (key, value)
 
         print(key, value)
-
+    largest = max(emotions.values)
+    print(largest)
     print ("The max value is: " + str(max) + " and the emotion associated is: " + str(emo))
 
-analyze(response.text)
+
+mystring = "Analyze THIS"
+analyze(mystring)
