@@ -9,15 +9,15 @@
 
         <h1 style= "color:yellowgreen;">This is the edit journal entry page for the app</h1>
 
-      
+        {% for entry in entries %}
         <div class="journal-entry">
-            <form action="{{url_for('main.edit' , entry )}}" method="post">
-              <input type="text" name="newtitle" placeholder="{{EntryTitle}}">
-              <input type="text" name="newtext" placeholder="{{EntryText}}">
+            <form action="{{url_for('main.edit' , EntryID = entry.EntryID )}}" method="post">
+              <input type="text" name="newtitle" placeholder="{{entry.EntryTitle}}">
+              <input type="text" name="newtext" placeholder="{{entry.EntryText}}">
               <button type="submit"> Edit Updated Entry </button>
             </form>
         </div>
-      
+        {% endfor %}
 
         {% endblock %}
 

@@ -78,9 +78,12 @@ def add(JournalID):
         
         journal.add_entry(entrytitle, entrytext, result)
 
-        entries = journal.entries
-       # entry = JournalEntry(EntryTitle = entrytitle, EntryText = entrytext, Date_Time = datetime)
-        #db.session.add(entry)   
+        #journal.add_entry(entrytitle, entrytext, result)
+
+        #entries = journal.entries
+        #entry = JournalEntry(EntryTitle = entrytitle, EntryText = entrytext, Date_Time = datetime)
+        #entry = journal.add_entry(entrytitle, entrytext, result)
+        #db.session.add(entry)
         #db.session.commit()
   
     entries = JournalEntry.query.all()
