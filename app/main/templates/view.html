@@ -1,0 +1,21 @@
+{% extends "j_template.html" %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{% block title %} Journal {% endblock %}</title>
+    </head>
+    <body>
+        {% block content %} 
+        <h1 style= "color:green;">This is the view journal entry page for the app</h1>
+
+        <a type = "button" href = "{{url_for('main.add' ,JournalID = 1)}}">Click to go to add page</a>
+        
+        <ul>list
+            {% for entry in entries %}
+            <li>{{entries[entry]}} </li>
+            {% endfor %}
+        </ul>
+        {% endblock %}
+
+    </body>
+</html>

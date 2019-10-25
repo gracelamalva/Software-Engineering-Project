@@ -1,0 +1,28 @@
+{% extends 'template.html' %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Add Entry</title>
+</head>
+
+<body>
+    {% block content %}
+    <h1 style="color:purple;">This is the add journal entry page for the app</h1>
+     <div class="journal-entry">
+        <form action="{{url_for('main.add', JournalID = 1 )}}" method="post">
+           <input type = "text" name = "title" placeholder="Entry Title">
+            <input type="text" name="entry" placeholder="Tell me about your day">
+            <input type = "datetime-local" name="datetime" placeholder="datetime-local">
+            <button type="submit"> Add Entry </button>
+        </form>
+    </div>
+
+    <a type = "button" href = "{{url_for('main.view')}}">view all entries</a>
+
+
+
+    {% endblock %}
+</body>
+
+</html>

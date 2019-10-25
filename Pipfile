@@ -8,6 +8,8 @@ verify_ssl = true
 [packages]
 pytest = "*"
 flask = "*"
+flask-sqlalchemy = "*"
+ibm-watson = "*"
 
 [requires]
-python_version = "3.6"
+python_version = "3.7"

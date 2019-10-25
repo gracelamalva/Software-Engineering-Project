@@ -1,0 +1,27 @@
+{% extends 'template.html' %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Add Journal</title>
+</head>
+
+<body>
+    {% block content %}
+    <h1 style="color:purple;">This is the create a journal page for the app</h1>
+    <div class="journal-entry">
+        <form action="{{url_for('main.create_journal')}}" method="post">
+            <input type = "text" name = "title" placeholder="Journal Title">
+            
+            <button type="submit"> Add Journal </button>
+        </form>
+    </div>
+
+
+
+
+
+    {% endblock %}
+</body>
+
+</html>
