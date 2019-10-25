@@ -9,6 +9,7 @@ verify_ssl = true
 pytest = "*"
 flask = "*"
 flask-sqlalchemy = "*"
+ibm-watson = "*"
 
 [requires]
 python_version = "3.7"

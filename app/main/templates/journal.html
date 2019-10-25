@@ -40,7 +40,16 @@
         {% endfor %}
     </ul>
 
-    <a type="button" href="{{url_for('main.analyze_text')}}">Analyze an entry</a>
+
+    <div class="journal-entry">
+        <h3>Analyze an entry</h3>
+        <form action="{{url_for('main.analyze_text')}}" method="post">
+           
+            <input type="text" name="entry" placeholder="Text to analyze">
+            <button type="submit" action = "{{url_for('main.analyze_text')}}"> Analyze Text </button>
+        </form>
+    </div>
+
 
 </body>
 

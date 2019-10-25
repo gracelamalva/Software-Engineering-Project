@@ -7,7 +7,8 @@ from .models import Journal
 from .models import JournalEntry
 from flask_sqlalchemy import SQLAlchemy
 from app.main.config import Config
-#from app.api.request import analyze
+#from app.api.request import *
+from app.api.request import analyze
 
 #bp = Blueprint("site", __name__)
 db = SQLAlchemy()
@@ -91,13 +92,14 @@ def delete(EntryID):
 @bp.route('/analyze', methods = ['GET', 'POST'])
 def analyze_text():
     #template for the analyzed text -- the results from watson api
+    analyzed_text = ""
+    text = request.form['entry']
 
-    text = request.form['formtext']
-
-    if (method.request == "post"):
+    if (request.method == "POST"):
         analyzed_text =  analyze(text)
     
-    return render_template('analyze.html', analyzed_text = analyzed_text)
+    
+    return render_template('analyze.html', analyzed_text = analyzed_text, text = text)
 
 """
 @bp.route('/populate', methods= ['GET','POST'])
@@ -111,7 +113,7 @@ def populate():
 
     return render_template (url_for('main.index'))
 
-    
+
 @bp.route('/view/<int:JournalID>', methods = ['POST','GET'])
 def view(JournalID):
     journal = Journal.query.get(JournalID)

@@ -8,6 +8,8 @@ from app.main.models import *
 app = Flask(__name__)
 app = create_app()
 
+#migrations 
+
 
 def main():
     if (len(sys.argv) == 2):
