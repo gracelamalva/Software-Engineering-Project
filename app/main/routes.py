@@ -68,6 +68,7 @@ def add(JournalID):
         
         journal.add_entry(entrytitle, entrytext, result)
 
+        analyzed_text = analyze_text(entrytext)
         #entries = journal.entries
         #entry = JournalEntry(EntryTitle = entrytitle, EntryText = entrytext, Date_Time = datetime)
         #entry = journal.add_entry(entrytitle, entrytext, result)
@@ -75,7 +76,7 @@ def add(JournalID):
         #db.session.commit()
   
     entries = JournalEntry.query.all()
-    return render_template('journal.html', journal=journal, entries = entries)
+    return render_template('journal.html', journal=journal, entries = entries, analyzed_text = analyzed_text)
 
 @bp.route('/delete/<int:EntryID>', methods = ['POST','GET', 'DELETE'])
 def delete(EntryID):
@@ -90,7 +91,7 @@ def delete(EntryID):
 
 
 @bp.route('/analyze', methods = ['GET', 'POST'])
-def analyze_text():
+def analyze_text(text):
     #template for the analyzed text -- the results from watson api
     analyzed_text = ""
     text = request.form['entry']
@@ -101,7 +102,7 @@ def analyze_text():
     
     return render_template('analyze.html', analyzed_text = analyzed_text, text = text)
 
-"""
+
 @bp.route('/populate', methods= ['GET','POST'])
 def populate():
     query = db.insert(Users).values(Username = "glamalva", fullName='grace', passwordHash="dfsfs34", Email = "gracegmailcom") 
@@ -112,7 +113,7 @@ def populate():
     print("record inserted.")
 
     return render_template (url_for('main.index'))
-
+"""
 
 @bp.route('/view/<int:JournalID>', methods = ['POST','GET'])
 def view(JournalID):

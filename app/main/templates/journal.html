@@ -36,11 +36,12 @@
         </li>
         <ul>
             <li>Entry text: {{entry.EntryText}} </li>
+            <li>The emotion associated is: {{analyzed_text}}</li>
         </ul>
         {% endfor %}
     </ul>
 
-
+    <a type = "button" href = "{{url_for('main.analyze_text' , EntryID = entry.EntryID)}}">Analyze</a>
     <div class="journal-entry">
         <h3>Analyze an entry</h3>
         <form action="{{url_for('main.analyze_text')}}" method="post">

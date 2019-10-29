@@ -36,9 +36,10 @@ class JournalEntry(db.Model):
     Date_Time = db.Column(db.DateTime)
     J_ID = db.Column(db.Integer, db.ForeignKey('Journal.JournalID'), nullable = False)
 
+    analyzed_entry = db.relationship("AnalyzedEntry", backref = "JournalEntry")
 
-#class AnalyzedEntry(db.Model):
-#    __tablename__ = "AnalyzedJournalEntry"
-#    AnalyzedEntryID = db.Column(db.Integer, primary_key = True, nullable = False, autoincrement = True)
-#    EntryEmotion = db.Column(db.String, nullable =False)
-#    E_ID = db.Column(db.Integer, db.ForeignKey('JournalEntry.EntryID'))
+class AnalyzedEntry(db.Model):
+    __tablename__ = "AnalyzedJournalEntry"
+    AnalyzedEntryID = db.Column(db.Integer, primary_key = True, nullable = False, autoincrement = True)
+    EntryEmotion = db.Column(db.String, nullable =False)
+    E_ID = db.Column(db.Integer, db.ForeignKey('JournalEntry.EntryID'))
