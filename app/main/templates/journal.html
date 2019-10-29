@@ -33,16 +33,20 @@
             <form name="formtext" method="DELETE" action="{{url_for('main.delete', EntryID = entry.EntryID)}}">
                 <button type="submit" action="{{url_for('main.delete', EntryID = entry.EntryID)}}">Delete</button>
             </form>
+            <form name="analyze" method="POST" action="{{url_for('main.analyze_entry', EntryID = entry.EntryID)}}">
+                <button type="submit" action="{{url_for('main.analyze_entry', EntryID = entry.EntryID)}}">Analyze Entry</button>
+            </form>
         </li>
         <ul>
             <li>Entry text: {{entry.EntryText}} </li>
+            <li>The emotion associated is: {{entry.EntryEmotion}}</li>
         </ul>
         {% endfor %}
     </ul>
 
-
+    <a type = "button" href = "{{url_for('main.analyze_text')}}">Analyze</a>
     <div class="journal-entry">
-        <h3>Analyze an entry</h3>
+        <h3>Analyze some text</h3>
         <form action="{{url_for('main.analyze_text')}}" method="post">
            
             <input type="text" name="entry" placeholder="Text to analyze">
