@@ -98,9 +98,9 @@ def analyze_entry(EntryID):
    
     if (request.method == "POST"):
         emotion = analyze(entry.EntryText)
-        #db.session.add(entry.EntryEmotion = emotion )
+       
         entry.EntryEmotion = emotion
-        #db.session.update(entry)
+       
         db.session.commit()
     entries = JournalEntry.query.all()
 
