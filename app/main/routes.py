@@ -83,8 +83,7 @@ def delete(EntryID):
     entry = JournalEntry.query.get(EntryID)
 
     JournalEntry.query.filter_by(EntryID = EntryID).delete()
-    db.session.commit()
-        
+    db.session.commit()    
     entries = JournalEntry.query.all()
 
     return render_template('journal.html', entries = entries)
