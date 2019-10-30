@@ -48,9 +48,9 @@
         {% for entry in entries %}
         <li>Entry title: {{entry.EntryTitle}} <a type="button"
                 href="{{url_for('main.edit' , EntryID = entry.EntryID )}}">Edit </a>
-            <form name="formtext" method="DELETE" action="{{url_for('main.delete', EntryID = entry.EntryID)}}">
-                <button type="submit" action="{{url_for('main.delete', EntryID = entry.EntryID)}}">Delete</button>
-            </form>
+                <form name="formtext" method="DELETE" action="{{url_for('main.delete', EntryID = entry.EntryID)}}">
+                    <button type="submit" action="{{url_for('main.delete', EntryID = entry.EntryID)}}">Delete</button>
+                </form>
             <form name="analyze" method="POST" action="{{url_for('main.analyze_entry', EntryID = entry.EntryID)}}">
                 <button type="submit" action="{{url_for('main.analyze_entry', EntryID = entry.EntryID)}}">Analyze Entry</button>
             </form>
