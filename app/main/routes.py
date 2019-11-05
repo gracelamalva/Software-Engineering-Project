@@ -10,9 +10,6 @@ from app.main.config import Config
 #from app.api.request import *
 from app.api.request import analyze
 
-#bp = Blueprint("site", __name__)
-#db = SQLAlchemy()
-
 @bp.route('/', methods=['GET','POST'])
 def index():
     users = Users.query.all()
