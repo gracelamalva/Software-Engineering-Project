@@ -5,10 +5,10 @@ from flask_sqlalchemy import SQLAlchemy
 from app.main.config import Config
 from app.main.models import *
 
-app = Flask(__name__)
+#app = Flask(__name__)
+#app, db = create_app()
 app = create_app()
-
-#migrations 
+#migrations
 
 
 def main():
@@ -16,8 +16,8 @@ def main():
         print(sys.argv)
     if sys.argv[1] == 'createdb':
         db.create_all()
-    if sys.argv[1] == 'populate':
-        populate()
+    #if sys.argv[1] == 'populate':
+    #    populate()
 
     else:
         print("Run app using 'flask run'")

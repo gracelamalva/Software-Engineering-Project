@@ -2,7 +2,7 @@ import sys, csv, os, datetime
 from app.main import bp
 from flask import Flask, redirect, render_template, request, Blueprint, url_for, jsonify
 from app.main.models import *
-from .models import Users
+from .models import User
 from .models import Journal
 from .models import JournalEntry
 from flask_sqlalchemy import SQLAlchemy
@@ -10,15 +10,90 @@ from app.main.config import Config
 #from app.api.request import *
 from app.api.request import analyze
 
+from flask_login import login_required, current_user, logout_user, login_user
+from .forms import RegisterForm, LoginForm, ChangePasswordForm
+
 #bp = Blueprint("site", __name__)
-#db = SQLAlchemy()
+db = SQLAlchemy()
+
+#@bp.route('/', methods=['GET','POST'])
+#def index():
+#    User = User.query.all()
+#    return render_template('index.html', User = User)
 
 @bp.route('/', methods=['GET','POST'])
 def index():
-    users = Users.query.all()
-    return render_template('index.html', users = users)
+    return render_template('index.html')
 
-@bp.route('/journal', methods = ['GET', 'POST'])    
+#------------ user login routes ----------
+
+@bp.route('/register', methods=['post', 'get'])
+def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+
+    form = RegisterForm()
+
+    if form.validate_on_submit():
+
+        User = models.User(
+            name=form.name.data, email=form.email.data, fullname=form.fullname.data
+            )
+        User.password = form.password.data
+        db.session.add(User)
+        db.session.commit()
+        flash('Your account created. Please login with your new credential.', category='success')
+        return redirect(url_for('main.login'))
+    return render_template('user_register.html', title='User Register', form=form)
+
+
+@bp.route('/login', methods=['GET', 'POST'])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = models.User.query.filter_by(name=form.name.data).first()
+        if user is None or not user.check_password(form.password.data):
+            flash('UserName or Password was Wrong', category='danger')
+            return redirect(url_for('main.login'))
+        login_user(user, remember=form.remember_me.data)
+        next_page = request.args.get('next')
+        if not next_page or url_parse(next_page).netloc != '':
+            next_page = url_for('main.index')
+        return redirect(next_page)
+    return render_template('user_login.html', title='User Login', form=form)
+
+
+@bp.route('/reset', methods=['post', 'get'])
+@login_required
+def reset():
+    form = ChangePasswordForm()
+
+    if form.validate_on_submit():
+        user = models.User.query.get(current_user.id)
+        if user is None:
+            abort(404)
+        if not user.check_password(form.old_password.data):
+            flash(message='Old password was invalid', category='warning')
+        else:
+            user.password = form.new_password.data
+            db.session.add(user)
+            db.session.commit()
+            flash(message='Password updated. Login with new password next time', category='success')
+
+    return render_template('user_reset.html', form=form)
+
+
+@bp.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('main.login'))
+
+#------------ user login routes ----------
+
+@bp.route('/journal', methods = ['GET', 'POST'])
 def journal():
     #entry = request.form.get("entry")
     entries = JournalEntry.query.all()
@@ -40,7 +115,7 @@ def create_journal():
 def edit(EntryID):
 
     entry = JournalEntry.query.get(EntryID)
-    entries = JournalEntry.query.filter_by(EntryID = EntryID)
+    entries = JournalEntry.query.all()
     if (request.method == "POST"):
         entry.EntryTitle = request.form.get("newtitle")
         entry.EntryText = request.form.get("newtext")
@@ -51,7 +126,7 @@ def edit(EntryID):
         return render_template('journal.html', entries = entries)
 
     return render_template('edit.html' , entries = entries)
-    
+
 
 @bp.route('/add/<int:JournalID>', methods = ['GET', 'POST'])
 def add(JournalID):
@@ -65,10 +140,9 @@ def add(JournalID):
         dt = request.form.get("datetime")
         ft = '%Y-%m-%dT%H:%M'
         result = datetime.datetime.strptime(dt, ft)
-        
+
         journal.add_entry(entrytitle, entrytext, result)
 
-       
         #entries = journal.entries
         #entry = JournalEntry(EntryTitle = entrytitle, EntryText = entrytext, Date_Time = datetime)
         #entry = journal.add_entry(entrytitle, entrytext, result)
@@ -80,35 +154,15 @@ def add(JournalID):
 
 @bp.route('/delete/<int:EntryID>', methods = ['POST','GET', 'DELETE'])
 def delete(EntryID):
-    #entry = JournalEntry.query.get(EntryID)
-    #entry.delete()
-    
-    #JournalEntry.query.filter_by(EntryID = EntryID).delete()
-    entry = JournalEntry.query.filter_by(EntryID = EntryID).first()
- 
-
-    #entry.delete()
-    db.session.delete(entry)
-    db.session.commit()    
-    entries = JournalEntry.query.all()
-
-    return render_template('journal.html', entries = entries)
-
-
-@bp.route('/analyze/<int:EntryID>', methods = ['GET', 'POST'])
-def analyze_entry(EntryID):
-    #template for the analyzed text -- the results from watson api
-    emotion = ""
     entry = JournalEntry.query.get(EntryID)
-   
-    if (request.method == "POST"):
-        emotion = analyze(entry.EntryText)
-       
-        entry.EntryEmotion = emotion
-        db.session.commit()
+
+    JournalEntry.query.filter_by(EntryID = EntryID).delete()
+    db.session.commit()
+
     entries = JournalEntry.query.all()
 
     return render_template('journal.html', entries = entries)
+
 
 @bp.route('/analyze', methods = ['GET', 'POST'])
 def analyze_text():
@@ -118,21 +172,22 @@ def analyze_text():
 
     if (request.method == "POST"):
         analyzed_text =  analyze(text)
-    
-    
+
+
     return render_template('analyze.html', analyzed_text = analyzed_text, text = text)
 
+"""
 @bp.route('/populate', methods= ['GET','POST'])
 def populate():
-    query = db.insert(Users).values(Username = "glamalva", fullName='grace', passwordHash="dfsfs34", Email = "gracegmailcom") 
-   # db.session.execute( "INSERT INTO Users (Username, fullName, passwordHash, Email) VALUES ('glamalva', 'gracelamalva', 'adfa43', 'glamalvagmailcom')")
+    query = db.insert(User).values(Username = "glamalva", fullName='grace', passwordHash="dfsfs34", Email = "gracegmailcom")
+   # db.session.execute( "INSERT INTO User (Username, fullName, passwordHash, Email) VALUES ('glamalva', 'gracelamalva', 'adfa43', 'glamalvagmailcom')")
     db.session.execute(query)
     db.session.commit()
 
     print("record inserted.")
 
-    return render_template ('index.html')
-"""
+    return render_template (url_for('main.index'))
+
 
 @bp.route('/view/<int:JournalID>', methods = ['POST','GET'])
 def view(JournalID):

@@ -25,3 +25,6 @@ You can start the basic application by issuing the command.
 ```shell
 flask run
 ```
+
+# install libs
+pip install -r requirements.txt

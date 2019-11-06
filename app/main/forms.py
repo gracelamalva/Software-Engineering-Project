@@ -7,11 +7,10 @@ from wtforms import (
 from wtforms.fields.html5 import TelField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, NumberRange
 from flask_login import current_user
-from .models import Users
+from .models import User
 from . import db
 
 from dateutil.tz import tz, tzlocal, tzutc
-
 
 class RegisterForm(FlaskForm):
     name = StringField('UserName', validators=[DataRequired()])

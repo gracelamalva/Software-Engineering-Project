@@ -35,26 +35,41 @@
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-            <a class="nav-link" href="">Home</a>
+            <a class="nav-link" href="{{ url_for('main.index') }}">Home</a>
           </li>
-
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Journal</a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="journal">View</a>
-              <a class="dropdown-item" href="createjournal">Add</a>
-              <a class="dropdown-item" href="journal">Edit</a>
-              <a class="dropdown-item" href="delete">Delete</a>
+              <a class="dropdown-item" href="{{ url_for('main.journal') }}">Journal List</a>
+              <a class="dropdown-item" href="{{ url_for('main.journal') }}">Create Journal</a>
+            </div>
               </li>
           <li class="nav-item">
-            <a class="nav-link" href="journal">Analysis</a>
+            <a class="nav-link" href="{{ url_for('main.journal') }}">Entry Search</a>
           </li>
-
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('main.analyze_text') }}">Analyze</a>
+          </li>
+            {% if current_user.is_authenticated %}
+            <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown-user" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+               Welcome {{ current_user.name }}</a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown-user">
+              <a class="dropdown-item" href="{{ url_for('main.reset') }}">Password Reset</a>
+              <a class="dropdown-item" href="{{ url_for('main.logout') }}">Logout</a>
+            </div>
+              </li>
+            {% else %}
+            <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('main.login') }}">Login</a>
+          </li>
+            {% endif %}
         </ul>
       </div>
     </div>
   </nav>
+
 
   <!-- Page Header -->
   {% block header%}{% endblock header %}
