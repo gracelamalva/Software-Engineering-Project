@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <header class="masthead" style="background-image: url('/static/img/home-bg.jpg')">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="site-heading">
+            <h1>User Login</h1>
+            <span class="subheading">Please login and enjoy our service</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+<h4>Please Fill In The Form</h4>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            {{ form.name.label }}
+            {% if form.name.errors %}
+                {% for e in form.name.errors %}
+                    <p class="help-block text-danger">{{ e }}</p>
+                {% endfor %}
+            {% endif %}
+            {{ form.name(class_='form-control') }}
+
+        </div>
+        <div class="form-group">
+            {{ form.password.label }}
+            {% if form.password.errors %}
+                {% for e in form.password.errors %}
+                    <p class="help-block text-danger">{{ e }}</p>
+                {% endfor %}
+            {% endif %}
+            {{ form.password(class_='form-control') }}
+
+        </div>
+        <div class="form-group">
+            {{ form.remember_me() }}
+            {{ form.remember_me.label }}
+
+        </div>
+        <div class="form-group">
+            {{ form.submit(class_='btn btn-primary') }}
+        </div>
+
+    </form>
+<p>No account？ <a href="{{ url_for('main.register') }}">Register One</a></p>
+
+</div>
+{% endblock content %}

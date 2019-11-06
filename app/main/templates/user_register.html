@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <header class="masthead" style="background-image: url('/static/img/home-bg.jpg')">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="site-heading">
+            <h1>User Register</h1>
+            <span class="subheading">Thank you very much</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+<h4>Please Fill In The Form</h4>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            {{ form.name.label }}
+            {% if form.name.errors %}
+                {% for e in form.name.errors %}
+                    <p class="help-block text-danger">{{ e }}</p>
+                {% endfor %}
+            {% endif %}
+            {{ form.name(class_='form-control') }}
+
+        </div>
+        <div class="form-group">
+            {{ form.fullname.label }}
+            {% if form.fullname.errors %}
+                {% for e in form.fullname.errors %}
+                    <p class="help-block text-danger">{{ e }}</p>
+                {% endfor %}
+            {% endif %}
+            {{ form.fullname(class_='form-control') }}
+
+        </div>
+        <div class="form-group">
+            {{ form.email.label }}
+            {% if form.email.errors %}
+                {% for e in form.email.errors %}
+                    <p class="help-block text-danger">{{ e }}</p>
+                {% endfor %}
+            {% endif %}
+            {{ form.email(class_='form-control') }}
+
+        </div>
+        <div class="form-group">
+            {{ form.password.label }}
+            {% if form.password.errors %}
+                {% for e in form.password.errors %}
+                    <p class="help-block text-danger">{{ e }}</p>
+                {% endfor %}
+            {% endif %}
+            {{ form.password(class_='form-control') }}
+
+        </div>
+        <div class="form-group">
+            {{ form.password2.label }}
+            {% if form.password2.errors %}
+                {% for e in form.password2.errors %}
+                    <p class="help-block text-danger">{{ e }}</p>
+                {% endfor %}
+            {% endif %}
+            {{ form.password2(class_='form-control') }}
+
+        </div>
+        <div class="form-group">
+            {{ form.submit(class_='btn btn-primary') }}
+        </div>
+
+    </form>
+<p>Got an Account? <a href="{{ url_for('main.login') }}">Login</a></p>
+</div>
+{% endblock content %}
