@@ -11,7 +11,7 @@ from app.main.config import Config
 from app.api.request import analyze
 
 #bp = Blueprint("site", __name__)
-db = SQLAlchemy()
+#db = SQLAlchemy()
 
 @bp.route('/', methods=['GET','POST'])
 def index():
@@ -40,7 +40,7 @@ def create_journal():
 def edit(EntryID):
 
     entry = JournalEntry.query.get(EntryID)
-    entries = JournalEntry.query.all()
+    entries = JournalEntry.query.filter_by(EntryID = EntryID)
     if (request.method == "POST"):
         entry.EntryTitle = request.form.get("newtitle")
         entry.EntryText = request.form.get("newtext")
@@ -68,26 +68,47 @@ def add(JournalID):
         
         journal.add_entry(entrytitle, entrytext, result)
 
+       
         #entries = journal.entries
         #entry = JournalEntry(EntryTitle = entrytitle, EntryText = entrytext, Date_Time = datetime)
         #entry = journal.add_entry(entrytitle, entrytext, result)
         #db.session.add(entry)
         #db.session.commit()
-  
+
     entries = JournalEntry.query.all()
     return render_template('journal.html', journal=journal, entries = entries)
 
 @bp.route('/delete/<int:EntryID>', methods = ['POST','GET', 'DELETE'])
 def delete(EntryID):
-    entry = JournalEntry.query.get(EntryID)
+    #entry = JournalEntry.query.get(EntryID)
+    #entry.delete()
+    
+    #JournalEntry.query.filter_by(EntryID = EntryID).delete()
+    entry = JournalEntry.query.filter_by(EntryID = EntryID).first()
+ 
 
-    JournalEntry.query.filter_by(EntryID = EntryID).delete()
-    db.session.commit()
-        
+    #entry.delete()
+    db.session.delete(entry)
+    db.session.commit()    
     entries = JournalEntry.query.all()
 
     return render_template('journal.html', entries = entries)
 
+
+@bp.route('/analyze/<int:EntryID>', methods = ['GET', 'POST'])
+def analyze_entry(EntryID):
+    #template for the analyzed text -- the results from watson api
+    emotion = ""
+    entry = JournalEntry.query.get(EntryID)
+   
+    if (request.method == "POST"):
+        emotion = analyze(entry.EntryText)
+       
+        entry.EntryEmotion = emotion
+        db.session.commit()
+    entries = JournalEntry.query.all()
+
+    return render_template('journal.html', entries = entries)
 
 @bp.route('/analyze', methods = ['GET', 'POST'])
 def analyze_text():
@@ -101,7 +122,6 @@ def analyze_text():
     
     return render_template('analyze.html', analyzed_text = analyzed_text, text = text)
 
-"""
 @bp.route('/populate', methods= ['GET','POST'])
 def populate():
     query = db.insert(Users).values(Username = "glamalva", fullName='grace', passwordHash="dfsfs34", Email = "gracegmailcom") 
@@ -111,8 +131,8 @@ def populate():
 
     print("record inserted.")
 
-    return render_template (url_for('main.index'))
-
+    return render_template ('index.html')
+"""
 
 @bp.route('/view/<int:JournalID>', methods = ['POST','GET'])
 def view(JournalID):

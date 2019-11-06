@@ -1,4 +1,4 @@
-from app import create_app
+from app import create_app,db
 import os, sys, csv
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy

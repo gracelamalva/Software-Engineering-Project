@@ -1,4 +1,22 @@
-{% extends 'template.html' %}{% block content %}
+{% extends 'base.html' %}
+
+{% block header %}
+      <header class="masthead" style="background-image: url('/static/img/entry-b.jpg')">
+        <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="site-heading">
+            <h1>Journal Entry</h1>
+            <span class="subheading">Choose something to do with your journal entry</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+{% endblock %}
+
+{% block content %}
 <!DOCTYPE html>
 <html>
 
@@ -8,7 +26,7 @@
 
 <body>
 
-    
+
     <h3>Add a journal</h3>
     <form action="{{url_for('main.create_journal')}}" method="post">
         <input type="text" name="title" placeholder="Journal Title">
@@ -30,21 +48,25 @@
         {% for entry in entries %}
         <li>Entry title: {{entry.EntryTitle}} <a type="button"
                 href="{{url_for('main.edit' , EntryID = entry.EntryID )}}">Edit </a>
-            <form name="formtext" method="DELETE" action="{{url_for('main.delete', EntryID = entry.EntryID)}}">
-                <button type="submit" action="{{url_for('main.delete', EntryID = entry.EntryID)}}">Delete</button>
+                <form name="formtext" method="DELETE" action="{{url_for('main.delete', EntryID = entry.EntryID)}}">
+                    <button type="submit" action="{{url_for('main.delete', EntryID = entry.EntryID)}}">Delete</button>
+                </form>
+            <form name="analyze" method="POST" action="{{url_for('main.analyze_entry', EntryID = entry.EntryID)}}">
+                <button type="submit" action="{{url_for('main.analyze_entry', EntryID = entry.EntryID)}}">Analyze Entry</button>
             </form>
         </li>
         <ul>
             <li>Entry text: {{entry.EntryText}} </li>
+            <li>The emotion associated is: {{entry.EntryEmotion}}</li>
         </ul>
         {% endfor %}
     </ul>
 
-
+    <a type = "button" href = "{{url_for('main.analyze_text')}}">Analyze</a>
     <div class="journal-entry">
-        <h3>Analyze an entry</h3>
+        <h3>Analyze some text</h3>
         <form action="{{url_for('main.analyze_text')}}" method="post">
-           
+
             <input type="text" name="entry" placeholder="Text to analyze">
             <button type="submit" action = "{{url_for('main.analyze_text')}}"> Analyze Text </button>
         </form>
