@@ -7,6 +7,7 @@ class Users(db.Model):
     fullName = db.Column(db.String, nullable = False)
     passwordHash = db.Column(db.String, nullable = False)
     Email = db.Column(db.String, nullable = False)
+    userStatus = db.Column(db.String) # are they a regular user, patient, or therapist
 
     journal = db.relationship("Journal", uselist=False, backref="Users")
 
@@ -14,6 +15,23 @@ class Users(db.Model):
         new_journal = Journal(title = title, UserID = self.Username)
         db.session.add(new_journal)
         db.session.commit()
+
+    def become_Patient(self, patientName):
+        new_patient = Patient(patientID = self.Username, patientName = patientName) 
+        #Users.userStatus = "Patient"
+        db.session.add(new_patient)
+        db.session.commit()
+
+    def become_Therapist(self, therapistName):
+        new_therapist = Therapist(therapistName = therapistName, TherapistID = self.Username)
+        #Users.userStatus = "Therapist"
+        db.session.add(new_therapist)
+        db.session.commit()
+
+class Profile (db.Model):
+    __tablename__ = "Profile"
+    ProfileID = db.Column(db.Integer, db.ForeignKey('Users.Username'), primary_key=True )
+    MemberStatus = db.Column(db.String, db.ForeinKey('Users.userStatus'))
 
 class Journal(db.Model):
     __tablename__ = "Journal"
@@ -37,9 +55,24 @@ class JournalEntry(db.Model):
     EntryEmotion = db.Column(db.String)
     J_ID = db.Column(db.Integer, db.ForeignKey('Journal.JournalID'), nullable = False)
 
+class Therapist(db.Model):
+    __tablename__ = "Therapist"
+    TherapistID = db.Column(db.Integer, db.ForeignKey('Users.Username'), primary_key=True)
+    therapistName = db.Column(db.String, db.ForeignKey('Users.fullName'))
+    T_Patients_ID = db.Column(db.Integer, db.ForeignKey('T_Patients.T_ID'))
+ 
+    def add_patients(self, patientID, patientName):
+        new_assigned_patient = T_Patients(T_ID = self.TherapistID, P_ID = P_ID, patientName = patientName)
 
-#class AnalyzedEntry(db.Model):
-#    __tablename__ = "AnalyzedJournalEntry"
-#    AnalyzedEntryID = db.Column(db.Integer, primary_key = True, nullable = False, autoincrement = True)
-#    EntryEmotion = db.Column(db.String, nullable =False)
-#    E_ID = db.Column(db.Integer, db.ForeignKey('JournalEntry.EntryID'))
+class T_Patients(db.Model):
+    __tablename__ = "T_Patients"
+    T_ID = db.Column(db.Integer, db.ForeignKey ('Therapist.TherapistID'), primary_key = True)
+    P_ID = db.Column(db.Integer, db.ForeignKey('Patient.PatientID'), primary_key = True)
+    patientName = db.Column(db.String, db.ForeignKey('Patient.patientName'))
+
+class Patient(db.Model):
+    __tablename__ = "Patient"
+    PatientID = db.Column(db.Integer, db.ForeignKey('Users.Username'), primary_key=True)
+    insuranceProvider = db.Column(db.String)
+    patientName = db.Column(db.String, db.ForeignKey('Users.fullName'))
+    T_ID = db.Column(db.Integer, db.ForeignKey ('Therapist.TherapistID'))

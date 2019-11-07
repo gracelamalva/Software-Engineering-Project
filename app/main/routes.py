@@ -64,14 +64,12 @@ def add(JournalID):
         result = datetime.datetime.strptime(dt, ft)
         
         journal.add_entry(entrytitle, entrytext, result)
-
        
         #entries = journal.entries
         #entry = JournalEntry(EntryTitle = entrytitle, EntryText = entrytext, Date_Time = datetime)
         #entry = journal.add_entry(entrytitle, entrytext, result)
         #db.session.add(entry)
         #db.session.commit()
-
     entries = JournalEntry.query.all()
     return render_template('journal.html', journal=journal, entries = entries)
 
@@ -91,10 +89,9 @@ def delete(EntryID):
 
     return render_template('journal.html', entries = entries)
 
-
 @bp.route('/analyze/<int:EntryID>', methods = ['GET', 'POST'])
 def analyze_entry(EntryID):
-    #template for the analyzed text -- the results from watson api
+   
     emotion = ""
     entry = JournalEntry.query.get(EntryID)
    
@@ -103,13 +100,14 @@ def analyze_entry(EntryID):
        
         entry.EntryEmotion = emotion
         db.session.commit()
+
     entries = JournalEntry.query.all()
 
     return render_template('journal.html', entries = entries)
 
 @bp.route('/analyze', methods = ['GET', 'POST'])
 def analyze_text():
-    #template for the analyzed text -- the results from watson api
+ 
     analyzed_text = ""
     text = request.form['entry']
 
@@ -118,6 +116,20 @@ def analyze_text():
     
     
     return render_template('analyze.html', analyzed_text = analyzed_text, text = text)
+
+@bp.route('/dummyprofile', methods = ['GET','POST'])
+def profile():
+    user = Users.query.all()
+    
+    return render_template('dummyprofile.html')
+
+@bp.route('/patient/<string:Username>' , methods = ['GET', 'POST'])
+def patient():
+    user = Users.query.get(Username)
+    
+    user.becomePatient(Username)
+
+    return render_template('patient.html')
 
 @bp.route('/populate', methods= ['GET','POST'])
 def populate():

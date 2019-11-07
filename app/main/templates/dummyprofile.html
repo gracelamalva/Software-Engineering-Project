@@ -1,0 +1,31 @@
+{% extends 'template.html' %}{% block content %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Profile</title>
+</head>
+
+<body>
+<h1>Dummy Profile page</h1>
+<ul>All info from Users
+    <li>name</li>
+    <li>etc </li>
+
+    <li>Patient? Null</li>
+    <li>(View only if not null) Therapist? Null</li>
+
+</ul>
+
+
+
+<form action="{{url_for('main.patient')}}" method="post">
+    <button type="submit" action = "{{url_for('main.patient')}}"> Become a patient </button>
+</form>
+
+<button> Convert to Therapist Profile</button>
+
+
+</body>
+
+</html>{% endblock %}
