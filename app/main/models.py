@@ -71,7 +71,7 @@ class Journal(db.Model):
     __tablename__ = "Journal"
     JournalID = db.Column(db.Integer, primary_key=True, unique = True, autoincrement = True)
     title = db.Column(db.String, nullable = False)
-    UserID = db.Column(db.String, db.ForeignKey('User.Username'), nullable = False)
+    UserID = db.Column(db.String, db.ForeignKey('User.name'), nullable = False)
 
     entries = db.relationship("JournalEntry", backref = "Journal")
 
