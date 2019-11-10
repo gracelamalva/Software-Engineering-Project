@@ -2,23 +2,25 @@ from . import flask_bcrypt
 from . import login
 from datetime import datetime
 from . import db
+from flask_sqlalchemy import SQLAlchemy
+db = SQLAlchemy()
 
-
-#from flask_sqlalchemy import SQLAlchemy
-#db = SQLAlchemy()
-
-class User(db.Model):
-    __tablename__ = "User"
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, unique=True, nullable=False)
+class Users(db.Model):
+    __tablename__ = "Users"
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    Username = db.Column(db.String, unique=True, nullable=False)
     fullname = db.Column(db.String, nullable=False)
     password_hash = db.Column(db.String, nullable=False)
     email = db.Column(db.String, nullable=False)
     register_date = db.Column(db.DateTime, default=datetime.now)
-
     is_active = db.Column(db.Boolean, default=True)
 
-    journals = db.relationship("Journal", backref='User', passive_deletes=True)
+    journal = db.relationship("Journal", uselist=False, backref='Users')
+
+    def add_journal(self, title):
+        new_journal = Journal(title = title, UserID = self.Username)
+        db.session.add(new_journal)
+        db.session.commit()
 
     @property
     def password(self):
@@ -43,14 +45,14 @@ class User(db.Model):
 def load_user(id):
     if isinstance(id, int):
         pass
-    elif isinstance(id, str):
+    elif isinstance(id, int):
         if id.strip().isdigit():
             id = int(id)
         else:
             return
     else:
         return
-    return User.query.get(id)
+    return Users.query.get(id)
 
 
 #class User(db.Model):
@@ -71,9 +73,9 @@ class Journal(db.Model):
     __tablename__ = "Journal"
     JournalID = db.Column(db.Integer, primary_key=True, unique = True, autoincrement = True)
     title = db.Column(db.String, nullable = False)
-    UserID = db.Column(db.String, db.ForeignKey('User.Username'), nullable = False)
+    UserID = db.Column(db.String, db.ForeignKey('Users.id'), nullable = False)
 
-    entries = db.relationship("JournalEntry", backref = "Journal")
+    entries = db.relationship("JournalEntry", backref="Journal")
 
     def add_entry(self, entrytitle, entrytext, date_time):
         new_entry = JournalEntry(EntryTitle = entrytitle, EntryText = entrytext, Date_Time = date_time, J_ID = self.JournalID)
@@ -86,6 +88,7 @@ class JournalEntry(db.Model):
     EntryTitle = db.Column(db.String)
     EntryText = db.Column(db.String)
     Date_Time = db.Column(db.DateTime)
+    #EntryEmotion = db.Column(db.Integer, db.ForeignKey('Journal.JournalID'), nullable=False)
     J_ID = db.Column(db.Integer, db.ForeignKey('Journal.JournalID'), nullable = False)
 
 

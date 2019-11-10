@@ -1,8 +1,11 @@
 import sys, csv, os, datetime
-from app.main import bp
-from flask import Flask, redirect, render_template, request, Blueprint, url_for, jsonify
+
+from werkzeug.urls import url_parse
+
+from app.main import bp, models
+from flask import Flask, redirect, render_template, request, Blueprint, url_for, jsonify, flash
 from app.main.models import *
-from .models import User
+from .models import Users
 from .models import Journal
 from .models import JournalEntry
 from flask_sqlalchemy import SQLAlchemy
@@ -36,11 +39,11 @@ def register():
 
     if form.validate_on_submit():
 
-        User = models.User(
-            name=form.name.data, email=form.email.data, fullname=form.fullname.data
+        user = models.Users(
+            Username=form.Username.data, email=form.email.data, fullname=form.fullname.data
             )
-        User.password = form.password.data
-        db.session.add(User)
+        user.password = form.password.data
+        db.session.add(user)
         db.session.commit()
         flash('Your account created. Please login with your new credential.', category='success')
         return redirect(url_for('main.login'))
@@ -53,7 +56,7 @@ def login():
         return redirect(url_for('index'))
     form = LoginForm()
     if form.validate_on_submit():
-        user = models.User.query.filter_by(name=form.name.data).first()
+        user = models.Users.query.filter_by(Username=form.Username.data).first()
         if user is None or not user.check_password(form.password.data):
             flash('UserName or Password was Wrong', category='danger')
             return redirect(url_for('main.login'))
@@ -71,9 +74,9 @@ def reset():
     form = ChangePasswordForm()
 
     if form.validate_on_submit():
-        user = models.User.query.get(current_user.id)
+        user = models.Users.query.get(current_user.id)
         if user is None:
-            abort(404)
+            os.abort(404)
         if not user.check_password(form.old_password.data):
             flash(message='Old password was invalid', category='warning')
         else:
@@ -83,7 +86,6 @@ def reset():
             flash(message='Password updated. Login with new password next time', category='success')
 
     return render_template('user_reset.html', form=form)
-
 
 @bp.route('/logout')
 @login_required

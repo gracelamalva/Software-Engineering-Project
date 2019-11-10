@@ -7,13 +7,13 @@ from wtforms import (
 from wtforms.fields.html5 import TelField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, NumberRange
 from flask_login import current_user
-from .models import User
+from .models import Users
 from . import db
 
 from dateutil.tz import tz, tzlocal, tzutc
 
 class RegisterForm(FlaskForm):
-    name = StringField('UserName', validators=[DataRequired()])
+    Username = StringField('UserName', validators=[DataRequired()])
     fullname = StringField('FullName', validators=[DataRequired()])
     password = PasswordField('Password', validators=[
         DataRequired(), Length(6, max=32, message='The length of a password should be between 6 and 32')])
@@ -22,21 +22,21 @@ class RegisterForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     submit = SubmitField('Submit')
 
-    def validate_name(self, name):
+    def validate_name(self, Username):
         super()
-        user = User.query.filter_by(name=name.data).first()
+        user = Users.query.filter_by(Username=Username.data).first()
         if user is not None:
             raise ValidationError('This username has been taken')
 
     def validate_email(self, email):
         super()
-        user = User.query.filter_by(email=email.data).first()
+        user = Users.query.filter_by(email=email.data).first()
         if user is not None:
             raise ValidationError('This email has been taken')
 
 
 class LoginForm(FlaskForm):
-    name = StringField('UserName', validators=[DataRequired()])
+    Username = StringField('UserName', validators=[DataRequired()])
     password = PasswordField('Password', validators=[
         DataRequired(), Length(6, max=32, message='The length of a password should be between 6 and 32')])
     remember_me = BooleanField('Remember Me')
@@ -52,7 +52,7 @@ class ChangePasswordForm(FlaskForm):
     submit = SubmitField('Submit')
 
     def validate_old_password(self, old_password):
-        user = User.query.get(current_user.id)
+        user = Users.query.get(current_user.id)
         if user is None:
             print(user)
             return

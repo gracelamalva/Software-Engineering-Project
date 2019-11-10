@@ -1,12 +1,12 @@
-from app import create_app,db
+from app import create_app
 import os, sys, csv
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 from app.main.config import Config
 from app.main.models import *
 
-#app = Flask(__name__)
-#app, db = create_app()
+app = Flask(__name__)
+#app = create_app()
 app = create_app()
 #migrations
 
