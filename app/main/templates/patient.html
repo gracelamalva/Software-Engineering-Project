@@ -1,4 +1,4 @@
-{% extends 'template.html' %}{% block content %}
+{% extends 'base.html' %}{% block content %}
 <!DOCTYPE html>
 <html>
 
@@ -8,9 +8,11 @@
 
 <body>
 <h1>Dummy Profile page</h1>
-<h1 style="color:blueviolet">YOU ARE A PATIENT NOW  </h1>
+<h2 style="color:blueviolet">YOU ARE A PATIENT NOW  </h2>
+
 <ul>All info from Users
-    <li>name</li>
+    <li>Username: {{user.Username}}</li>
+    <li>name: {{user.fullName}}</li>
     <li>etc </li>
     
     <li>Patient? Null</li>
@@ -18,7 +20,10 @@
 
 </ul>
 
-<p>Find a therapist</p>
+<h3>Patient Features:</h3>
+<a> Find a therapist </a>
+
+
 
 </body>
 

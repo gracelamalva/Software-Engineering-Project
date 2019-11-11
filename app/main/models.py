@@ -16,9 +16,9 @@ class Users(db.Model):
         db.session.add(new_journal)
         db.session.commit()
 
-    def become_Patient(self, patientName):
-        new_patient = Patient(patientID = self.Username, patientName = patientName) 
-        #Users.userStatus = "Patient"
+    def become_Patient(self):
+        new_patient = Patient(PatientID = self.Username, patientName = self.fullName) 
+        Users.userStatus = "Patient"
         db.session.add(new_patient)
         db.session.commit()
 
@@ -31,7 +31,7 @@ class Users(db.Model):
 class Profile (db.Model):
     __tablename__ = "Profile"
     ProfileID = db.Column(db.Integer, db.ForeignKey('Users.Username'), primary_key=True )
-    MemberStatus = db.Column(db.String, db.ForeinKey('Users.userStatus'))
+    #MemberStatus = db.Column(db.String, db.ForeinKey('Users.userStatus'))
 
 class Journal(db.Model):
     __tablename__ = "Journal"
@@ -72,7 +72,7 @@ class T_Patients(db.Model):
 
 class Patient(db.Model):
     __tablename__ = "Patient"
-    PatientID = db.Column(db.Integer, db.ForeignKey('Users.Username'), primary_key=True)
-    insuranceProvider = db.Column(db.String)
+    PatientID = db.Column(db.String, db.ForeignKey('Users.Username'), primary_key=True)
+    #insuranceProvider = db.Column(db.String)
     patientName = db.Column(db.String, db.ForeignKey('Users.fullName'))
-    T_ID = db.Column(db.Integer, db.ForeignKey ('Therapist.TherapistID'))
+    #T_ID = db.Column(db.Integer, db.ForeignKey ('Therapist.TherapistID')

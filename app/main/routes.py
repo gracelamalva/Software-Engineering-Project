@@ -28,7 +28,7 @@ def create_journal():
     journal = Journal(title=title, UserID = "glamalva")
     db.session.add(journal)
     db.session.commit()
-    # Query database.
+
     journal=Journal.query.all()
 
     return render_template('journal.html', journal=journal)
@@ -43,7 +43,6 @@ def edit(EntryID):
         entry.EntryText = request.form.get("newtext")
 
     #entries = JournalEntry.query.all()
-        #looks for Journal Entry (using user login and journal id) deletes old entry and replaces with new one
 
         return render_template('journal.html', entries = entries)
 
@@ -76,13 +75,10 @@ def add(JournalID):
 @bp.route('/delete/<int:EntryID>', methods = ['POST','GET', 'DELETE'])
 def delete(EntryID):
     #entry = JournalEntry.query.get(EntryID)
-    #entry.delete()
-    
+
     #JournalEntry.query.filter_by(EntryID = EntryID).delete()
     entry = JournalEntry.query.filter_by(EntryID = EntryID).first()
- 
 
-    #entry.delete()
     db.session.delete(entry)
     db.session.commit()    
     entries = JournalEntry.query.all()
@@ -117,19 +113,24 @@ def analyze_text():
     
     return render_template('analyze.html', analyzed_text = analyzed_text, text = text)
 
-@bp.route('/dummyprofile', methods = ['GET','POST'])
-def profile():
-    user = Users.query.all()
-    
-    return render_template('dummyprofile.html')
+@bp.route('/dummyprofile/<string:Username>', methods = ['GET','POST'])
+def profile(Username):
+
+    user = Users.query.get(Username)
+
+    if (request.method == "POST"):
+        return render_template(url_for('patient'))
+
+    return render_template('dummyprofile.html', user = user)
 
 @bp.route('/patient/<string:Username>' , methods = ['GET', 'POST'])
-def patient():
+def patient(Username):
+
     user = Users.query.get(Username)
     
-    user.becomePatient(Username)
+    user.become_Patient()
 
-    return render_template('patient.html')
+    return render_template('patient.html', user = user)
 
 @bp.route('/populate', methods= ['GET','POST'])
 def populate():
