@@ -58,3 +58,20 @@ class ChangePasswordForm(FlaskForm):
             return
         if not user.check_password(old_password.data):
             return ValidationError(message='Invalid Old Password.')
+
+class UpdateAccountInfo(FlaskForm):
+    Username = StringField('New Usermame', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    submit = SubmitField('Update')
+
+    def validate_name(self, Username):
+        if Username.data != current_user.Username:
+            user = Users.query.filter_by(Username=Username.data).first()
+        if user is not None:
+            raise ValidationError('Username already exists! Choose a different one!')
+
+    def validate_email(self, email):
+        if email.data != current_user.email:
+            user = Users.query.filter_by(email=email.data).first()
+        if user is not None:
+            raise ValidationError('Email already exists! Choose a different one!')

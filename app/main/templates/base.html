@@ -56,7 +56,7 @@
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown-user" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                Welcome {{ current_user.Username }}</a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown-user">
-              <a class="dropdown-item" href="{{ url_for('main.reset') }}">Password Reset</a>
+              <a class="dropdown-item" href="{{url_for('main.account') }}">Account</a>
               <a class="dropdown-item" href="{{ url_for('main.logout') }}">Logout</a>
             </div>
               </li>

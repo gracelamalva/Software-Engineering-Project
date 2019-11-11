@@ -14,7 +14,7 @@ from app.main.config import Config
 from app.api.request import analyze
 
 from flask_login import login_required, current_user, logout_user, login_user
-from .forms import RegisterForm, LoginForm, ChangePasswordForm
+from .forms import RegisterForm, LoginForm, ChangePasswordForm, UpdateAccountInfo
 
 #bp = Blueprint("site", __name__)
 db = SQLAlchemy()
@@ -67,6 +67,21 @@ def login():
         return redirect(next_page)
     return render_template('user_login.html', title='User Login', form=form)
 
+@bp.route('/update', methods=['POST', 'GET'])
+@login_required
+def update():
+    form = UpdateAccountInfo()
+
+    if form.validate_on_submit():
+        current_user.Username = form.Username.data
+        current_user.email = form.email.data
+        db.session.commit()
+        flash('Your changes have been saved!', category='success')
+        return redirect(url_for('main.account'))
+    elif request.method == 'GET':
+        form.Username.data = current_user.Username
+        form.email.data = current_user.email
+    return render_template('user_update.html', form=form)
 
 @bp.route('/reset', methods=['post', 'get'])
 @login_required
@@ -94,6 +109,11 @@ def logout():
     return redirect(url_for('main.login'))
 
 #------------ user login routes ----------
+
+@bp.route('/account')
+@login_required
+def account():
+    return render_template('account.html')
 
 @bp.route('/journal', methods = ['GET', 'POST'])
 def journal():
