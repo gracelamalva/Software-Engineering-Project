@@ -7,7 +7,7 @@
       <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
           <div class="site-heading">
-            <h1>Profile Page</h1>
+            <h1>Account Info</h1>
             <span class="subheading">Welcome {{ current_user.Username }}!</span>
           </div>
         </div>
@@ -19,11 +19,13 @@
 {% block content %}
   <div class="container">
       {% if current_user.is_authenticated %}
-      <h4>Account Actions:</h4>
-        <p><a href="{{ url_for('main.accountview') }}">View Account Information</a></p>
-        <p><a href="{{ url_for('main.update') }}">Update Account Information</a></p>
-        <p><a href="{{ url_for('main.reset') }}">Password Reset</a></p>
-        <p>Member Since: {{ current_user.register_date.strftime("%A %B %d, %Y") }}</p>
+      <h4>{{ current_user.Username }}'s Account:</h4>
+      <p>Full Name: {{ current_user.fullname }}</p>
+      <p>Username: {{ current_user.Username }}</p>
+      <p>Email: {{ current_user.email }}</p>
+      <p><a href="{{ url_for('main.reset') }}">Click Here to Reset Your Password</a></p>
+      <p><a href="{{ url_for('main.update') }}">Click Here to Update Your Account Information</a></p>
+      <p>Member Since: {{ current_user.register_date.strftime("%A %B %d, %Y") }}</p>
   {% else %}
       <h4>Dear You:</h4>
         <p>

@@ -84,6 +84,11 @@ def update():
         form.email.data = current_user.email
     return render_template('user_update.html', form=form)
 
+@bp.route('/viewAccount')
+@login_required
+def accountview():
+    return render_template('accountview.html')
+
 @bp.route('/reset', methods=['post', 'get'])
 @login_required
 def reset():
