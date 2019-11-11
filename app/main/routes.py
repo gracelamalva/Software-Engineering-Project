@@ -75,6 +75,7 @@ def update():
     if form.validate_on_submit():
         current_user.Username = form.Username.data
         current_user.email = form.email.data
+        db.session.merge(current_user)
         db.session.commit()
         flash('Your changes have been saved!', category='success')
         return redirect(url_for('main.account'))
