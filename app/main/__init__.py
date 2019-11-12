@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from flask import Blueprint, Flask
 #-------------
 from flask_sqlalchemy import SQLAlchemy
@@ -5,6 +6,10 @@ from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
 
 from app import api
+=======
+from flask import Blueprint
+bp = Blueprint('main',__name__, template_folder= '../main/templates')
+>>>>>>> feature_two_dilpreet
 
 db = SQLAlchemy()
 login = LoginManager()

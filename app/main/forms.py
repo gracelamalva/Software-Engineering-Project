@@ -6,6 +6,7 @@ from wtforms import (
     DateTimeField, IntegerField, FloatField, FileField, SelectField)
 from wtforms.fields.html5 import TelField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, NumberRange
+<<<<<<< HEAD
 from flask_login import current_user
 from .models import Users
 from . import db
@@ -75,3 +76,12 @@ class UpdateAccountInfo(FlaskForm):
             user = Users.query.filter_by(email=email.data).first()
         if user is not None:
             raise ValidationError('Email already exists! Choose a different one!')
+=======
+from .models import Users, AffirmationEntry
+#from . import db
+
+class createAEntry(FlaskForm):
+    EntryTitle = StringField('Affirmation Entry Title', validators=[DataRequired()])
+    EntryText = StringField('Affirmation Entry Text', validators=[DataRequired()])
+    submit = SubmitField('Create')
+>>>>>>> feature_two_dilpreet
