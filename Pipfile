@@ -13,6 +13,7 @@ ibm-watson = "*"
 flask-wtf = "*"
 flask-login = "*"
 basequery = "*"
+hashlib = "*"
 
 [requires]
 python_version = "3.7"

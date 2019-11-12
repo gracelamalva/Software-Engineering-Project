@@ -1,6 +1,7 @@
 from . import flask_bcrypt
 from . import login
 from datetime import datetime
+from hashlib import md5
 from . import db
 from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
@@ -90,7 +91,6 @@ class JournalEntry(db.Model):
     Date_Time = db.Column(db.DateTime)
     #EntryEmotion = db.Column(db.Integer, db.ForeignKey('Journal.JournalID'), nullable=False)
     J_ID = db.Column(db.Integer, db.ForeignKey('Journal.JournalID'), nullable = False)
-
 
 #class AnalyzedEntry(db.Model):
 #    __tablename__ = "AnalyzedJournalEntry"
