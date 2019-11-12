@@ -147,6 +147,11 @@ def affirmation():
         flash('Affirmation has been created!', category='success')
         return redirect(url_for('main.index'))
     return render_template('affirmation.html', AffirmationEntry=AffirmationEntry, form=form)
+
+@bp.route('/viewAffirmation')
+def affirmationview():
+    affirmationEntries=AffirmationEntry.query.all()
+    return render_template('affirmationview.html', entries=affirmationEntries)
 """
 
 @bp.route('/affirmation', methods = ['GET', 'POST'])
