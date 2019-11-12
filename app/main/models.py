@@ -24,7 +24,6 @@ class Users(db.Model):
         db.session.add(new_journal)
         db.session.commit()
 
-<<<<<<< HEAD
     @property
     def password(self):
         return 'hashed password'
@@ -79,7 +78,6 @@ def load_user(id):
         db.session.add(new_affirmation)
         db.session.commit()
 """
->>>>>>> feature_two_dilpreet
 class Journal(db.Model):
     __tablename__ = "Journal"
     JournalID = db.Column(db.Integer, primary_key=True, unique = True, autoincrement = True)
@@ -101,9 +99,7 @@ class JournalEntry(db.Model):
     Date_Time = db.Column(db.DateTime)
     #EntryEmotion = db.Column(db.Integer, db.ForeignKey('Journal.JournalID'), nullable=False)
     J_ID = db.Column(db.Integer, db.ForeignKey('Journal.JournalID'), nullable = False)
-
-<<<<<<< HEAD
-=======
+    
 class AffirmationEntry(db.Model):
     __tablename__ = "AffirmationEntry"
     AffirmationEntryID = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
@@ -137,7 +133,6 @@ class AffirmationEntry(db.Model):
     #A_ID = db.Column(db.Integer, db.ForeignKey('Affirmation.AffirmationID'), nullable=False)
 """
 
->>>>>>> feature_two_dilpreet
 #class AnalyzedEntry(db.Model):
 #    __tablename__ = "AnalyzedJournalEntry"
 #    AnalyzedEntryID = db.Column(db.Integer, primary_key = True, nullable = False, autoincrement = True)
