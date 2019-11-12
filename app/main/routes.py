@@ -30,11 +30,13 @@ db = SQLAlchemy()
 @bp.route('/', methods=['GET', 'POST'])
 def index():
     users = Users.query.all()
+
     return render_template('index.html', users=users)
 
 
-@bp.route('/journal', methods=['GET', 'POST'])
-    return render_template('index.html')
+#@bp.route('/journal', methods=['GET', 'POST'])
+#def journal():
+#    return render_template('index.html')
 
 #------------ user login routes ----------
 
@@ -130,19 +132,19 @@ def account():
     return render_template('account.html')
 
 @bp.route('/journal', methods = ['GET', 'POST'])
->>>>>>> feature_two_sabrina
-def journal():
+def journal():#JournalID):
+    #journal = Journal.query.get(JournalID)
     # entry = request.form.get("entry")
     entries = JournalEntry.query.all()
-    return render_template('journal.html', entries=entries)
+    return render_template('journal.html', journal = journal, entries=entries)
 
 
 @bp.route('/search', methods=['GET', 'POST'])
-def search():
+def search():#JournalID):
     dt = request.args.get("date")
     ft = '%Y-%m-%d'
     date = datetime.datetime.strptime(dt, ft)
-    entries = JournalEntry.query.filter(JournalEntry.Date_Time.between(date, date + datetime.timedelta(days=1))).all()
+    entries = JournalEntry.query.filter(JournalID, JournalEntry.Date_Time.between(date, date + datetime.timedelta(days=1))).all()
     return render_template('search.html', entries=entries)
 
 
@@ -184,7 +186,7 @@ def add(JournalID):
         # journal =Journal.query.get(JournalID)
         entrytitle = request.form.get("title")
         entrytext = request.form.get("entry")
-        dt = request.form.get("datetime")
+        dt = request.form.get("date-time")
         ft = '%Y-%m-%dT%H:%M'
         result = datetime.datetime.strptime(dt, ft)
 
@@ -254,10 +256,9 @@ def analyze_text():
 
 @bp.route('/populate', methods=['GET', 'POST'])
 def populate():
-    query = db.insert(Users).values(Username="glamalva", fullName='grace', passwordHash="dfsfs34",
-                                    Email="gracegmailcom")
+    query = db.insert(Users).values(Username="glamalva", fullName='grace', passwordHash="dfsfs34",  Email="gracegmailcom")
     # db.session.execute( "INSERT INTO Users (Username, fullName, passwordHash, Email) VALUES ('glamalva', 'gracelamalva', 'adfa43', 'glamalvagmailcom')")
-        analyzed_text =  analyze(text)
+    analyzed_text =  analyze(text)
 
     return render_template('analyze.html', analyzed_text = analyzed_text, text = text)
 
@@ -273,6 +274,7 @@ def populate():
     return render_template('index.html')
     return render_template (url_for('main.index'))
 @bp.route('/view/<int:JournalID>', methods = ['POST','GET'])
+
 def view(JournalID):
     journal = Journal.query.get(JournalID)
     entries = JournalEntry.query.all(journal)
