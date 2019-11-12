@@ -1,14 +1,10 @@
 import sys, csv, os, datetime
-<<<<<<< HEAD
-
 from werkzeug.urls import url_parse
 
 from app.main import bp, models
 from flask import Flask, redirect, render_template, request, Blueprint, url_for, jsonify, flash
-=======
 from app.main import bp, models
 from flask import Flask, redirect, render_template, request, Blueprint, url_for, jsonify
->>>>>>> feature_two_dilpreet
 from app.main.models import *
 from .models import Users
 from .models import Journal
@@ -26,14 +22,11 @@ from .forms import RegisterForm, LoginForm, ChangePasswordForm, UpdateAccountInf
 
 #bp = Blueprint("site", __name__)
 db = SQLAlchemy()
-<<<<<<< HEAD
 
 #@bp.route('/', methods=['GET','POST'])
 #def index():
 #    User = User.query.all()
 #    return render_template('index.html', User = User)
-=======
->>>>>>> feature_two_dilpreet
 
 # bp = Blueprint("site", __name__)
 # db = SQLAlchemy()
@@ -366,8 +359,6 @@ def remove(AffirmationEntryID):
     return render_template('affirmation.html', Affirmationentries = Affirmationentries)
 """
 """
-
->>>>>>> feature_two_dilpreet
 @bp.route('/view/<int:JournalID>', methods = ['POST','GET'])
 def view(JournalID):
     journal = Journal.query.get(JournalID)
