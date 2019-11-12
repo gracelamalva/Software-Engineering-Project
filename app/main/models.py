@@ -8,13 +8,6 @@ db = SQLAlchemy()
 
 class Users(db.Model):
     __tablename__ = "Users"
-<<<<<<< HEAD
-    Username = db.Column(db.String, primary_key=True, nullable = False)
-    fullName = db.Column(db.String, nullable = False)
-    passwordHash = db.Column(db.String, nullable = False)
-    Email = db.Column(db.String, nullable = False)
-    userStatus = db.Column(db.String) # are they a regular user, patient, or therapist
-=======
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     Username = db.Column(db.String, unique=True, nullable=False)
     fullname = db.Column(db.String, nullable=False)
@@ -22,7 +15,7 @@ class Users(db.Model):
     email = db.Column(db.String, nullable=False)
     register_date = db.Column(db.DateTime, default=datetime.now)
     is_active = db.Column(db.Boolean, default=True)
->>>>>>> feature_two
+    userstatus = db.Column(db.String, default = "User")
 
     journal = db.relationship("Journal", uselist=False, backref='Users')
 
@@ -31,7 +24,6 @@ class Users(db.Model):
         db.session.add(new_journal)
         db.session.commit()
 
-<<<<<<< HEAD
     def become_Patient(self):
         new_patient = Patient(Username = self.Username, patientName = self.fullName) 
         db.session.add(new_patient)
@@ -43,11 +35,7 @@ class Users(db.Model):
         db.session.add(new_therapist)
         db.session.commit()
 
-class Profile (db.Model):
-    __tablename__ = "Profile"
-    ProfileID = db.Column(db.Integer, db.ForeignKey('Users.Username'), primary_key=True )
-    #MemberStatus = db.Column(db.String, db.ForeinKey('Users.userStatus'))
-=======
+    
     @property
     def password(self):
         return 'hashed password'
@@ -81,20 +69,10 @@ def load_user(id):
     return Users.query.get(id)
 
 
-#class User(db.Model):
-#    __tablename__ = "User"
-#    Username = db.Column(db.String, primary_key=True, nullable = False)
-#    fullName = db.Column(db.String, nullable = False)
-#    passwordHash = db.Column(db.String, nullable = False)
-#    Email = db.Column(db.String, nullable = False)
-#
-#    journal = db.relationship("Journal", uselist=False, backref="User")
-#
-#    def add_journal(self, title):
-#        new_journal = Journal(title = title, UserID = self.Username)
-#        db.session.add(new_journal)
-#        db.session.commit()
->>>>>>> feature_two
+#class Profile (db.Model):
+#    __tablename__ = "Profile"
+#    ProfileID = db.Column(db.Integer, db.ForeignKey('Users.Username'), primary_key=True )
+    #MemberStatus = db.Column(db.String, db.ForeinKey('Users.userStatus'))
 
 class Journal(db.Model):
     __tablename__ = "Journal"
@@ -118,11 +96,10 @@ class JournalEntry(db.Model):
     #EntryEmotion = db.Column(db.Integer, db.ForeignKey('Journal.JournalID'), nullable=False)
     J_ID = db.Column(db.Integer, db.ForeignKey('Journal.JournalID'), nullable = False)
 
-<<<<<<< HEAD
 class Therapist(db.Model):
     __tablename__ = "Therapist"
-    Username = db.Column(db.Integer, db.ForeignKey('Users.Username'), primary_key=True)
-    therapistName = db.Column(db.String, db.ForeignKey('Users.fullName'))
+    id = db.Column(db.Integer, db.ForeignKey('Users.id'), primary_key=True)
+    therapistName = db.Column(db.String, db.ForeignKey('Users.fullname'))
     #TherapistID = db.Column(db.Integer, unique = True)
     #T_Patients_ID = db.Column(db.Integer, db.ForeignKey('T_Patients.T_ID'))
  
@@ -139,15 +116,8 @@ class Therapist(db.Model):
 
 class Patient(db.Model):
     __tablename__ = "Patient"
-    Username = db.Column(db.String, db.ForeignKey('Users.Username'), primary_key=True)
+    id = db.Column(db.String, db.ForeignKey('Users.id'), primary_key=True)
     #insuranceProvider = db.Column(db.String)
-    patientName = db.Column(db.String, db.ForeignKey('Users.fullName'))
-    TherapistID = db.Column(db.Integer, db.ForeignKey('Therapist.Username'), unique = True)
+    patientName = db.Column(db.String, db.ForeignKey('Users.fullname'))
+    TherapistID = db.Column(db.Integer, db.ForeignKey('Therapist.id'), unique = True)
     #T_ID = db.Column(db.Integer, db.ForeignKey ('Therapist.TherapistID')
-=======
-#class AnalyzedEntry(db.Model):
-#    __tablename__ = "AnalyzedJournalEntry"
-#    AnalyzedEntryID = db.Column(db.Integer, primary_key = True, nullable = False, autoincrement = True)
-#    EntryEmotion = db.Column(db.String, nullable =False)
-#    E_ID = db.Column(db.Integer, db.ForeignKey('JournalEntry.EntryID'))
->>>>>>> feature_two
