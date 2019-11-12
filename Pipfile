@@ -10,10 +10,17 @@ pytest = "*"
 flask = "*"
 flask-sqlalchemy = "*"
 ibm-watson = "*"
+<<<<<<< HEAD
 flask-wtf = "*"
 flask-login = "*"
 basequery = "*"
 hashlib = "*"
+=======
+wtfforms = "*"
+db = "*"
+flaskform = "*"
+wtforms = "*"
+>>>>>>> feature_two_dilpreet
 
 
 [requires]

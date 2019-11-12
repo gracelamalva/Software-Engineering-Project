@@ -1,0 +1,26 @@
+<!--
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>{% block title %}  Affirmation {% endblock %}</title>
+</head>
+
+<body>
+   <div id = "content">
+    <ul>list
+        {% for Affirmationentry in Affirmationentries %}
+        <li>a {{Affirmationentries[Affirmationentry]}} <a type = "button" href = "{{url_for('main.change')}}">Edit</a>
+            <a type = "button" href="{{url_for('main.remove')}}" >Delete</a></li>
+        {% endfor %}
+    </ul>
+
+    <a type = "button" href = "{{url_for('main.input')}}">Add Affirmation</a>
+    <a type = "button" href = "{{url_for('main.display')}}">View all Affirmations</a>
+    {% block content %} {% endblock %}
+
+    </div>
+</body>
+-->
+
+</html>
