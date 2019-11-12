@@ -22,6 +22,7 @@
   <h4>Welcome {{ current_user.Username }}</h4>
         <p><a href="{{ url_for('main.account') }}">Your Account</a></p>
         <p><a href="{{ url_for('main.journal') }}">Your Journals</a></p>
+        <p><a href="{{ url_for('main.affirmation') }}">Your Affirmation(s)</a></p>
   {% else %}
         <h4>Dear You:</h4>
         <p>
@@ -29,31 +30,5 @@
         </p>
   {% endif %}
   </div>
-
 {% endblock %}
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>{% block title %} Home {% endblock %} </title>
-    </head>
-    <body>
-    <div class="container">
-<h4>Welcome {{ current_user.Username }}</h4>
-      <p><a href="{{ url_for('main.journal') }}">Your Journals</a></p>
-      <p><a href="{{ url_for('main.affirmation') }}">Your Affirmation(s)</a></p>
-    <!--
-        <div id = "content">
-        {% block content %}
-        <h1>This is the home page for the app</h1>
-        <ul>users
-        {% for user in Users %}
-            <li>username: {{user.username}} </li>
-         </ul>
-         {% endfor %}
-        <a type = "button" href="{{url_for('main.journal')}}" >Click me to go to journal page</a>
-            <a type = "button" href="{{url_for('main.affirmation')}}" >Click me to go to affirmation page</a>
-            -->
-        {% endblock %}
-      </div>
-    </body>
 </html>

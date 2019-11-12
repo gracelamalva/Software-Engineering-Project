@@ -10,7 +10,6 @@ from .models import Users
 from .models import Journal
 from .models import JournalEntry
 from .models import AffirmationEntry
-from .forms import createAEntry
 from flask import flash
 from flask_sqlalchemy import SQLAlchemy
 from app.main.config import Config
@@ -18,7 +17,7 @@ from app.main.config import Config
 from app.api.request import analyze
 
 from flask_login import login_required, current_user, logout_user, login_user
-from .forms import RegisterForm, LoginForm, ChangePasswordForm, UpdateAccountInfo
+from .forms import RegisterForm, LoginForm, ChangePasswordForm, UpdateAccountInfo, createAEntry
 
 #bp = Blueprint("site", __name__)
 db = SQLAlchemy()
@@ -36,10 +35,11 @@ def index():
     users = Users.query.all()
     return render_template('index.html', users=users)
 
-
+"""
 @bp.route('/journal', methods=['GET', 'POST'])
+def journal():
     return render_template('index.html')
-
+"""
 #------------ user login routes ----------
 
 @bp.route('/register', methods=['post', 'get'])
@@ -134,7 +134,6 @@ def account():
     return render_template('account.html')
 
 @bp.route('/journal', methods = ['GET', 'POST'])
->>>>>>> feature_two_sabrina
 def journal():
     # entry = request.form.get("entry")
     entries = JournalEntry.query.all()
@@ -153,7 +152,7 @@ def search():
 @bp.route('/createjournal', methods=['POST', 'GET'])
 def create_journal():
     title = request.form.get("title")
-    journal = Journal(title=title, UserID="glamalva")
+    journal = Journal(title=title, UserID=current_user)
     db.session.add(journal)
     db.session.commit()
     # Query database.
@@ -190,7 +189,7 @@ def add(JournalID):
         entrytext = request.form.get("entry")
         dt = request.form.get("datetime")
         ft = '%Y-%m-%dT%H:%M'
-        result = datetime.datetime.strptime(dt, ft)
+        result = datetime.strptime(dt, ft)
 
         journal.add_entry(entrytitle, entrytext, result)
 
@@ -255,17 +254,16 @@ def analyze_text():
 
     return render_template('analyze.html', analyzed_text=analyzed_text, text=text)
 
-
+"""
 @bp.route('/populate', methods=['GET', 'POST'])
 def populate():
     query = db.insert(Users).values(Username="glamalva", fullName='grace', passwordHash="dfsfs34",
                                     Email="gracegmailcom")
     # db.session.execute( "INSERT INTO Users (Username, fullName, passwordHash, Email) VALUES ('glamalva', 'gracelamalva', 'adfa43', 'glamalvagmailcom')")
-        analyzed_text =  analyze(text)
+    analyzed_text =  analyze(text=analyze_text)
 
-    return render_template('analyze.html', analyzed_text = analyzed_text, text = text)
+    return render_template('analyze.html', analyzed_text = analyzed_text, text = analyze_text)
 
-"""
 @bp.route('/populate', methods= ['GET','POST'])
 def populate():
     query = db.insert(User).values(Username = "glamalva", fullName='grace', passwordHash="dfsfs34", Email = "gracegmailcom")
@@ -274,10 +272,8 @@ def populate():
     db.session.commit()
     print("record inserted.")
 
-<<<<<<< HEAD
     return render_template('index.html')
     return render_template (url_for('main.index'))
-=======
     return render_template ('index.html')
 
 @bp.route('/affirmation', methods = ['GET', 'POST'])
@@ -322,7 +318,7 @@ def change(AffirmationEntryID):
 
 @bp.route('/input/<int:AffirmationID>', methods = ['GET', 'POST'])
 def input(AffirmationID):
-       affirmation =Affirmation.query.get(AffirmationID)
+       affirmation =AffirmationEntry.query.get(AffirmationID)
        #entries = JournalEntry.query.all()
 
        if request.method == "POST":
@@ -357,7 +353,6 @@ def remove(AffirmationEntryID):
     Affirmationentries = AffirmationEntry.query.all()
 
     return render_template('affirmation.html', Affirmationentries = Affirmationentries)
-"""
 """
 @bp.route('/view/<int:JournalID>', methods = ['POST','GET'])
 def view(JournalID):
