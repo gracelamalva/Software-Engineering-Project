@@ -13,8 +13,6 @@ from app.main.config import Config
 # from app.api.request import *
 from app.api.request import analyze
 
-<<<<<<< HEAD
-=======
 from flask_login import login_required, current_user, logout_user, login_user
 from .forms import RegisterForm, LoginForm, ChangePasswordForm, UpdateAccountInfo
 
@@ -25,20 +23,17 @@ db = SQLAlchemy()
 #def index():
 #    User = User.query.all()
 #    return render_template('index.html', User = User)
->>>>>>> feature_two_sabrina
 
 # bp = Blueprint("site", __name__)
 # db = SQLAlchemy()
 
 @bp.route('/', methods=['GET', 'POST'])
 def index():
-<<<<<<< HEAD
     users = Users.query.all()
     return render_template('index.html', users=users)
 
 
 @bp.route('/journal', methods=['GET', 'POST'])
-=======
     return render_template('index.html')
 
 #------------ user login routes ----------
@@ -166,11 +161,8 @@ def create_journal():
 @bp.route('/edit/<int:EntryID>', methods=['GET', 'POST', 'PUT'])
 def edit(EntryID):
     entry = JournalEntry.query.get(EntryID)
-<<<<<<< HEAD
     entries = JournalEntry.query.filter_by(EntryID=EntryID)
-=======
     entries = JournalEntry.query.all()
->>>>>>> feature_two_sabrina
     if (request.method == "POST"):
         entry.EntryTitle = request.form.get("newtitle")
         entry.EntryText = request.form.get("newtext")
@@ -182,11 +174,6 @@ def edit(EntryID):
 
     return render_template('edit.html', entries=entries)
 
-<<<<<<< HEAD
-=======
-    return render_template('edit.html' , entries = entries)
-
->>>>>>> feature_two_sabrina
 
 @bp.route('/add/<int:JournalID>', methods=['GET', 'POST'])
 def add(JournalID):
@@ -203,19 +190,16 @@ def add(JournalID):
 
         journal.add_entry(entrytitle, entrytext, result)
 
-<<<<<<< HEAD
         # entries = journal.entries
         # entry = JournalEntry(EntryTitle = entrytitle, EntryText = entrytext, Date_Time = datetime)
         # entry = journal.add_entry(entrytitle, entrytext, result)
         # db.session.add(entry)
         # db.session.commit()
-=======
         #entries = journal.entries
         #entry = JournalEntry(EntryTitle = entrytitle, EntryText = entrytext, Date_Time = datetime)
         #entry = journal.add_entry(entrytitle, entrytext, result)
         #db.session.add(entry)
         #db.session.commit()
->>>>>>> feature_two_sabrina
 
     entries = JournalEntry.query.all()
     return render_template('journal.html', journal=journal, entries=entries)
@@ -223,7 +207,6 @@ def add(JournalID):
 
 @bp.route('/delete/<int:EntryID>', methods=['POST', 'GET', 'DELETE'])
 def delete(EntryID):
-<<<<<<< HEAD
     # entry = JournalEntry.query.get(EntryID)
     # entry.delete()
 
@@ -236,14 +219,11 @@ def delete(EntryID):
     entries = JournalEntry.query.all()
 
     return render_template('journal.html', entries=entries)
-=======
     entry = JournalEntry.query.get(EntryID)
->>>>>>> feature_two_sabrina
 
     JournalEntry.query.filter_by(EntryID = EntryID).delete()
     db.session.commit()
 
-<<<<<<< HEAD
 @bp.route('/analyze/<int:EntryID>', methods=['GET', 'POST'])
 def analyze_entry(EntryID):
     # template for the analyzed text -- the results from watson api
@@ -255,26 +235,18 @@ def analyze_entry(EntryID):
 
         entry.EntryEmotion = emotion
         db.session.commit()
-=======
->>>>>>> feature_two_sabrina
     entries = JournalEntry.query.all()
 
     return render_template('journal.html', entries=entries)
 
 
-<<<<<<< HEAD
-@bp.route('/analyze', methods=['GET', 'POST'])
-=======
-
 @bp.route('/analyze', methods = ['GET', 'POST'])
->>>>>>> feature_two_sabrina
 def analyze_text():
     # template for the analyzed text -- the results from watson api
     analyzed_text = ""
     text = request.form['entry']
 
     if (request.method == "POST"):
-<<<<<<< HEAD
         analyzed_text = analyze(text)
 
     return render_template('analyze.html', analyzed_text=analyzed_text, text=text)
@@ -285,9 +257,7 @@ def populate():
     query = db.insert(Users).values(Username="glamalva", fullName='grace', passwordHash="dfsfs34",
                                     Email="gracegmailcom")
     # db.session.execute( "INSERT INTO Users (Username, fullName, passwordHash, Email) VALUES ('glamalva', 'gracelamalva', 'adfa43', 'glamalvagmailcom')")
-=======
         analyzed_text =  analyze(text)
-
 
     return render_template('analyze.html', analyzed_text = analyzed_text, text = text)
 
@@ -296,20 +266,12 @@ def populate():
 def populate():
     query = db.insert(User).values(Username = "glamalva", fullName='grace', passwordHash="dfsfs34", Email = "gracegmailcom")
    # db.session.execute( "INSERT INTO User (Username, fullName, passwordHash, Email) VALUES ('glamalva', 'gracelamalva', 'adfa43', 'glamalvagmailcom')")
->>>>>>> feature_two_sabrina
     db.session.execute(query)
     db.session.commit()
     print("record inserted.")
-<<<<<<< HEAD
 
     return render_template('index.html')
-
-
-"""
-
-=======
     return render_template (url_for('main.index'))
->>>>>>> feature_two_sabrina
 @bp.route('/view/<int:JournalID>', methods = ['POST','GET'])
 def view(JournalID):
     journal = Journal.query.get(JournalID)
