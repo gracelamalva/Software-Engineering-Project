@@ -23,9 +23,7 @@
     </head>
     <body>
     <div class="container">
-  {% if current_user.is_authenticated %}
 <h4>Welcome {{ current_user.Username }}</h4>
-      <p><a href="{{ url_for('main.account') }}">Your Account</a></p>
       <p><a href="{{ url_for('main.journal') }}">Your Journals</a></p>
       <p><a href="{{ url_for('main.affirmation') }}">Your Affirmation(s)</a></p>
     <!--
