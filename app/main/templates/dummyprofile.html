@@ -20,13 +20,17 @@
 </ul>
 
 
-
+{% if user.userStatus != "Patient" && user.userStatus != "User"%}
 <form action="{{url_for('main.patient', Username = user.Username)}}" method="post">
     <button type="submit" action = "{{url_for('main.patient', Username = user.Username)}}"> Become a patient </button>
 </form>
+{% endif %}
 
-<button> Convert to Therapist Profile</button>
-
+{% if user.userStatus != "Therapist" && user.userStatus != "User"%}
+<form action="{{url_for('main.therapist', Username = user.Username)}}" method="post">
+    <button type="submit" action = "{{url_for('main.therapist', Username = user.Username)}}"> Become a Therapist </button>
+</form>
+{% endif %}
 
 </body>
 

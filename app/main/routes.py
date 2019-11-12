@@ -121,6 +121,9 @@ def profile(Username):
     if (request.method == "POST"):
         return render_template(url_for('patient'))
 
+    if (user.userStatus == "Patient"):
+         return render_template(url_for('patient'))
+
     return render_template('dummyprofile.html', user = user)
 
 @bp.route('/patient/<string:Username>' , methods = ['GET', 'POST'])
@@ -129,14 +132,29 @@ def patient(Username):
     user = Users.query.get(Username)
     
     user.become_Patient()
+    Users.userStatus = "Patient"
+    db.session.commit()
 
     return render_template('patient.html', user = user)
+
+@bp.route('/therapist/<string:Username>' , methods = ['GET', 'POST'])
+def therapist(Username):
+
+    user = Users.query.get(Username)
+    
+    user.become_Therapist()
+    Users.userStatus = "Therapist"
+    db.session.commit()
+
+    return render_template('therapist.html', user = user)
 
 @bp.route('/populate', methods= ['GET','POST'])
 def populate():
     query = db.insert(Users).values(Username = "glamalva", fullName='grace', passwordHash="dfsfs34", Email = "gracegmailcom") 
+    query1 = db.insert(Users).values(Username = "javery", fullName='james', passwordHash="awe131", Email = "jamesaveryaimcom") 
    # db.session.execute( "INSERT INTO Users (Username, fullName, passwordHash, Email) VALUES ('glamalva', 'gracelamalva', 'adfa43', 'glamalvagmailcom')")
     db.session.execute(query)
+    db.session.execute(query1)
     db.session.commit()
 
     print("record inserted.")

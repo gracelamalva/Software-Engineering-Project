@@ -1,0 +1,32 @@
+{% extends 'base.html' %}{% block content %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Profile</title>
+</head>
+
+<body>
+<h1>Dummy Profile page</h1>
+<h2 style="color:blueviolet">YOU ARE A THERAPIST NOW  </h2>
+
+<ul>All info from Users
+    <li>Username: {{user.Username}}</li>
+    <li>name: {{user.fullName}}</li>
+    <li>etc </li>
+    
+    <li>Patient? Null</li>
+    <li>(View only if not null) Therapist? Null</li>
+
+</ul>
+
+<h3>Therapist Features:</h3>
+<a> Post listing to find patients</a>
+<a> Add patients</a>
+<a> Look up my patients</a>
+
+
+
+</body>
+
+</html>{% endblock %}

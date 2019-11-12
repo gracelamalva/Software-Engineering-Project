@@ -17,13 +17,12 @@ class Users(db.Model):
         db.session.commit()
 
     def become_Patient(self):
-        new_patient = Patient(PatientID = self.Username, patientName = self.fullName) 
-        Users.userStatus = "Patient"
+        new_patient = Patient(Username = self.Username, patientName = self.fullName) 
         db.session.add(new_patient)
         db.session.commit()
 
     def become_Therapist(self, therapistName):
-        new_therapist = Therapist(therapistName = therapistName, TherapistID = self.Username)
+        new_therapist = Therapist(therapistName = therapistName, Username = self.Username)
         #Users.userStatus = "Therapist"
         db.session.add(new_therapist)
         db.session.commit()
@@ -57,22 +56,26 @@ class JournalEntry(db.Model):
 
 class Therapist(db.Model):
     __tablename__ = "Therapist"
-    TherapistID = db.Column(db.Integer, db.ForeignKey('Users.Username'), primary_key=True)
+    Username = db.Column(db.Integer, db.ForeignKey('Users.Username'), primary_key=True)
     therapistName = db.Column(db.String, db.ForeignKey('Users.fullName'))
-    T_Patients_ID = db.Column(db.Integer, db.ForeignKey('T_Patients.T_ID'))
+    #TherapistID = db.Column(db.Integer, unique = True)
+    #T_Patients_ID = db.Column(db.Integer, db.ForeignKey('T_Patients.T_ID'))
  
-    def add_patients(self, patientID, patientName):
-        new_assigned_patient = T_Patients(T_ID = self.TherapistID, P_ID = P_ID, patientName = patientName)
+    #def add_patient(self, Username, patientName):
+    #    new_assigned_patient = Patient(T_ID = self.TherapistID, P_ID = P_ID, patientName = patientName)
 
-class T_Patients(db.Model):
-    __tablename__ = "T_Patients"
-    T_ID = db.Column(db.Integer, db.ForeignKey ('Therapist.TherapistID'), primary_key = True)
-    P_ID = db.Column(db.Integer, db.ForeignKey('Patient.PatientID'), primary_key = True)
-    patientName = db.Column(db.String, db.ForeignKey('Patient.patientName'))
+    patients = db.relationship("Patient", backref = "Therapist")
+
+#class T_Patients(db.Model):
+#    __tablename__ = "T_Patients"
+#    T_ID = db.Column(db.Integer, db.ForeignKey ('Therapist.TherapistID'), primary_key = True)
+#    P_ID = db.Column(db.Integer, db.ForeignKey('Patient.PatientID'), primary_key = True)
+#    patientName = db.Column(db.String, db.ForeignKey('Patient.patientName'))
 
 class Patient(db.Model):
     __tablename__ = "Patient"
-    PatientID = db.Column(db.String, db.ForeignKey('Users.Username'), primary_key=True)
+    Username = db.Column(db.String, db.ForeignKey('Users.Username'), primary_key=True)
     #insuranceProvider = db.Column(db.String)
     patientName = db.Column(db.String, db.ForeignKey('Users.fullName'))
+    TherapistID = db.Column(db.Integer, db.ForeignKey('Therapist.Username'), unique = True)
     #T_ID = db.Column(db.Integer, db.ForeignKey ('Therapist.TherapistID')
