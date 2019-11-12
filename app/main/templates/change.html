@@ -1,0 +1,43 @@
+<!--
+{% extends 'base.html' %}
+
+{% block header %}
+      <header class="masthead" style="background-image: url('/static/img/index-b.jpg')">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="site-heading">
+            <h1>Edit Affirmation</h1>
+            <span class="subheading">you can change the content of this affirmation</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+{% endblock %}
+
+<html>
+    <head>
+        <title>{% block title %} Edit {% endblock %}</title>
+    </head>
+    <body>
+        {% block content%}
+
+        <h1 style= "color:yellowgreen;">This is the edit Affirmation entry page for the app</h1>
+
+        {% for Affirmationentry in Affirmationentries %}
+        <div class="affirmations-entry">
+            <form action="{{url_for('main.change' , AffirmationID = Affirmationentry.AffirmationEntryID )}}" method="post">
+              <input type="text" name="Affirmationnewtitle" placeholder="{{Affirmationentry.AffirmationEntryTitle}}">
+              <input type="text" name="Affirmationnewtext" placeholder="{{Affirmationentry.AffirmationEntryText}}">
+              <button type="submit"> Edit Updated Affirmation </button>
+            </form>
+        </div>
+        {% endfor %}
+
+        {% endblock %}
+
+    </body>
+</html>
+-->

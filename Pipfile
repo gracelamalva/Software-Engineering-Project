@@ -10,6 +10,10 @@ pytest = "*"
 flask = "*"
 flask-sqlalchemy = "*"
 ibm-watson = "*"
+wtfforms = "*"
+db = "*"
+flaskform = "*"
+wtforms = "*"
 
 [requires]
 python_version = "3.7"
