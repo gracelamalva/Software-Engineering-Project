@@ -16,7 +16,8 @@ from app.main.config import Config
 from app.api.request import analyze
 
 from flask_login import login_required, current_user, logout_user, login_user
-from .forms import RegisterForm, LoginForm, ChangePasswordForm, UpdateAccountInfo
+from .forms import RegisterForm, LoginForm, ChangePasswordForm, UpdateAccountInfo, createAEntry
+
 
 @bp.route('/', methods=['GET','POST'])
 def index():
@@ -225,6 +226,7 @@ def analyze_text():
 
     return render_template('analyze.html', analyzed_text=analyzed_text, text=text)
 
+
 @bp.route('/populate', methods=['GET', 'POST'])
 def populate():
     query = db.insert(Users).values(Username="glamalva", fullName='grace', passwordHash="dfsfs34",  Email="gracegmailcom")
@@ -232,6 +234,7 @@ def populate():
     analyzed_text =  analyze(text)
 
     return render_template('analyze.html', analyzed_text = analyzed_text, text = text)
+
 
 @bp.route('/dummyprofile/<string:Username>', methods = ['GET','POST'])
 def profile(Username):
@@ -313,12 +316,9 @@ def revertaccount():
     db.session.commit()
     
     return render_template('revertaccount.html')
-"""
-@bp.route('/populate', methods= ['GET','POST'])
-def populate():
-    query = db.insert(Users).values(Username = "glamalva", fullName='grace', passwordHash="dfsfs34", Email = "gracegmailcom") 
-"""
+
 @bp.route('/affirmation', methods = ['GET', 'POST'])
+@login_required
 def affirmation():
     form = createAEntry()
 
