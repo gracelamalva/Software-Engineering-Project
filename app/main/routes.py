@@ -254,7 +254,6 @@ def analyze_text():
 
     return render_template('analyze.html', analyzed_text=analyzed_text, text=text)
 
-"""
 @bp.route('/populate', methods=['GET', 'POST'])
 def populate():
     query = db.insert(Users).values(Username="glamalva", fullName='grace', passwordHash="dfsfs34",
@@ -263,18 +262,6 @@ def populate():
     analyzed_text =  analyze(text=analyze_text)
 
     return render_template('analyze.html', analyzed_text = analyzed_text, text = analyze_text)
-
-@bp.route('/populate', methods= ['GET','POST'])
-def populate():
-    query = db.insert(User).values(Username = "glamalva", fullName='grace', passwordHash="dfsfs34", Email = "gracegmailcom")
-   # db.session.execute( "INSERT INTO User (Username, fullName, passwordHash, Email) VALUES ('glamalva', 'gracelamalva', 'adfa43', 'glamalvagmailcom')")
-    db.session.execute(query)
-    db.session.commit()
-    print("record inserted.")
-
-    return render_template('index.html')
-    return render_template (url_for('main.index'))
-    return render_template ('index.html')
 
 @bp.route('/affirmation', methods = ['GET', 'POST'])
 def affirmation():
@@ -292,71 +279,3 @@ def affirmation():
 def affirmationview():
     affirmationEntries=AffirmationEntry.query.all()
     return render_template('affirmationview.html', entries=affirmationEntries)
-"""
-
-@bp.route('/affirmation', methods = ['GET', 'POST'])
-def affirmation():
-    #entry = request.form.get("entry")
-    Affirmationentries = AffirmationEntry.query.all()
-    #db.session.add(affirmation)
-    #db.session.commit()
-    return render_template('affirmation.html', Affirmationentries = Affirmationentries)
-
-@bp.route('/change/<int:AffirmationEntryID>', methods=['GET', 'POST', 'PUT'])
-def change(AffirmationEntryID):
-     Affirmationentry = AffirmationEntry.query.get(AffirmationEntryID)
-     Affirmationentries = AffirmationEntry.query.filter_by(AffirmationEntryID=AffirmationEntryID)
-     if (request.method == "POST"):
-         Affirmationentry.EntryTitle = request.form.get("Affirmationnewtitle")
-         Affirmationentry.EntryText = request.form.get("Affirmationnewtext")
-       #entries = JournalEntry.query.all()
-               #looks for Journal Entry (using user login and journal id) deletes old entry and replaces with new one
-
-         return render_template('affirmation.html', Affirmationentries = Affirmationentries)
-
-     return render_template('change.html' , Affirmationentries = Affirmationentries)
-
-@bp.route('/input/<int:AffirmationID>', methods = ['GET', 'POST'])
-def input(AffirmationID):
-       affirmation =AffirmationEntry.query.get(AffirmationID)
-       #entries = JournalEntry.query.all()
-
-       if request.method == "POST":
-           #journal =Journal.query.get(JournalID)
-           Affirmationentrytitle = request.form.get("Affirmationtitle")
-           Affirmationentrytext = request.form.get("Affirmationentry")
-
-           affirmation.add_Affirmationentry(Affirmationentrytitle, Affirmationentrytext)
-
-
-           #entries = journal.entries
-           #entry = JournalEntry(EntryTitle = entrytitle, EntryText = entrytext, Date_Time = datetime)
-           #entry = journal.add_entry(entrytitle, entrytext, result)
-           #db.session.add(entry)
-           #db.session.commit()
-
-       Affirmationentries = AffirmationEntry.query.all()
-       return render_template('affirmation.html', affirmation=affirmation, Affirmationentries = Affirmationentries)
-
-@bp.route('/remove/<int:AffirmationEntryID>', methods = ['POST','GET', 'DELETE'])
-def remove(AffirmationEntryID):
-    #entry = JournalEntry.query.get(EntryID)
-    #entry.delete()
-
-    #JournalEntry.query.filter_by(EntryID = EntryID).delete()
-    Affirmationentry = AffirmationEntry.query.filter_by(AffirmationEntryID = AffirmationEntryID).first()
-
-
-    #entry.delete()
-    db.session.delete(Affirmationentry)
-    db.session.commit()
-    Affirmationentries = AffirmationEntry.query.all()
-
-    return render_template('affirmation.html', Affirmationentries = Affirmationentries)
-"""
-@bp.route('/view/<int:JournalID>', methods = ['POST','GET'])
-def view(JournalID):
-    journal = Journal.query.get(JournalID)
-    entries = JournalEntry.query.all(journal)
-    return render_template('view.html', entries = entries)
-"""
