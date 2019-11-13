@@ -15,19 +15,7 @@ from app.main.config import Config
 # from app.api.request import *
 from app.api.request import analyze
 
-from flask_login import login_required, current_user, logout_user, login_user
-from .forms import RegisterForm, LoginForm, ChangePasswordForm, UpdateAccountInfo, createAEntry
-
-#bp = Blueprint("site", __name__)
-db = SQLAlchemy()
-
-#@bp.route('/', methods=['GET','POST'])
-#def index():
-#    User = User.query.all()
-#    return render_template('index.html', User = User)
-
-
-@bp.route('/', methods=['GET', 'POST'])
+@bp.route('/', methods=['GET','POST'])
 def index():
     user = current_user
 
