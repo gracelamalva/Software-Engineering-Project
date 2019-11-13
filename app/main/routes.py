@@ -254,7 +254,6 @@ def analyze_text():
 
     return render_template('analyze.html', analyzed_text=analyzed_text, text=text)
 
-"""
 @bp.route('/populate', methods=['GET', 'POST'])
 def populate():
     query = db.insert(Users).values(Username="glamalva", fullName='grace', passwordHash="dfsfs34",
