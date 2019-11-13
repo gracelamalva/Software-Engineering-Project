@@ -16,12 +16,23 @@ class Users(db.Model):
     email = db.Column(db.String, nullable=False)
     register_date = db.Column(db.DateTime, default=datetime.now)
     is_active = db.Column(db.Boolean, default=True)
+    userstatus = db.Column(db.String, default = "User")
 
     journal = db.relationship("Journal", uselist=False, backref='Users')
 
     def add_journal(self, title):
         new_journal = Journal(title = title, UserID = self.Username)
         db.session.add(new_journal)
+        db.session.commit()
+    
+    def become_Patient(self):
+        new_patient = Patient(id = self.id, patientName = self.fullname)
+        db.session.add(new_patient)
+        db.session.commit()
+    
+    def become_Therapist(self):
+        new_therapist = Therapist(id = self.id, therapistName = self.fullname)
+        db.session.add(new_therapist)
         db.session.commit()
 
     @property
@@ -56,7 +67,22 @@ def load_user(id):
         return
     return Users.query.get(id)
 
+class Therapist(db.Model):
+    __tablename__ = "Therapist"
+    id = db.Column(db.Integer, db.ForeignKey('Users.id'), primary_key=True)
+    therapistName = db.Column(db.String, db.ForeignKey('Users.fullname'))
 
+    myPatients = db.relationship("Patient", backref = "Therapist")
+
+
+class Patient(db.Model):
+    __tablename__ = "Patient"
+    id = db.Column(db.String, db.ForeignKey('Users.id'), primary_key=True)
+    #insuranceProvider = db.Column(db.String)
+    patientName = db.Column(db.String, db.ForeignKey('Users.fullname'))
+    TherapistID = db.Column(db.String, db.ForeignKey('Therapist.id'), unique = True)
+
+    #T_ID = db.Column(db.Integer, db.ForeignKey ('Therapist.TherapistID')
 #class User(db.Model):
 #    __tablename__ = "User"
 #    Username = db.Column(db.String, primary_key=True, nullable = False)
@@ -65,13 +91,7 @@ def load_user(id):
 #    Email = db.Column(db.String, nullable = False)
 #
 #    journal = db.relationship("Journal", uselist=False, backref="User")
-#
-#    def add_journal(self, title):
-#        new_journal = Journal(title = title, UserID = self.Username)
-#        db.session.add(new_journal)
-#        db.session.commit()
 
-=======
 """
     def add_affirmation(self,title):
         new_affirmation=Affirmation(title = title, UserID = self.Username)
