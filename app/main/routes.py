@@ -387,12 +387,4 @@ def remove(AffirmationEntryID):
     Affirmationentries = AffirmationEntry.query.all()
 
     return render_template('affirmation.html', Affirmationentries = Affirmationentries)
-"""
-"""
-@bp.route('/view/<int:JournalID>', methods = ['POST','GET'])
 
-def view(JournalID):
-    journal = Journal.query.get(JournalID)
-    entries = JournalEntry.query.all(journal)
-    return render_template('view.html', entries = entries)
-"""

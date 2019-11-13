@@ -5,6 +5,8 @@ from hashlib import md5
 from . import db
 from flask_sqlalchemy import SQLAlchemy
 #from .import db
+
+
 db = SQLAlchemy()
 
 class Users(db.Model):
@@ -67,21 +69,6 @@ def load_user(id):
         return
     return Users.query.get(id)
 
-class Therapist(db.Model):
-    __tablename__ = "Therapist"
-    id = db.Column(db.Integer, db.ForeignKey('Users.id'), primary_key=True)
-    therapistName = db.Column(db.String, db.ForeignKey('Users.fullname'))
-
-    myPatients = db.relationship("Patient", backref = "Therapist")
-
-
-class Patient(db.Model):
-    __tablename__ = "Patient"
-    id = db.Column(db.String, db.ForeignKey('Users.id'), primary_key=True)
-    #insuranceProvider = db.Column(db.String)
-    patientName = db.Column(db.String, db.ForeignKey('Users.fullname'))
-    TherapistID = db.Column(db.String, db.ForeignKey('Therapist.id'), unique = True)
-
     #T_ID = db.Column(db.Integer, db.ForeignKey ('Therapist.TherapistID')
 #class User(db.Model):
 #    __tablename__ = "User"
@@ -116,10 +103,10 @@ class JournalEntry(db.Model):
     EntryID = db.Column(db.Integer, primary_key=True, nullable = False, autoincrement = True)
     EntryTitle = db.Column(db.String)
     EntryText = db.Column(db.String)
-    Date_Time = db.Column(db.DateTime)
+    Date_Time = db.Column(db.DateTime, nullable = False)
     #EntryEmotion = db.Column(db.Integer, db.ForeignKey('Journal.JournalID'), nullable=False)
     J_ID = db.Column(db.Integer, db.ForeignKey('Journal.JournalID'), nullable = False)
-    
+
 class AffirmationEntry(db.Model):
     __tablename__ = "AffirmationEntry"
     AffirmationEntryID = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
@@ -131,30 +118,22 @@ class AffirmationEntry(db.Model):
         new_AffirmationEntry = AffirmationEntry(AffirmationEntryTitle=aTitle, AffirmationEntryText=aText)
         db.session.add(new_AffirmationEntry)
         db.session.commit()
-""" 
-class Affirmation(db.Model):
-    __tablename__ = "Affirmation"
-    AffirmationID = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
-    Affirmationtitle = db.Column(db.String, nullable=False)
-    AffirmationUserID = db.Column(db.String, db.ForeignKey('Users.Username'), nullable=False)
 
-    Affirmationentries = db.relationship("AffirmationEntry", backref="Affirmation")
 
-    def add_Affirmationentry(self, Affirmationentrytitle, Affirmationentrytext):
-        new_Affirmationentry = AffirmationEntry(EntryTitle=Affirmationentrytitle, EntryText=Affirmationentrytext, A_ID=self.AffirmationID)
-        db.session.add(new_Affirmationentry)
-        db.session.commit()
+class Therapist(db.Model):
+    __tablename__ = "Therapist"
+    id = db.Column(db.Integer, db.ForeignKey('Users.id'), primary_key=True)
+    therapistName = db.Column(db.String, db.ForeignKey('Users.fullname'))
+    TherapistID = db.Column(db.String, db.ForeignKey('Therapist.id'), unique = True)
 
-class AffirmationEntry(db.Model):
-    __tablename__ = "AffirmationEntry"
-    AffirmationEntryID = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
-    AffirmationEntryTitle = db.Column(db.String)
-    AffirmationEntryText = db.Column(db.String)
-    #A_ID = db.Column(db.Integer, db.ForeignKey('Affirmation.AffirmationID'), nullable=False)
-"""
+    myPatients = db.relationship("Patient", backref = "Therapist")
 
-#class AnalyzedEntry(db.Model):
-#    __tablename__ = "AnalyzedJournalEntry"
-#    AnalyzedEntryID = db.Column(db.Integer, primary_key = True, nullable = False, autoincrement = True)
-#    EntryEmotion = db.Column(db.String, nullable =False)
-#    E_ID = db.Column(db.Integer, db.ForeignKey('JournalEntry.EntryID'))
+
+class Patient(db.Model):
+    __tablename__ = "Patient"
+    id = db.Column(db.String, db.ForeignKey('Users.id'), primary_key=True)
+    #insuranceProvider = db.Column(db.String)
+    patientName = db.Column(db.String, db.ForeignKey('Users.fullname'))
+    T_ID = db.Column(db.Integer, db.ForeignKey ('Therapist.TherapistID'))
+
+    
