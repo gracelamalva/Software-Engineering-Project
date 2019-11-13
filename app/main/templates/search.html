@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block header %}
+      <header class="masthead" style="background-image: url('/static/img/entry-b.jpg')">
+        <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="site-heading">
+            <h1>Journal Entry</h1>
+            <span class="subheading">Choose something to do with your journal entry</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Journal</title>
+</head>
+
+<body>
+    <ul>List of Entries
+        {% for entry in entries %}
+        <li>Entry title: {{entry.EntryTitle}} <a type="button"
+                href="{{url_for('main.edit' , EntryID = entry.EntryID )}}">Edit </a>
+                <form name="formtext" method="DELETE" action="{{url_for('main.delete', EntryID = entry.EntryID)}}">
+                    <button type="submit" action="{{url_for('main.delete', EntryID = entry.EntryID)}}">Delete</button>
+                </form>
+            <form name="analyze" method="POST" action="{{url_for('main.analyze_entry', EntryID = entry.EntryID)}}">
+                <button type="submit" action="{{url_for('main.analyze_entry', EntryID = entry.EntryID)}}">Analyze Entry</button>
+            </form>
+        </li>
+        <ul>
+            <li>Date: {{entry.Date_Time}} </li>
+            <li>Entry text: {{entry.EntryText}} </li>
+            <li>The emotion associated is: {{entry.EntryEmotion}}</li>
+        </ul>
+        {% endfor %}
+    </ul>
+
+</body>
+
+</html>{% endblock %}

@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <header class="masthead" style="background-image: url('/static/img/home-bg.jpg')">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="site-heading">
+            <h1>Update Account Information</h1>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+    <h4>Account Information:</h4>
+        <hr>
+    <form action="" method="POST">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            {{ form.Username.label }}
+            {% if form.Username.errors %}
+                {% for e in form.Username.errors %}
+                    <p class="help-block text-danger">{{ e }}</p>
+                {% endfor %}
+            {% endif %}
+            {{ form.Username(class_='form-control') }}
+
+        </div>
+
+        <div class="form-group">
+            {{ form.email.label }}
+            {% if form.email.errors %}
+                {% for e in form.email.errors %}
+                    <p class="help-block text-danger">{{ e }}</p>
+                {% endfor %}
+            {% endif %}
+            {{ form.email(class_='form-control') }}
+
+        </div>
+
+        <div class="form-group">
+            {{ form.submit(class_='btn btn-primary') }}
+        </div>
+
+    </form>
+    </div>
+{% endblock content %}
