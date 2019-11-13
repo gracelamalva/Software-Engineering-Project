@@ -19,6 +19,7 @@
 {% block content %}
   <div class="container">
       {% if current_user.is_authenticated %}
+      <h2>you are a regular user </h2>
       <h4>{{ current_user.Username }}'s Account:</h4>
       <p>Full Name: {{ current_user.fullname }}</p>
       <p>Username: {{ current_user.Username }}</p>
@@ -53,6 +54,11 @@
         
       {% endif %}
   
+
+
+
+
+      
   {% else %}
       <h4>Dear You:</h4>
         <p>

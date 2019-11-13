@@ -131,8 +131,9 @@ def search():#JournalID):
 
 @bp.route('/createjournal', methods=['POST', 'GET'])
 def create_journal():
+    #/<string:id>
     title = request.form.get("title")
-    journal = Journal(title=title, UserID=current_user)
+    journal = Journal(title=title, UserID=current_user.id)
     db.session.add(journal)
     db.session.commit()
 
@@ -247,6 +248,10 @@ def profile(Username):
 @bp.route('/patient' , methods = ['GET', 'POST'])
 def patient():
 
+    if current_user.userstatus == "Patient":
+        flash('you cannot become a patient again')
+        render_template('accountview.html')
+
     #user = Users.query.get(Username)
     user = current_user
 
@@ -280,7 +285,6 @@ def account():
  
     return render_template('account.html', user = user)
 
-
 @bp.route('/findtherapist')
 @login_required
 def findtherapist():
@@ -290,13 +294,22 @@ def findtherapist():
 @bp.route('/revertaccount')
 @login_required
 def revertaccount():
+    
+    
+    id = current_user.id
+    user = current_user
+
+    current_user.userstatus = "User"
+    patient = Patient.query.get(id)
+    db.session.delete(patient)
+    db.session.commit()
 
     return render_template('revertaccount.html')
 """
 @bp.route('/populate', methods= ['GET','POST'])
 def populate():
     query = db.insert(Users).values(Username = "glamalva", fullName='grace', passwordHash="dfsfs34", Email = "gracegmailcom") 
-
+"""
 @bp.route('/affirmation', methods = ['GET', 'POST'])
 def affirmation():
     form = createAEntry()

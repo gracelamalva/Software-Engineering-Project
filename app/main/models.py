@@ -118,7 +118,7 @@ class Therapist(db.Model):
     __tablename__ = "Therapist"
     id = db.Column(db.Integer, db.ForeignKey('Users.id'), primary_key=True)
     therapistName = db.Column(db.String, db.ForeignKey('Users.fullname'))
-    TherapistID = db.Column(db.String, db.ForeignKey('Therapist.id'), unique = True)
+    TherapistID = db.Column(db.String, unique = True)
 
     myPatients = db.relationship("Patient", backref = "Therapist")
 
