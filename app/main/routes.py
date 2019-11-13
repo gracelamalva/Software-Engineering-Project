@@ -268,7 +268,7 @@ def therapist():
     user = current_user
     
     user.become_Therapist()
-    Users.userStatus = "Therapist"
+    current_user.userstatus = "Therapist"
     db.session.commit()
 
     user = current_user
@@ -289,7 +289,9 @@ def account():
 @login_required
 def findtherapist():
 
-    return render_template('findtherapist.html')
+    therapists = Therapist.query.all()
+
+    return render_template('findtherapist.html', therapists = therapists )
 
 @bp.route('/revertaccount')
 @login_required
@@ -298,12 +300,17 @@ def revertaccount():
     
     id = current_user.id
     user = current_user
-
+    if current_user.userstatus == "Patient":
+        patient = Patient.query.get(id)
+        db.session.delete(patient)
+    if current_user.userstatus == "Therapist":
+        therapist = Therapist.query.get(id)
+        db.session.delete(therapist)
+    
+ 
     current_user.userstatus = "User"
-    patient = Patient.query.get(id)
-    db.session.delete(patient)
     db.session.commit()
-
+    
     return render_template('revertaccount.html')
 """
 @bp.route('/populate', methods= ['GET','POST'])

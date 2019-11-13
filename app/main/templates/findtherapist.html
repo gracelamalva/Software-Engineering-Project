@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <header class="masthead" style="background-image: url('/static/img/index-b.jpg')">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="site-heading">
+            <h1>It's A Wonderful Journal App</h1>
+            <span class="subheading">Thanks for Visiting</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+{% endblock %}
+
+{% block content %}
+<h2>Find a therapist</h2>
+{% for therapist in therapists %}
+<p> {{therapist.therapistName}}</p> <a>Add as my Therapist</a>
+{% endfor %}
+{% endblock %}
+
+
