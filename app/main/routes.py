@@ -317,6 +317,7 @@ def revertaccount():
     return render_template('revertaccount.html')
 
 @bp.route('/affirmation', methods = ['GET', 'POST'])
+@login_required
 def affirmation():
     form = createAEntry()
 
