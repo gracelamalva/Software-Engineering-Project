@@ -1,14 +1,21 @@
-import sys, csv, os, datetime
-from app.main import bp
-from flask import Flask, redirect, render_template, request, Blueprint, url_for, jsonify
+import sys, csv, os
+import datetime
+from werkzeug.urls import url_parse
+from app.main import bp, models
+from flask import Flask, redirect, render_template, request, Blueprint, url_for, jsonify, flash
 from app.main.models import *
 from .models import Users
 from .models import Journal
 from .models import JournalEntry
+
+from flask import flash
 from flask_sqlalchemy import SQLAlchemy
 from app.main.config import Config
-#from app.api.request import *
+# from app.api.request import *
 from app.api.request import analyze
+
+from flask_login import login_required, current_user, logout_user, login_user
+from .forms import RegisterForm, LoginForm, ChangePasswordForm, UpdateAccountInfo
 
 @bp.route('/', methods=['GET','POST'])
 def index():
