@@ -1,4 +1,5 @@
 import sys, csv, os, datetime
+from datetime import timedelta
 from werkzeug.urls import url_parse
 from app.main import bp, models
 from flask import Flask, redirect, render_template, request, Blueprint, url_for, jsonify, flash
@@ -124,8 +125,8 @@ def journal():
 def search():#JournalID):
     dt = request.args.get("date")
     ft = '%Y-%m-%d'
-    date = datetime.datetime.strptime(dt, ft)
-    entries = JournalEntry.query.filter(JournalID, JournalEntry.Date_Time.between(date, date + datetime.timedelta(days=1))).all()
+    date = datetime.strptime(dt, ft)
+    entries = JournalEntry.query.filter(JournalEntry.Date_Time.between(date, date + datetime.timedelta(days=1))).all()
     return render_template('search.html', entries=entries)
 
 
