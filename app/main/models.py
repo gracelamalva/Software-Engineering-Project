@@ -23,7 +23,7 @@ class Users(db.Model):
     journal = db.relationship("Journal", uselist=False, backref='Users')
 
     def add_journal(self, title):
-        new_journal = Journal(title = title, UserID = self.Username)
+        new_journal = Journal(title = title, UserID = self.id)
         db.session.add(new_journal)
         db.session.commit()
     
@@ -79,12 +79,6 @@ def load_user(id):
 #
 #    journal = db.relationship("Journal", uselist=False, backref="User")
 
-"""
-    def add_affirmation(self,title):
-        new_affirmation=Affirmation(title = title, UserID = self.Username)
-        db.session.add(new_affirmation)
-        db.session.commit()
-"""
 class Journal(db.Model):
     __tablename__ = "Journal"
     JournalID = db.Column(db.Integer, primary_key=True, unique = True, autoincrement = True)
@@ -94,7 +88,7 @@ class Journal(db.Model):
     entries = db.relationship("JournalEntry", backref="Journal")
 
     def add_entry(self, entrytitle, entrytext, date_time):
-        new_entry = JournalEntry(EntryTitle = entrytitle, EntryText = entrytext, Date_Time = date_time, J_ID = self.JournalID)
+        new_entry = JournalEntry(EntryTitle = entrytitle, EntryText = entrytext, Date_Time = date_time, J_ID = self.UserID)
         db.session.add(new_entry)
         db.session.commit()
 

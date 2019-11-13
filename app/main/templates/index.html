@@ -22,6 +22,7 @@
   <h4>Welcome {{ current_user.Username }}</h4>
         <p><a href="{{ url_for('main.account') }}">Your Account</a></p>
         <p><a href="{{ url_for('main.journal') }}">Your Journals</a></p>
+        <p><a href="{{ url_for('main.affirmation') }}">Your Affirmation(s)</a></p>
   {% else %}
         <h4>Dear You:</h4>
         <p>
@@ -29,8 +30,8 @@
         </p>
   {% endif %}
   </div>
-
 {% endblock %}
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html>
     <head>
@@ -44,4 +45,6 @@
    
       </div>
     </body>
+=======
+>>>>>>> d7cf8536e7e4ae04fd574b0997ba67d0b9da264c
 </html>
