@@ -5,6 +5,8 @@ from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
 
 from app import api
+from flask import Blueprint
+bp = Blueprint('main',__name__, template_folder= '../main/templates')
 
 db = SQLAlchemy()
 login = LoginManager()

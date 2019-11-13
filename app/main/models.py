@@ -92,6 +92,10 @@ class Patient(db.Model):
 #
 #    journal = db.relationship("Journal", uselist=False, backref="User")
 
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> feature_two
 """
     def add_affirmation(self,title):
         new_affirmation=Affirmation(title = title, UserID = self.Username)
