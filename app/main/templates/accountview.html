@@ -23,10 +23,45 @@
       <p>Full Name: {{ current_user.fullname }}</p>
       <p>Username: {{ current_user.Username }}</p>
       <p>Email: {{ current_user.email }}</p>
+      <P>User Status: {{current_user.userstatus}}</P>
+
       <p><a href="{{ url_for('main.reset') }}">Click Here to Reset Your Password</a></p>
       <p><a href="{{ url_for('main.update') }}">Click Here to Update Your Account Information</a></p>
       <p>Member Since: {{ current_user.register_date.strftime("%A %B %d, %Y") }}</p>
-  {% else %}
+
+
+
+      {% if current_user.userstatus == "Patient" %}
+      <h3>Patient Features</h3>
+        <p><a href = "{{url_for('main.findtherapist')}}">find therapist</a></p>
+        <p><a href = "{{url_for('main.revertaccount')}}">revert account</a></p>
+      {% endif %}
+  
+
+      {% if current_user.userstatus == "Therapist" %}
+      <h3>Therapist Features</h3>
+
+        <p><a href = "{{url_for('main.findtherapist')}}">find Patient</a></p>
+        <p><a href = "{{url_for('main.revertaccount')}}">revert account</a></p>
+      {% endif %}
+  
+    
+      {% if current_user.userstatus == "User" %}
+      <h3>User Features</h3>
+
+        <p><a href = "{{url_for('main.journal')}}">manage journal</a></p>
+        
+      {% endif %}
+  
+  
+  
+  
+      {% else %}
+
+
+
+
+
       <h4>Dear You:</h4>
         <p>
         Please <a href="{{ url_for('main.login') }}">Login</a> or <a href="{{ url_for('main.register') }}">Register</a>

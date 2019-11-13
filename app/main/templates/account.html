@@ -25,10 +25,21 @@
   <p><a href="{{ url_for('main.reset') }}">Password Reset</a></p>
 
 
+  {% if current_user.userstatus == "User"%}
+  
+  <p><a type = "button" href = "{{ url_for('main.patient')}}">CONVERT TO patient</a></p>
+  <p><a type = "button" href = "{{ url_for('main.therapist')}}">CONVERT TO therapist</a></p>
+
+  {% endif %}
 
   <p>Member Since: {{ current_user.register_date.strftime("%A %B %d, %Y") }}</p>
-  {% else %}
 
+
+
+
+
+
+  {% else %}
 
 
 

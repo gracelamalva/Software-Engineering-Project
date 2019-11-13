@@ -1,7 +1,5 @@
 import sys, csv, os, datetime
-
 from werkzeug.urls import url_parse
-
 from app.main import bp, models
 from flask import Flask, redirect, render_template, request, Blueprint, url_for, jsonify, flash
 from app.main.models import *
@@ -24,19 +22,12 @@ db = SQLAlchemy()
 #    User = User.query.all()
 #    return render_template('index.html', User = User)
 
-# bp = Blueprint("site", __name__)
-# db = SQLAlchemy()
 
 @bp.route('/', methods=['GET', 'POST'])
 def index():
     user = current_user
 
     return render_template('index.html', user = user)
-
-
-#@bp.route('/journal', methods=['GET', 'POST'])
-#def journal():
-#    return render_template('index.html')
 
 #------------ user login routes ----------
 
@@ -261,27 +252,30 @@ def profile(Username):
 
     return render_template('dummyprofile.html', user = user)
 
-@bp.route('/patient/<string:Username>' , methods = ['GET', 'POST'])
-def patient(Username):
+@bp.route('/patient' , methods = ['GET', 'POST'])
+def patient():
 
-    user = Users.query.get(Username)
-    
+    #user = Users.query.get(Username)
+    user = current_user
+
     user.become_Patient()
-    Users.userStatus = "Patient"
+    current_user.userstatus = "Patient"
     db.session.commit()
 
-    return render_template('patient.html', user = user)
+    user = current_user
+    return render_template('accountview.html', user = user)
 
-@bp.route('/therapist/<string:Username>' , methods = ['GET', 'POST'])
-def therapist(Username):
+@bp.route('/therapist' , methods = ['GET', 'POST'])
+def therapist():
 
-    user = Users.query.filter(Username)
+    user = current_user
     
     user.become_Therapist()
     Users.userStatus = "Therapist"
     db.session.commit()
 
-    return render_template('therapist.html', user = user)
+    user = current_user
+    return render_template('accountview.html', user = user)
 
 
 @bp.route('/account')
@@ -289,14 +283,23 @@ def therapist(Username):
 def account():
 
     #user = Users.query.filter(id)
+    user = current_user
+    flag = 0
+ 
+    return render_template('account.html', user = user)
 
-    #if (request.method == "POST"):
-    #    return render_template(url_for('patient'))
 
-    #if (user.userStatus == "Patient"):
-    #     return render_template(url_for('patient'))
+@bp.route('/findtherapist')
+@login_required
+def findtherapist():
 
-    return render_template('account.html')#, user = user)
+    return render_template('findtherapist.html')
+
+@bp.route('/revertaccount')
+@login_required
+def revertaccount():
+
+    return render_template('revertaccount.html')
 """
 @bp.route('/populate', methods= ['GET','POST'])
 def populate():
