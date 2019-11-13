@@ -30,20 +30,9 @@ db = SQLAlchemy()
 
 @bp.route('/', methods=['GET', 'POST'])
 def index():
-<<<<<<< HEAD
     user = current_user
 
     return render_template('index.html', user = user)
-=======
-    users = Users.query.all()
-
-    return render_template('index.html', users=users)
-
-
-#@bp.route('/journal', methods=['GET', 'POST'])
-#def journal():
-#    return render_template('index.html')
->>>>>>> feature_two
 
 #------------ user login routes ----------
 
@@ -320,18 +309,6 @@ def revertaccount():
 @bp.route('/populate', methods= ['GET','POST'])
 def populate():
     query = db.insert(Users).values(Username = "glamalva", fullName='grace', passwordHash="dfsfs34", Email = "gracegmailcom") 
-    query1 = db.insert(Users).values(Username = "javery", fullName='james', passwordHash="awe131", Email = "jamesaveryaimcom") 
-   # db.session.execute( "INSERT INTO Users (Username, fullName, passwordHash, Email) VALUES ('glamalva', 'gracelamalva', 'adfa43', 'glamalvagmailcom')")
-    db.session.execute(query)
-    db.session.execute(query1)
-    db.session.commit()
-    print("record inserted.")
-
-<<<<<<< HEAD
-    return render_template('index.html')
-    return render_template (url_for('main.index'))
-=======
-    return render_template ('index.html')
 
 @bp.route('/affirmation', methods = ['GET', 'POST'])
 def affirmation():
@@ -418,4 +395,4 @@ def view(JournalID):
     journal = Journal.query.get(JournalID)
     entries = JournalEntry.query.all(journal)
     return render_template('view.html', entries = entries)
-"""
+
