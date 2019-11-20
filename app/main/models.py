@@ -4,7 +4,6 @@ from datetime import datetime
 from hashlib import md5
 from . import db
 from flask_sqlalchemy import SQLAlchemy
-#from .import db
 
 
 db = SQLAlchemy()
@@ -55,7 +54,6 @@ class Users(db.Model):
     def is_authenticated(self):
         return True
 
-
 @login.user_loader
 def load_user(id):
     if isinstance(id, int):
@@ -70,14 +68,6 @@ def load_user(id):
     return Users.query.get(id)
 
     #T_ID = db.Column(db.Integer, db.ForeignKey ('Therapist.TherapistID')
-#class User(db.Model):
-#    __tablename__ = "User"
-#    Username = db.Column(db.String, primary_key=True, nullable = False)
-#    fullName = db.Column(db.String, nullable = False)
-#    passwordHash = db.Column(db.String, nullable = False)
-#    Email = db.Column(db.String, nullable = False)
-#
-#    journal = db.relationship("Journal", uselist=False, backref="User")
 
 class Journal(db.Model):
     __tablename__ = "Journal"
@@ -113,14 +103,16 @@ class AffirmationEntry(db.Model):
         db.session.add(new_AffirmationEntry)
         db.session.commit()
 
-
 class Therapist(db.Model):
     __tablename__ = "Therapist"
     id = db.Column(db.Integer, db.ForeignKey('Users.id'), primary_key=True)
     therapistName = db.Column(db.String, db.ForeignKey('Users.fullname'))
     TherapistID = db.Column(db.String, unique = True)
+    #numberOfPatients = db. Column(db.Integer)
 
     myPatients = db.relationship("Patient", backref = "Therapist")
+    
+    def signPatient(self):
 
 
 class Patient(db.Model):
@@ -130,4 +122,20 @@ class Patient(db.Model):
     patientName = db.Column(db.String, db.ForeignKey('Users.fullname'))
     T_ID = db.Column(db.Integer, db.ForeignKey ('Therapist.TherapistID'))
 
-    
+class Request(db.Model):
+    __tablename__ = "Request"
+    id = db.Column(db.String, autoincrement = True, primary_key = True)
+    from = db.Column(db.String, db.ForeignKey('Users.id'))
+    to = db.Column(db.String, db.ForeignKey('Users.id'))
+    status = db.Column(db.String, default = "Sent") #options are sent, accepted, denied
+
+    def sendRequest(self, from, to):
+        new_request = Request(from = from, to = to)
+        db.session.add(new_request)
+        db.session.commit()
+
+class RequestResponse(db.Model):
+    __tablename__ = "RequestResponse"
+    id = db.Column(db.String, autoincrement = True, primary_key = True)
+
+

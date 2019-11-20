@@ -26,8 +26,6 @@ def index():
 
     return render_template('index.html', user = user)
 
-#------------ user login routes ----------
-
 @bp.route('/register', methods=['post', 'get'])
 def register():
     if current_user.is_authenticated:
@@ -46,7 +44,6 @@ def register():
         flash('Your acc created. Please login with your new credential.', category='success')
         return redirect(url_for('main.login'))
     return render_template('user_register.html', title='User Register', form=form)
-
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
@@ -113,15 +110,11 @@ def logout():
     logout_user()
     return redirect(url_for('main.login'))
 
-#------------ user login routes ----------
-
-
 @bp.route('/journal', methods = ['GET', 'POST'])
 def journal():
     # entry = request.form.get("entry")
     entries = JournalEntry.query.all()
     return render_template('journal.html', journal = journal, entries=entries)
-
 
 @bp.route('/search', methods=['GET', 'POST'])
 def search():#JournalID):
@@ -130,7 +123,6 @@ def search():#JournalID):
     date = datetime.strptime(dt, ft)
     entries = JournalEntry.query.filter(JournalEntry.Date_Time.between(date, date + datetime.timedelta(days=1))).all()
     return render_template('search.html', entries=entries)
-
 
 @bp.route('/createjournal', methods=['POST', 'GET'])
 def create_journal():
@@ -184,7 +176,6 @@ def add(JournalID):
     entries = JournalEntry.query.all()
     return render_template('journal.html', journal=journal, entries=entries)
 
-
 @bp.route('/delete/<int:EntryID>', methods=['POST', 'GET', 'DELETE'])
 def delete(EntryID):
     #entry = JournalEntry.query.get(EntryID)
@@ -215,7 +206,6 @@ def analyze_entry(EntryID):
 
     return render_template('journal.html', entries=entries)
 
-
 @bp.route('/analyze', methods = ['GET', 'POST'])
 def analyze_text():
  
@@ -227,7 +217,6 @@ def analyze_text():
 
     return render_template('analyze.html', analyzed_text=analyzed_text, text=text)
 
-
 @bp.route('/populate', methods=['GET', 'POST'])
 def populate():
     query = db.insert(Users).values(Username="glamalva", fullName='grace', passwordHash="dfsfs34",  Email="gracegmailcom")
@@ -235,7 +224,6 @@ def populate():
     analyzed_text =  analyze(text)
 
     return render_template('analyze.html', analyzed_text = analyzed_text, text = text)
-
 
 @bp.route('/dummyprofile/<string:Username>', methods = ['GET','POST'])
 def profile(Username):
@@ -279,7 +267,6 @@ def therapist():
     user = current_user
     return render_template('accountview.html', user = user)
 
-
 @bp.route('/account')
 @login_required
 def account():
@@ -301,8 +288,7 @@ def findtherapist():
 @bp.route('/revertaccount')
 @login_required
 def revertaccount():
-    
-    
+      
     id = current_user.id
     user = current_user
     if current_user.userstatus == "Patient":
@@ -312,11 +298,42 @@ def revertaccount():
         therapist = Therapist.query.get(id)
         db.session.delete(therapist)
     
- 
     current_user.userstatus = "User"
     db.session.commit()
     
     return render_template('revertaccount.html')
+
+@bp.route('/sendrequest')
+@login_required
+def sendrequest(from, to):
+
+    #sends request to patient db to add therapist as T_ID
+    id = current_user.id
+    user = current_user
+
+    if current_user.userstatus == "Therapist":
+        
+
+    if current_user.userstatus == "Patient":
+
+    flash('Your request has been sent to Patient')
+
+    return render_template('viewaccount.html')
+
+@bp.route('/requestresponse/<string:id>/<string:from>/<string:to>')
+@login_required
+def requestresponse(id, from, to):
+
+    request = Request.query.get(id)
+
+    
+
+    id = current_user.id
+    user = current_user
+
+
+
+    return render_template('viewaccount.html')
 
 @bp.route('/affirmation', methods = ['GET', 'POST'])
 @login_required

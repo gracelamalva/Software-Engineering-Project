@@ -7,7 +7,7 @@
       <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
           <div class="site-heading">
-            <h1>Find the Therapist</h1>
+            <h1>Find a Patient</h1>
             <span class="subheading">Thanks for Visiting</span>
           </div>
         </div>
@@ -17,8 +17,8 @@
 {% endblock %}
 
 {% block content %}
-<h2>Find a therapist</h2>
-{% for therapist in therapists %}
-<p> {{therapist.therapistName}}</p> <a href = "{{url_for('main.sendrequest')}}>
+<h2>Send request to a Patient</h2>
+{% for patient in patients %}
+<p> {{patient.patientName}}</p> <a href = "{{url_for('main.sendrequest')}}">
 {% endfor %}
 {% endblock %}
