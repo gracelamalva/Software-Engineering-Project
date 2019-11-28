@@ -110,9 +110,10 @@ class Therapist(db.Model):
     TherapistID = db.Column(db.String, unique = True)
     #numberOfPatients = db. Column(db.Integer)
 
-    myPatients = db.relationship("Patient", backref = "Therapist")
-    
-    def signPatient(self):
+    #myPatients = db.relationship("Patient", backref = "Therapist")
+    #sendsrequest = db.relationship("Request",)
+    #def signPatient(self):
+
 
 
 class Patient(db.Model):
@@ -128,6 +129,9 @@ class Request(db.Model):
     from = db.Column(db.String, db.ForeignKey('Users.id'))
     to = db.Column(db.String, db.ForeignKey('Users.id'))
     status = db.Column(db.String, default = "Sent") #options are sent, accepted, denied
+    respone = db.Column(db.String, default = "none")
+
+    responses = db.relationship("RequestResponse", backref = "Request")
 
     def sendRequest(self, from, to):
         new_request = Request(from = from, to = to)
@@ -136,6 +140,5 @@ class Request(db.Model):
 
 class RequestResponse(db.Model):
     __tablename__ = "RequestResponse"
-    id = db.Column(db.String, autoincrement = True, primary_key = True)
-
-
+    id = db.Column(db.String, db.ForeignKey('Request.id'), primary_key = True)
+    respone = db.Column(db.String)
