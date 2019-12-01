@@ -23,6 +23,7 @@
         <p><a href="{{ url_for('main.account') }}">Your Account</a></p>
         <p><a href="{{ url_for('main.journal') }}">Your Journals</a></p>
         <p><a href="{{ url_for('main.affirmation') }}">Your Affirmation(s)</a></p>
+        <button>Share our page</button>
   {% else %}
         <h4>Dear You:</h4>
         <p>
@@ -30,5 +31,11 @@
         </p>
   {% endif %}
   </div>
+    <div class="overlay"></div>
+    <div class="share">
+        <h2>Share now</h2> </div>
+    <a href="https://twitter.com/intent/tweet?text=Create+your+own+journal+which+analysis-your+writing&url=http%3A%2F%2F127.0.0.1:5000&via=JorunalApp" rel="noopener" target="_blank">Share on Twitter</a>
+    <a href="https://www.facebook.com/dialog/share?app_id=XXXXXXXXXXXXXXX&display=popup&href=https%3A%2F%2Fstevenwestmoreland.com%2F2018%2F07%2Fcreating-social-sharing-links-without-javascript.html" rel="noopener" target="_blank">Share on Facebook</a>
+    </div>
 {% endblock %}
 </html>
