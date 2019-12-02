@@ -19,6 +19,12 @@ from app.api.request import analyze
 from flask_login import login_required, current_user, logout_user, login_user
 from .forms import RegisterForm, LoginForm, ChangePasswordForm, UpdateAccountInfo, createAEntry
 
+#import chatbot files
+from chatterbot import ChatBot
+from chatterbot.trainers import ChatterBotCorpusTrainer
+from chatterbot.trainers import ListTrainer
+import spacy
+nlp = spacy.load('en')
 
 @bp.route('/', methods=['GET','POST'])
 def index():
@@ -175,7 +181,7 @@ def add(JournalID):
         result = datetime.strptime(dt, ft)
 
         journal.add_entry(entrytitle, entrytext, result)
-       
+
         #entries = journal.entries
         #entry = JournalEntry(EntryTitle = entrytitle, EntryText = entrytext, Date_Time = datetime)
         #entry = journal.add_entry(entrytitle, entrytext, result)
@@ -201,7 +207,7 @@ def delete(EntryID):
 
 @bp.route('/analyze/<int:EntryID>', methods = ['GET', 'POST'])
 def analyze_entry(EntryID):
-   
+
     emotion = ""
     entry = JournalEntry.query.get(EntryID)
 
@@ -218,7 +224,7 @@ def analyze_entry(EntryID):
 
 @bp.route('/analyze', methods = ['GET', 'POST'])
 def analyze_text():
- 
+
     analyzed_text = ""
     text = request.form['entry']
 
@@ -271,7 +277,7 @@ def patient():
 def therapist():
 
     user = current_user
-    
+
     user.become_Therapist()
     current_user.userstatus = "Therapist"
     db.session.commit()
@@ -287,7 +293,7 @@ def account():
     #user = Users.query.filter(id)
     user = current_user
     flag = 0
- 
+
     return render_template('account.html', user = user)
 
 @bp.route('/findtherapist')
@@ -301,8 +307,8 @@ def findtherapist():
 @bp.route('/revertaccount')
 @login_required
 def revertaccount():
-    
-    
+
+
     id = current_user.id
     user = current_user
     if current_user.userstatus == "Patient":
@@ -311,11 +317,11 @@ def revertaccount():
     if current_user.userstatus == "Therapist":
         therapist = Therapist.query.get(id)
         db.session.delete(therapist)
-    
- 
+
+
     current_user.userstatus = "User"
     db.session.commit()
-    
+
     return render_template('revertaccount.html')
 
 @bp.route('/affirmation', methods = ['GET', 'POST'])
@@ -335,3 +341,37 @@ def affirmation():
 def affirmationview():
     affirmationEntries=AffirmationEntry.query.all()
     return render_template('affirmationview.html', entries=affirmationEntries)
+
+#chatbot files
+bot = ChatBot("Chatbot Therapist")
+conversation = [
+    "Hello",
+    "Hi there!",
+    "How are you doing?",
+    "I'm doing great.",
+    "That is good to hear",
+    "Thank you.",
+    "You're welcome."
+    "What is your name?",
+    "My name is Bot Therapist.",
+    "Who are you?",
+    "I am your private mental health therapist."
+]
+trainer = ListTrainer(bot)
+trainer.train(conversation)
+#training on english dataset
+#for files in os.listdir('./english/'):
+#    data=open('./english/'+files,'r').readlines()
+#    bot.train(data)
+
+trainer = ChatterBotCorpusTrainer(bot)
+trainer.train('chatterbot.corpus.english')
+
+@bp.route("/chat")
+def chat():
+    return render_template("chat.html")
+
+@bp.route("/get")
+def get_bot_response():
+    userText = request.args.get('msg')
+    return str(bot.get_response(userText))
