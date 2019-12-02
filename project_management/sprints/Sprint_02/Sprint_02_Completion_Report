@@ -1,7 +1,0 @@
-| Use Case | Description | Completion Status | Problems | Additional Tasks | What else did you do? | Team Member |
-|---|---|---|---|---|---|---|
-| Account | View Account Info (information you registered account with and displays the date you joined), update account info such as the username and email and have a password reset. | Completed | Could not create avatar, API was difficult to work with | Adding a confirmation email link and avatar/profile picture | Helped create and implement the register and login and helped with the creation of the affirmation use case | Sabrina |
-|---|---|---|---|---|---|---|
-|---|---|---|---|---|---|---|
-|---|---|---|---|---|---|---|
-|---|---|---|---|---|---|---|
