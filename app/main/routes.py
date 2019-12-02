@@ -1,6 +1,5 @@
 import sys, csv, os, datetime
 from datetime import timedelta
-from sqlalchemy.testing import db
 from werkzeug.urls import url_parse
 from app.main import bp, models
 from flask import Flask, redirect, render_template, request, Blueprint, url_for, jsonify, flash
@@ -15,9 +14,12 @@ from flask_sqlalchemy import SQLAlchemy
 from app.main.config import Config
 # from app.api.request import *
 from app.api.request import analyze
-
 from flask_login import login_required, current_user, logout_user, login_user
 from .forms import RegisterForm, LoginForm, ChangePasswordForm, UpdateAccountInfo, createAEntry
+from flask import send_file
+from flask import Response
+
+
 
 #import chatbot files
 from chatterbot import ChatBot
@@ -128,13 +130,41 @@ def journal():
     entries = JournalEntry.query.all()
     return render_template('journal.html', journal = journal, entries=entries)
 
+@bp.route('/journal/downloadcsv', methods = ['GET', 'POST'])
+def journal_downloadcsv():
+    # entry = request.form.get("entry")
+    entries = JournalEntry.query.all()
+    csvLines = []
+    # csv header
+    csvLines.append("ID,Title,Text,DateTime")
+    for entry in entries:
+        # in order to escape double quotes, we should double the double quotes
+        csvLine = []
+        # ID
+        csvLine.append("\"" + str(entry.EntryID).replace("\"", "\"\"") + "\"")
+        # Title
+        csvLine.append("\"" + entry.EntryTitle.replace("\"", "\"\"") + "\"")
+        # Text
+        csvLine.append("\"" + entry.EntryText.replace("\"", "\"\"") + "\"")
+        # DateTime
+        csvLine.append("\"" + str(entry.Date_Time).replace("\"", "\"\"") + "\"")
+
+        csvLines.append(",".join(csvLine))
+
+    return Response("\n".join(csvLines),
+                    mimetype="text/csv",
+                    headers={
+                        "Content-Disposition":
+                            "attachment;filename=entries.csv"
+                    })
+
 
 @bp.route('/search', methods=['GET', 'POST'])
 def search():#JournalID):
     dt = request.args.get("date")
     ft = '%Y-%m-%d'
     date = datetime.strptime(dt, ft)
-    entries = JournalEntry.query.filter(JournalEntry.Date_Time.between(date, date + datetime.timedelta(days=1))).all()
+    entries = JournalEntry.query.filter(JournalEntry.Date_Time.between(date, date + timedelta(days=1))).all()
     return render_template('search.html', entries=entries)
 
 
@@ -243,6 +273,14 @@ def populate():
     return render_template('analyze.html', analyzed_text = analyzed_text, text = text)
 
 
+@bp.route('/file-downloads/', methods=['GET','POST'])
+def file_downloads():
+    try:
+        return render_template('downloads.html')
+    except Exception as e:
+        return str(e)
+
+
 @bp.route('/dummyprofile/<string:Username>', methods = ['GET','POST'])
 def profile(Username):
 
@@ -335,11 +373,13 @@ def affirmation():
         return redirect(url_for('main.index'))
     return render_template('affirmation.html', AffirmationEntry=AffirmationEntry, form=form)
 
+
 @bp.route('/viewAffirmation')
 def affirmationview():
     affirmationEntries=AffirmationEntry.query.all()
     return render_template('affirmationview.html', entries=affirmationEntries)
 
+<<<<<<< HEAD
 #chatbot files
 bot = ChatBot("Chatbot Therapist")
 conversation = [
@@ -373,3 +413,5 @@ def chat():
 def get_bot_response():
     userText = request.args.get('msg')
     return str(bot.get_response(userText))
+=======
+>>>>>>> feature_three_karan
