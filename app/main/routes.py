@@ -308,7 +308,6 @@ def findtherapist():
 @login_required
 def revertaccount():
 
-
     id = current_user.id
     user = current_user
     if current_user.userstatus == "Patient":
@@ -317,7 +316,6 @@ def revertaccount():
     if current_user.userstatus == "Therapist":
         therapist = Therapist.query.get(id)
         db.session.delete(therapist)
-
 
     current_user.userstatus = "User"
     db.session.commit()
