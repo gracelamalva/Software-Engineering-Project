@@ -28,8 +28,15 @@
       <p><a href="{{ url_for('main.update') }}">Click Here to Update Your Account Information</a></p>
       <p>Member Since: {{ current_user.register_date.strftime("%A %B %d, %Y") }}</p>
 
-
-
+      <p>Delete Your Account
+      <ul>{% for id in Users %}
+          <li><form name="formtext" method="DELETE" action="{{url_for('main.deleteU', id = models.Users.id)}}">
+                    <button type="submit" action="{{url_for('main.deleteU', id = Users.id)}}">Delete Your Account</button>
+                </form>
+          </li>
+      {% endfor %}
+      </ul>
+      </p>
 
       {% if current_user.userstatus == "Patient" %}
       <h3>Patient Features</h3>

@@ -1,13 +1,17 @@
+from flask import url_for
+
 from . import flask_bcrypt
 from . import login
 from datetime import datetime
 from hashlib import md5
 from . import db
-from flask_sqlalchemy import SQLAlchemy
-#from .import db
+from flask_sqlalchemy import SQLAlchemy, BaseQuery
+
+# from .import db
 
 
 db = SQLAlchemy()
+
 
 class Users(db.Model):
     __tablename__ = "Users"
@@ -18,22 +22,23 @@ class Users(db.Model):
     email = db.Column(db.String, nullable=False)
     register_date = db.Column(db.DateTime, default=datetime.now)
     is_active = db.Column(db.Boolean, default=True)
-    userstatus = db.Column(db.String, default = "User")
+    userstatus = db.Column(db.String, default="User")
+    deleted = db.Column(db.Boolean(), default=False)
 
     journal = db.relationship("Journal", uselist=False, backref='Users')
 
     def add_journal(self, title):
-        new_journal = Journal(title = title, UserID = self.id)
+        new_journal = Journal(title=title, UserID=self.id)
         db.session.add(new_journal)
         db.session.commit()
-    
+
     def become_Patient(self):
-        new_patient = Patient(id = self.id, patientName = self.fullname)
+        new_patient = Patient(id=self.id, patientName=self.fullname)
         db.session.add(new_patient)
         db.session.commit()
-    
+
     def become_Therapist(self):
-        new_therapist = Therapist(id = self.id, therapistName = self.fullname)
+        new_therapist = Therapist(id=self.id, therapistName=self.fullname)
         db.session.add(new_therapist)
         db.session.commit()
 
@@ -69,8 +74,10 @@ def load_user(id):
         return
     return Users.query.get(id)
 
-    #T_ID = db.Column(db.Integer, db.ForeignKey ('Therapist.TherapistID')
-#class User(db.Model):
+    # T_ID = db.Column(db.Integer, db.ForeignKey ('Therapist.TherapistID')
+
+
+# class User(db.Model):
 #    __tablename__ = "User"
 #    Username = db.Column(db.String, primary_key=True, nullable = False)
 #    fullName = db.Column(db.String, nullable = False)
@@ -81,32 +88,35 @@ def load_user(id):
 
 class Journal(db.Model):
     __tablename__ = "Journal"
-    JournalID = db.Column(db.Integer, primary_key=True, unique = True, autoincrement = True)
-    title = db.Column(db.String, nullable = False)
-    UserID = db.Column(db.String, db.ForeignKey('Users.id'), nullable = False)
+    JournalID = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
+    title = db.Column(db.String, nullable=False)
+    UserID = db.Column(db.String, db.ForeignKey('Users.id'), nullable=False)
 
     entries = db.relationship("JournalEntry", backref="Journal")
 
     def add_entry(self, entrytitle, entrytext, date_time):
-        new_entry = JournalEntry(EntryTitle = entrytitle, EntryText = entrytext, Date_Time = date_time, J_ID = self.UserID)
+        new_entry = JournalEntry(EntryTitle=entrytitle, EntryText=entrytext, Date_Time=date_time, J_ID=self.UserID)
         db.session.add(new_entry)
         db.session.commit()
 
+
 class JournalEntry(db.Model):
     __tablename__ = "JournalEntry"
-    EntryID = db.Column(db.Integer, primary_key=True, nullable = False, autoincrement = True)
+    EntryID = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
     EntryTitle = db.Column(db.String)
     EntryText = db.Column(db.String)
-    Date_Time = db.Column(db.DateTime, nullable = False)
-    #EntryEmotion = db.Column(db.Integer, db.ForeignKey('Journal.JournalID'), nullable=False)
-    J_ID = db.Column(db.Integer, db.ForeignKey('Journal.JournalID'), nullable = False)
+    Date_Time = db.Column(db.DateTime, nullable=False)
+    # EntryEmotion = db.Column(db.Integer, db.ForeignKey('Journal.JournalID'), nullable=False)
+    J_ID = db.Column(db.Integer, db.ForeignKey('Journal.JournalID'), nullable=False)
+
 
 class AffirmationEntry(db.Model):
     __tablename__ = "AffirmationEntry"
     AffirmationEntryID = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
     AffirmationEntryTitle = db.Column(db.String)
     AffirmationEntryText = db.Column(db.String)
-    #User_ID = db.Column(db.String, db.ForeignKey('Users.id'), nullable = False)
+
+    # User_ID = db.Column(db.String, db.ForeignKey('Users.id'), nullable = False)
 
     def add_AEntry(self, aTitle, aText):
         new_AffirmationEntry = AffirmationEntry(AffirmationEntryTitle=aTitle, AffirmationEntryText=aText)
@@ -118,16 +128,43 @@ class Therapist(db.Model):
     __tablename__ = "Therapist"
     id = db.Column(db.Integer, db.ForeignKey('Users.id'), primary_key=True)
     therapistName = db.Column(db.String, db.ForeignKey('Users.fullname'))
-    TherapistID = db.Column(db.String, unique = True)
+    TherapistID = db.Column(db.String, unique=True)
 
-    myPatients = db.relationship("Patient", backref = "Therapist")
+    myPatients = db.relationship("Patient", backref="Therapist")
 
 
 class Patient(db.Model):
     __tablename__ = "Patient"
     id = db.Column(db.String, db.ForeignKey('Users.id'), primary_key=True)
-    #insuranceProvider = db.Column(db.String)
+    # insuranceProvider = db.Column(db.String)
     patientName = db.Column(db.String, db.ForeignKey('Users.fullname'))
-    T_ID = db.Column(db.Integer, db.ForeignKey ('Therapist.TherapistID'))
+    T_ID = db.Column(db.Integer, db.ForeignKey('Therapist.TherapistID'))
 
-    
+
+class QueryWithSoftDelete(BaseQuery):
+    _with_deleted = False
+
+    def __new__(cls, *args, **kwargs):
+        obj = super(QueryWithSoftDelete, cls).__new__(cls)
+        obj._with_deleted = kwargs.pop('_with_deleted', False)
+        if len(args) > 0:
+            super(QueryWithSoftDelete, obj).__init__(*args, **kwargs)
+            return obj.filter_by(deleted=False) if not obj._with_deleted else obj
+        return obj
+
+    def __init__(self, *args, **kwargs):
+        pass
+
+    def with_deleted(self):
+        return self.__class__(db.class_mapper(self._mapper_zero().class_),
+                              session=db.session(), _with_deleted=True)
+
+    def _get(self, *args, **kwargs):
+        # this calls the original query.get function from the base class
+        return super(QueryWithSoftDelete, self).get(*args, **kwargs)
+
+    def get(self, *args, **kwargs):
+        # the query.get method does not like it if there is a filter clause
+        # pre-loaded, so we need to implement it using a workaround
+        obj = self.with_deleted()._get(*args, **kwargs)
+        return obj if obj is None or self._with_deleted or not obj.deleted else None
