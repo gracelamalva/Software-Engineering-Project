@@ -6,11 +6,17 @@ prefix = 'https://gitlab.com/api/v4/projects/{}'.format(projectId)
 
 categories = [
 	{
-		"id": "Journal Account",
+
 		"label": {
+            "id": "Journal Account",
 			"name": "journal-account",
 			"color": "#3450f6"
-		}
+		},
+        "label":{
+            "id":"Patient Account",
+            "name": "patient-account",
+            "color": "#3450f6"
+        }
 	}
 ]
 

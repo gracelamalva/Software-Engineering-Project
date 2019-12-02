@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<header class="masthead" style="background-image: url('/static/img/entry-b.jpg')">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="site-heading">
+            <h1>Contact Us</h1>
+            <span class="subheading">Help Desk</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div style="text-align:center">
+    <h2>Contact Us</h2>
+    <p>We are here to help! leave us a message:</p>
+  </div>
+  <div class="row">
+    <div class="column">
+    </div>
+    <div class="column">
+      <form action="mailto:incoming+sentijournal-supportticketing-15617391-issue-@incoming.gitlab.com?subject=[Journal Account]" method="post" enctype="text/plain">
+      <form action="/action_page.php">
+        <label for="fname">First Name</label>
+        <input type="text" id="fname" name="firstname" placeholder="Your first name.." required>
+        <label for="lname">Last Name</label>
+        <input type="text" id="lname" name="lastname" placeholder="Your last name..">
+        <label for="subject">Subject</label>
+        <select id="subject" name="subject">
+          <option value="[Journal App]">[Journal Account]</option>
+          <option value="[Journal App]">[Patient Account]</option>
+        </select>
+        <label for="message">Message</label>
+        <textarea id="message" name="message" placeholder="Write something.." style="height:170px"></textarea>
+        <input type="submit" value="Submit">
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock content %}

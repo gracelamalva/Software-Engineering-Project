@@ -335,3 +335,7 @@ def affirmation():
 def affirmationview():
     affirmationEntries=AffirmationEntry.query.all()
     return render_template('affirmationview.html', entries=affirmationEntries)
+
+@bp.route('/contact', methods = ['GET', 'POST'])
+def contact():
+    return render_template('contact.html')
