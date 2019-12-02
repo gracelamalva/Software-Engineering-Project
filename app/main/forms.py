@@ -18,7 +18,7 @@ class RegisterForm(FlaskForm):
     password = PasswordField('Password', validators=[
         DataRequired(), Length(6, max=32, message='The length of a password should be between 6 and 32')])
     password2 = PasswordField(
-        'Password Repeat', validators=[DataRequired(), EqualTo('password')])
+        'Confirm Password', validators=[DataRequired(), EqualTo('password')])
     email = StringField('Email', validators=[DataRequired(), Email()])
     submit = SubmitField('Submit')
 
@@ -80,3 +80,11 @@ class createAEntry(FlaskForm):
     EntryTitle = StringField('Affirmation Entry Title', validators=[DataRequired()])
     EntryText = StringField('Affirmation Entry Text', validators=[DataRequired()])
     submit = SubmitField('Create')
+
+class Delete(FlaskForm):
+    confirmU = StringField('Confirm Your Username:', validators=[DataRequired])
+    confirmP = PasswordField('Confirm Your Password', validators=[
+        DataRequired(), Length(6, max=32, message='The length of a password should be between 6 and 32')])
+    reconfirmP = PasswordField(
+        'Reconfirm Your Password', validators=[DataRequired(), EqualTo('confirmP')])
+    submit = SubmitField('Submit')

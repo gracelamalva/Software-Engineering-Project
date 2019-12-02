@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <header class="masthead" style="background-image: url('/static/img/home-bg.jpg')">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="site-heading">
+            <h1>Delete Account</h1>
+            <span class="subheading">Fill in the form to confirm you want to delete your account</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+<h4>Please Fill In The Form</h4>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            {{ form.confirmU.label }}
+            {% if form.confirmU.errors %}
+                {% for e in form.confirmU.errors %}
+                    <p class="help-block text-danger">{{ e }}</p>
+                {% endfor %}
+            {% endif %}
+            {{ form.confirmU(class_='form-control') }}
+        </div>
+
+        <div class="form-group">
+            {{ form.confirmP.label }}
+            {% if form.confirmP.errors %}
+                {% for e in form.confirmP.errors %}
+                    <p class="help-block text-danger">{{ e }}</p>
+                {% endfor %}
+            {% endif %}
+            {{ form.confirmP(class_='form-control') }}
+        </div>
+
+        <div class="form-group">
+            {{ form.reconfirmP.label }}
+            {% if form.reconfirmP.errors %}
+                {% for e in form.reconfirmP.errors %}
+                    <p class="help-block text-danger">{{ e }}</p>
+                {% endfor %}
+            {% endif %}
+            {{ form.reconfirmP(class_='form-control') }}
+        </div>
+
+        <div class="form-group">
+            {{ form.submit(class_='btn btn-primary') }}
+        </div>
+
+    </form>
+</div>
+{% endblock content %}
