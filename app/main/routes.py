@@ -379,7 +379,7 @@ def affirmationview():
     affirmationEntries=AffirmationEntry.query.all()
     return render_template('affirmationview.html', entries=affirmationEntries)
 
-<<<<<<< HEAD
+HEAD
 #chatbot files
 bot = ChatBot("Chatbot Therapist")
 conversation = [
@@ -413,5 +413,4 @@ def chat():
 def get_bot_response():
     userText = request.args.get('msg')
     return str(bot.get_response(userText))
-=======
->>>>>>> feature_three_karan
+
