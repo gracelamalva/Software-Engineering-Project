@@ -19,6 +19,9 @@
 {% block content %}
 <h2>Send request to a Patient</h2>
 {% for patient in patients %}
-<p> {{patient.patientName}}</p> <a href = "{{url_for('main.sendrequest')}}">
+<p> {{patient.patientName}}</p> <a href = "{{url_for('main.sendrequest', to = patient.id)}}"> Invite to be my patient </a>
 {% endfor %}
+
+
+
 {% endblock %}

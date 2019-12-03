@@ -108,37 +108,58 @@ class Therapist(db.Model):
     id = db.Column(db.Integer, db.ForeignKey('Users.id'), primary_key=True)
     therapistName = db.Column(db.String, db.ForeignKey('Users.fullname'))
     TherapistID = db.Column(db.String, unique = True)
-    #numberOfPatients = db. Column(db.Integer)
+    numPatients = db.Column(db.Integer, default = 0) # <10
 
-    #myPatients = db.relationship("Patient", backref = "Therapist")
-    #sendsrequest = db.relationship("Request",)
-    #def signPatient(self):
-
-
+    #requests = db.relationship("Request", backref = "Patient")
 
 class Patient(db.Model):
     __tablename__ = "Patient"
-    id = db.Column(db.String, db.ForeignKey('Users.id'), primary_key=True)
+    id = db.Column(db.Integer, db.ForeignKey('Users.id'), primary_key=True)
     #insuranceProvider = db.Column(db.String)
     patientName = db.Column(db.String, db.ForeignKey('Users.fullname'))
+    hasTherapist = db.Column(db.Boolean)
     T_ID = db.Column(db.Integer, db.ForeignKey ('Therapist.TherapistID'))
+
+    #requests = db.relationship("Request", backref = "Patient")
 
 class Request(db.Model):
     __tablename__ = "Request"
-    id = db.Column(db.String, autoincrement = True, primary_key = True)
-    from = db.Column(db.String, db.ForeignKey('Users.id'))
+    id = db.Column(db.Integer, primary_key = True, autoincrement = True)
+    origin = db.Column(db.String, db.ForeignKey('Users.id'))
     to = db.Column(db.String, db.ForeignKey('Users.id'))
     status = db.Column(db.String, default = "Sent") #options are sent, accepted, denied
-    respone = db.Column(db.String, default = "none")
+    #response = db.Column(db.String, default = "none")
 
-    responses = db.relationship("RequestResponse", backref = "Request")
+    #responses = db.relationship("RequestResponse", backref = "Request")
+    responses = db.relationship("T_Patients", backref="Request")
 
-    def sendRequest(self, from, to):
-        new_request = Request(from = from, to = to)
+    def sendRequest(self, origin, to):
+        new_request = Request(origin = origin, to = to)
         db.session.add(new_request)
         db.session.commit()
 
-class RequestResponse(db.Model):
-    __tablename__ = "RequestResponse"
+    def acceptRequest(self, t_id, p_id):
+        accepted_request = T_Patients(t_id = t_id, p_id = p_id, response = "accepted")
+        db.session.commit()
+
+    def declineRequest(self, t_id, p_id):
+        declined_request = T_Patients(t_id = t_id, p_id = p_id, response = "declined")
+        db.session.commit()
+    
+    #def respondRequest(self, response):
+    #    Request.response = response
+    #    db.session.commit()
+
+
+class T_Patients(db.Model):
+    __tablename__ = "T_Patients"
     id = db.Column(db.String, db.ForeignKey('Request.id'), primary_key = True)
-    respone = db.Column(db.String)
+    t_id = db.Column(db.String, db.ForeignKey('Therapist.id'))
+    p_id = db.Column(db.String, db.ForeignKey('Patient.id'))
+    response = db.Column(db.String, default = "Sent") #options are sent, accepted, denied
+
+
+#class RequestResponse(db.Model):
+#    __tablename__ = "RequestResponse"
+#    id = db.Column(db.String, db.ForeignKey('Request.id'), primary_key = True)
+#    respone = db.Column(db.String)

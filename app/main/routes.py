@@ -283,7 +283,16 @@ def findtherapist():
 
     therapists = Therapist.query.all()
 
-    return render_template('findtherapist.html', therapists = therapists )
+    return render_template('findtherapist.html', therapists = therapists)
+
+@bp.route('/findpatient')
+@login_required
+def findpatient():
+
+    patients = Patient.query.all()
+
+    return render_template('findpatient.html', patients = patients)
+
 
 @bp.route('/revertaccount')
 @login_required
@@ -303,37 +312,83 @@ def revertaccount():
     
     return render_template('revertaccount.html')
 
-@bp.route('/sendrequest')
+@bp.route('/sendrequest/<int:to>')
 @login_required
-def sendrequest(from, to):
+def sendrequest(to):
 
-    #sends request to patient db to add therapist as T_ID
     id = current_user.id
     user = current_user
 
     if current_user.userstatus == "Therapist":
+        therapist = Therapist.query.get(id)
+        patient = Patient.query.get(to)
+        Request.sendRequest(therapist, patient)
         
 
     if current_user.userstatus == "Patient":
+        patient = Patient.query.get(id)
+        therapist = Therapist.query.get(to)
+        Request.sendRequest(patient, therapist)
 
-    flash('Your request has been sent to Patient')
 
-    return render_template('viewaccount.html')
+    flash('Your request has been sent')
 
-@bp.route('/requestresponse/<string:id>/<string:from>/<string:to>')
+    return render_template('accountview.html')
+
+@bp.route('/requestresponse/<int:id>/<string:to>')
 @login_required
-def requestresponse(id, from, to):
+def requestresponse(id,to):
 
     request = Request.query.get(id)
-
-    
 
     id = current_user.id
     user = current_user
 
 
+    request.respondRequest()
 
-    return render_template('viewaccount.html')
+    return render_template('accountview.html')
+
+
+@bp.route('/accept/<int:id>/<string:to>')
+@login_required
+def accept(id,to):
+
+    request = Request.query.get(id)
+
+    id = current_user.id
+    user = current_user
+
+    #if current_user.userstatus == "Therapist":
+    therapist = Therapist.query.get(id)
+    patient = Patient.query.get(to)
+    request.acceptRequest(therapist,patient)
+
+    therapist.numPatients += therapist.numPatients
+    patient.hasTherapist = True
+
+    flash('you have accepted the request')
+        
+
+    #if current_user.userstatus == "Patient":
+    #    patient = Patient.query.get(id)
+    #    therapist = Therapist.query.get(to)
+    #    request.acceptRequest(therapist, patient)
+
+    return render_template('accountview.html')
+
+@bp.route('/decline/<int:id>/<string:to>')
+@login_required
+def decline(id,to):
+
+    request = Request.query.get(id)
+
+    id = current_user.id
+    user = current_user
+
+
+    return render_template('accountview.html')
+
 
 @bp.route('/affirmation', methods = ['GET', 'POST'])
 @login_required
