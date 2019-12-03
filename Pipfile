@@ -14,7 +14,7 @@ flask-wtf = "*"
 flask-login = "*"
 basequery = "*"
 hashlib = "*"
-
+chatterbot = "*"
 
 [requires]
 python_version = "3.7"
