@@ -131,18 +131,3 @@ class Patient(db.Model):
     patientName = db.Column(db.String, db.ForeignKey('Users.fullname'))
     T_ID = db.Column(db.Integer, db.ForeignKey ('Therapist.TherapistID'))
 
-"""
-class HelpDesk(db.Model):
-    __tablename__ = "HelpDesk"
-    HelpDeskID = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
-    HelpDeskName = db.Column(db.String, nullable=False)
-    HelpDeskEmail = db.Column(db.String, nullable=False)
-    HelpDeskSubject = db.Column(db.String)
-    HelpDeskMessage= db.Column(db.String, nullable=False)
-    #User_ID = db.Column(db.String, db.ForeignKey('Users.id'), nullable = False)
-
-    def add_HEntry(self, name, email, subject, message):
-        new_HelpDesk = HelpDesk(HelpDeskName=name, HelpDeskEmail=email, HelpDeskSubject=subject, HelpDeskMessage=message)
-        db.session.add(new_HelpDesk)
-        db.session.commit()
-    """
