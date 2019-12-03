@@ -44,7 +44,7 @@ def register():
         user.deleted = False
         db.session.add(user)
         db.session.commit()
-        flash('Your acc created. Please login with your new credential.', category='success')
+        flash('Your account has been created! Please login with your new credential.', category='success')
         return redirect(url_for('main.login'))
     return render_template('user_register.html', title='User Register', form=form)
 
