@@ -10,15 +10,28 @@ from app.main.models import *
 from .models import Users
 from .models import Journal
 from .models import JournalEntry
+from .models import AffirmationEntry
 from flask import flash
 from flask_sqlalchemy import SQLAlchemy
-from app.main.config import Config
 # from app.api.request import *
 from app.api.request import analyze
-
 from flask_login import login_required, current_user, logout_user, login_user
-from .forms import RegisterForm, LoginForm, ChangePasswordForm, UpdateAccountInfo, createAEntry
+from .forms import RegisterForm, LoginForm, ChangePasswordForm, UpdateAccountInfo, createAEntry, HelpDeskForm
+from flask_mail import Message, Mail
 
+
+app = Flask(__name__)
+
+app.config.update(
+    DEBUG=True,
+    #EMAIL SETTINGS
+    MAIL_SERVER='smtp.gmail.com',
+    MAIL_PORT=465,
+    MAIL_USE_SSL=True,
+    MAIL_USERNAME = 'sentijournalapp@gmail.com',
+    MAIL_PASSWORD = 'sentijournalapp'
+)
+mail=Mail(app)
 
 @bp.route('/', methods=['GET','POST'])
 def index():
@@ -338,4 +351,21 @@ def affirmationview():
 
 @bp.route('/contact', methods = ['GET', 'POST'])
 def contact():
-    return render_template('contact.html')
+    form = HelpDeskForm()
+
+    if request.method == 'POST':
+        if form.validate() == False:
+            flash('All fields are required.')
+            return render_template('contact.html', form=form)
+        else:
+            msg = Message(form.Subject.data, sender='sentijournalapp@gmail.com', recipients=['incoming+sentijournal-supportticketing-15617391-issue-@incoming.gitlab.com'])
+            msg.body = """
+            From: %s <%s>
+            %s
+            """ % (form.Name.data, form.Email.data, form.Message.data)
+            mail.send(msg)
+            return render_template('contact.html', success=True, form=form)
+    elif request.method == 'GET':
+        return render_template('contact.html', form=form)
+
+

@@ -47,6 +47,8 @@ wtforms = "*"
 nexmo = "*"
 dotenv = "*"
 self = "*"
+flask-mail = "*"
+message = "*"
 
 [requires]
 python_version = "3.7"
