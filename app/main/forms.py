@@ -81,6 +81,7 @@ class createAEntry(FlaskForm):
     EntryText = StringField('Affirmation Entry Text', validators=[DataRequired()])
     submit = SubmitField('Create')
 
+'''
 class Delete(FlaskForm):
     confirmU = StringField('Confirm Your Username:', validators=[DataRequired])
     confirmP = PasswordField('Confirm Your Password', validators=[
@@ -88,3 +89,4 @@ class Delete(FlaskForm):
     reconfirmP = PasswordField(
         'Reconfirm Your Password', validators=[DataRequired(), EqualTo('confirmP')])
     submit = SubmitField('Submit')
+'''

@@ -23,7 +23,6 @@ class Users(db.Model):
     register_date = db.Column(db.DateTime, default=datetime.now)
     is_active = db.Column(db.Boolean, default=True)
     userstatus = db.Column(db.String, default="User")
-    deleted = db.Column(db.Boolean(), default=False)
 
     journal = db.relationship("Journal", uselist=False, backref='Users')
 

@@ -17,7 +17,7 @@ from app.main.config import Config
 from app.api.request import analyze
 
 from flask_login import login_required, current_user, logout_user, login_user
-from .forms import RegisterForm, LoginForm, ChangePasswordForm, UpdateAccountInfo, createAEntry, Delete
+from .forms import RegisterForm, LoginForm, ChangePasswordForm, UpdateAccountInfo, createAEntry
 
 
 @bp.route('/', methods=['GET', 'POST'])
@@ -41,6 +41,7 @@ def register():
             Username=form.Username.data, email=form.email.data, fullname=form.fullname.data
         )
         user.password = form.password.data
+        user.deleted = False
         db.session.add(user)
         db.session.commit()
         flash('Your acc created. Please login with your new credential.', category='success')
@@ -110,36 +111,16 @@ def reset():
 
     return render_template('user_reset.html', form=form)
 
-@bp.route('/deleteU', methods=['GET', 'POST', 'DELETE'])
-@login_required
-def deleteU():
-    user = models.Users.query.filter_by(id=current_user.id).first()
-    form = Delete()
-
-    if form.validate_on_submit():
-        if current_user.Username == form.confirmU.data():
-            current_user.Username = form.confirmU.data
-        elif current_user.Username != form.confirmU.data():
-            return redirect(url_for('main.deleteU'))
-        current_user.password_hash = form.confirmP.data
-        current_user.password_hash = form.reconfirmP.data
-        db.session.delete(user)
-        db.session.commit()
-        user.deleted = True
-        flash('Your Account Has Been Deleted!', category='success')
-        return redirect(url_for('main.accountview'))
-    return render_template('deleteU.html', form=form)
-'''
-@bp.route('/users/<int:id>', methods=['DELETE'])
+@bp.route('/deleteU/<int:id>', methods=['DELETE'])
 @login_required
 def delete_user(id):
-    user = models.Users.query.filter_by(id=current_user.id).first()
+    user = models.Users.query.get(id)
     db.session.delete(user)
     db.session.commit()
-    user.deleted = True
+
     flash('Your Account Has Been Deleted!', category='success')
     return render_template('accountview.html', id=id)
-'''
+
 @bp.route('/logout')
 @login_required
 def logout():
