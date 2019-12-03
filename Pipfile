@@ -12,9 +12,7 @@ flask-sqlalchemy = "*"
 ibm-watson = "*"
 flask-wtf = "*"
 flask-login = "*"
-basequery = "*"
-hashlib = "*"
-
+flask-bcrypt = "*"
 
 [requires]
 python_version = "3.7"
