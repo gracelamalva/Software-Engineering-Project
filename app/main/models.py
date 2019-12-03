@@ -125,8 +125,8 @@ class Patient(db.Model):
 class Request(db.Model):
     __tablename__ = "Request"
     id = db.Column(db.Integer, primary_key = True, autoincrement = True)
-    origin = db.Column(db.String, db.ForeignKey('Users.id'))
-    to = db.Column(db.String, db.ForeignKey('Users.id'))
+    origin = db.Column(db.Integer)#, db.ForeignKey('Users.id'))
+    to = db.Column(db.Integer)#, db.ForeignKey('Users.id'))
     status = db.Column(db.String, default = "Sent") #options are sent, accepted, denied
     #response = db.Column(db.String, default = "none")
 
@@ -140,10 +140,12 @@ class Request(db.Model):
 
     def acceptRequest(self, t_id, p_id):
         accepted_request = T_Patients(t_id = t_id, p_id = p_id, response = "accepted")
+        db.session.add(accepted_request)
         db.session.commit()
 
     def declineRequest(self, t_id, p_id):
         declined_request = T_Patients(t_id = t_id, p_id = p_id, response = "declined")
+        db.session.add(accepted_request)
         db.session.commit()
     
     #def respondRequest(self, response):
@@ -157,9 +159,3 @@ class T_Patients(db.Model):
     t_id = db.Column(db.String, db.ForeignKey('Therapist.id'))
     p_id = db.Column(db.String, db.ForeignKey('Patient.id'))
     response = db.Column(db.String, default = "Sent") #options are sent, accepted, denied
-
-
-#class RequestResponse(db.Model):
-#    __tablename__ = "RequestResponse"
-#    id = db.Column(db.String, db.ForeignKey('Request.id'), primary_key = True)
-#    respone = db.Column(db.String)

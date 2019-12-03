@@ -33,7 +33,8 @@
 
         <ul>My requests
           {% for request in requests %}
-          <li>name: {{request.origin}} </li> <a href = "{{url_for('main.accept')}}">Accept</a><a href = "{{url_for('main.decline')}}">Decline</a>
+          <li>name: {{request.origin}} </li> <a href = "{{url_for('main.accept', id = request.id, origin = request.origin)}}">Accept</a>
+          <a href = "{{url_for('main.decline', id = request.id, origin = request.origin)}}">Decline</a>
           {% endfor %}
         </ul>
 

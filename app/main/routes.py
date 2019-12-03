@@ -83,7 +83,17 @@ def update():
 @bp.route('/viewAccount')
 @login_required
 def accountview():
-    return render_template('accountview.html')
+    #user = current_user
+
+    if current_user.userstatus == "Patient":
+        patient = Patient.query.get(current_user.id)
+        requests = Request.query.filter_by(to = current_user.id)
+
+    if current_user.userstatus == "Therapist":
+        therapist = Therapist.query.get(id)
+        db.session.delete(therapist)
+    
+    return render_template('accountview.html', requests = requests)
 
 @bp.route('/reset', methods=['post', 'get'])
 @login_required
@@ -316,19 +326,23 @@ def revertaccount():
 @login_required
 def sendrequest(to):
 
+    
     id = current_user.id
     user = current_user
 
     if current_user.userstatus == "Therapist":
         therapist = Therapist.query.get(id)
         patient = Patient.query.get(to)
-        Request.sendRequest(therapist, patient)
-        
+        request = Request(origin = therapist.id, to = patient.id)
+        db.session.add(request)
+        db.session.commit()
 
     if current_user.userstatus == "Patient":
         patient = Patient.query.get(id)
         therapist = Therapist.query.get(to)
-        Request.sendRequest(patient, therapist)
+        request = Request(origin = patient.id, to = therapist.id)
+        db.session.add(request)
+        db.session.commit()
 
 
     flash('Your request has been sent')
@@ -350,42 +364,57 @@ def requestresponse(id,to):
     return render_template('accountview.html')
 
 
-@bp.route('/accept/<int:id>/<string:to>')
+@bp.route('/accept/<int:id>/<int:origin>')
 @login_required
-def accept(id,to):
+def accept(id,origin):
 
     request = Request.query.get(id)
+    origin = Request.query.get(origin)
 
     id = current_user.id
     user = current_user
 
-    #if current_user.userstatus == "Therapist":
-    therapist = Therapist.query.get(id)
-    patient = Patient.query.get(to)
-    request.acceptRequest(therapist,patient)
+    if current_user.userstatus == "Therapist":
+        therapist = Therapist.query.get(current_user.id)
+        patient = Request.query.filter_by(origin = origin)
+        request.acceptRequest(therapist,patient)
 
+
+    if current_user.userstatus == "Patient":
+        patient = Patient.query.get(current_user.id)
+        therapist = Request.query.filter_by(origin = origin)
+        request.acceptRequest(t_id = therapist, p_id =patient)
+    
     therapist.numPatients += therapist.numPatients
     patient.hasTherapist = True
 
     flash('you have accepted the request')
-        
-
-    #if current_user.userstatus == "Patient":
-    #    patient = Patient.query.get(id)
-    #    therapist = Therapist.query.get(to)
-    #    request.acceptRequest(therapist, patient)
 
     return render_template('accountview.html')
 
-@bp.route('/decline/<int:id>/<string:to>')
+@bp.route('/decline/<int:id>/<int:origin>')
 @login_required
-def decline(id,to):
+def decline(id,origin):
 
     request = Request.query.get(id)
+    origin = Request.query.get(origin)
 
     id = current_user.id
     user = current_user
 
+    if current_user.userstatus == "Therapist":
+        therapist = Therapist.query.get(origin)
+        patient = Patient.query.get(to)
+        request.declineRequest(therapist,patient)
+
+
+    if current_user.userstatus == "Patient":
+        patient = Patient.query.get(origin)
+        therapist = Therapist.query.get(to)
+        request.declineRequest(therapist, patient)
+    
+    #therapist.numPatients += therapist.numPatients
+    patient.hasTherapist = False
 
     return render_template('accountview.html')
 
