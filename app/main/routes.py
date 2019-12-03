@@ -111,14 +111,15 @@ def reset():
 
     return render_template('user_reset.html', form=form)
 
-@bp.route('/deleteU/<int:id>', methods=['DELETE'])
+@bp.route('/deleteU/<int:id>', methods=['POST', 'DELETE'])
 @login_required
 def delete_user(id):
     user = models.Users.query.get(id)
-    db.session.delete(user)
-    db.session.commit()
-
-    flash('Your Account Has Been Deleted!', category='success')
+    if request.method == 'POST':
+        db.session.delete(user)
+        db.session.commit()
+        flash('Your Account Has Been Deleted!', category='success')
+        return redirect(url_for('main.index'))
     return render_template('accountview.html', id=id)
 
 @bp.route('/logout')

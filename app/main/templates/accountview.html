@@ -28,9 +28,10 @@
       <p><a href="{{ url_for('main.update') }}">Click Here to Update Your Account Information</a></p>
 
       <p>Would You Like to Delete Your Account?
-          <button type="submit">Delete</button>
+        <form action="{{ url_for('main.delete_user', id=current_user.id) }}" method="POST" class="delete_user">
+            <button type="submit" action="{{ url_for('main.delete_user', id=current_user.id) }}" value="DELETE"> Delete </button>
+        </form>
       </p>
-
 
       <p>Member Since: {{ current_user.register_date.strftime("%A %B %d, %Y") }}</p>
 
