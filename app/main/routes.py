@@ -88,12 +88,15 @@ def accountview():
     if current_user.userstatus == "Patient":
         patient = Patient.query.get(current_user.id)
         requests = Request.query.filter_by(to = current_user.id)
+        #therapist = T_Patients.query.filter_by(p_id = current_user.id)
+        mytherapist = Patient.query.filter_by(T_ID = requests.to)
 
     if current_user.userstatus == "Therapist":
-        therapist = Therapist.query.get(id)
-        db.session.delete(therapist)
+        therapist = Therapist.query.get(current_user.id)
+        requests = Request.query.filter_by(to = current_user.id)
+        mypatients = T_Patients.query.filter_by(t_id = current_user.id)
     
-    return render_template('accountview.html', requests = requests)
+    return render_template('accountview.html', requests = requests, mytherapist = mytherapist, patient = patient)
 
 @bp.route('/reset', methods=['post', 'get'])
 @login_required
@@ -282,6 +285,7 @@ def therapist():
 def account():
 
     #user = Users.query.filter(id)
+    
     user = current_user
     flag = 0
  
@@ -290,18 +294,22 @@ def account():
 @bp.route('/findtherapist')
 @login_required
 def findtherapist():
+    #user = current_user
+    #requests = Request.query.filter_by(to = current_user.id)
+    #patient = Patient.query.get(id = current_user.id)
+    #therapists = Therapist.query.filter_by(numPatients< 10, request.to != therapist.id)
+    available = Patient.query.join(Request).filter_by(hasTherapist == False, to != therapist.id)
 
-    therapists = Therapist.query.all()
-
-    return render_template('findtherapist.html', therapists = therapists)
+    return render_template('findtherapist.html', therapists = therapists, requests = requests)
 
 @bp.route('/findpatient')
 @login_required
 def findpatient():
 
     patients = Patient.query.all()
+    requests = Request.query.filter_by(to = current_user.id)
 
-    return render_template('findpatient.html', patients = patients)
+    return render_template('findpatient.html', patients = patients, requests = requests)
 
 
 @bp.route('/revertaccount')
@@ -326,7 +334,6 @@ def revertaccount():
 @login_required
 def sendrequest(to):
 
-    
     id = current_user.id
     user = current_user
 
@@ -375,18 +382,29 @@ def accept(id,origin):
     user = current_user
 
     if current_user.userstatus == "Therapist":
+        #therapist = Therapist.query.get(current_user.id)
+        #patient = Patient.query.get()
+        accepted_request = T_Patients(id = request.id, t_id = current_user.id , p_id = request.origin, response = "accepted")
         therapist = Therapist.query.get(current_user.id)
-        patient = Request.query.filter_by(origin = origin)
-        request.acceptRequest(therapist,patient)
-
+        therapist.numPatients += 1
+        patient = Patient.query.get(request.origin)
+        patient.hasTherapist = True
+        patient.T_ID = therapist.therapistName
+        db.session.add(accepted_request)
+        db.session.commit()
 
     if current_user.userstatus == "Patient":
+        #patient = Patient.query.get(current_user.id)
+        #therapist = Therapist.query.get()
+        #request.acceptRequest(therapist.id, patient.id)
+        accepted_request = T_Patients(id = request.id, t_id = request.origin , p_id = current_user.id, response = "accepted")
+        therapist = Therapist.query.get(request.origin)
+        therapist.numPatients += 1
         patient = Patient.query.get(current_user.id)
-        therapist = Request.query.filter_by(origin = origin)
-        request.acceptRequest(t_id = therapist, p_id =patient)
-    
-    therapist.numPatients += therapist.numPatients
-    patient.hasTherapist = True
+        patient.hasTherapist = True
+        patient.T_ID = therapist.therapistName
+        db.session.add(accepted_request)
+        db.session.commit()
 
     flash('you have accepted the request')
 
@@ -403,20 +421,26 @@ def decline(id,origin):
     user = current_user
 
     if current_user.userstatus == "Therapist":
-        therapist = Therapist.query.get(origin)
-        patient = Patient.query.get(to)
-        request.declineRequest(therapist,patient)
+        declined_request = T_Patients(id = request.id, t_id = current_user.id, p_id = request.origin, response = "declined")
+        db.session.add(accepted_request)
+        db.session.commit()
 
 
     if current_user.userstatus == "Patient":
-        patient = Patient.query.get(origin)
-        therapist = Therapist.query.get(to)
-        request.declineRequest(therapist, patient)
+        declined_request = T_Patients(id = request.origin, p_id = current_user.id, response = "declined")
+        db.session.add(accepted_request)
+        db.session.commit()
     
     #therapist.numPatients += therapist.numPatients
     patient.hasTherapist = False
 
     return render_template('accountview.html')
+
+
+
+
+
+
 
 
 @bp.route('/affirmation', methods = ['GET', 'POST'])

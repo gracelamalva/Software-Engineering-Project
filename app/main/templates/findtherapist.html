@@ -20,7 +20,11 @@
 <h2>Find a therapist</h2>
 {% for therapist in therapists %}
 {% if therapist.numPatients < 10 %}
+{% for request in requests%}
+{% if request.to != therapist.id%}
 <p> {{therapist.therapistName}}</p> <a href = "{{url_for('main.sendrequest', to = therapist.id )}}"> Invite to be my Therapist</a>
+{% endif %}
+{% endfor%}
 {% endif %}
 {% endfor %}
 {% endblock %}

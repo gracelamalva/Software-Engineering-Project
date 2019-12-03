@@ -138,15 +138,6 @@ class Request(db.Model):
         db.session.add(new_request)
         db.session.commit()
 
-    def acceptRequest(self, t_id, p_id):
-        accepted_request = T_Patients(t_id = t_id, p_id = p_id, response = "accepted")
-        db.session.add(accepted_request)
-        db.session.commit()
-
-    def declineRequest(self, t_id, p_id):
-        declined_request = T_Patients(t_id = t_id, p_id = p_id, response = "declined")
-        db.session.add(accepted_request)
-        db.session.commit()
     
     #def respondRequest(self, response):
     #    Request.response = response
@@ -155,7 +146,7 @@ class Request(db.Model):
 
 class T_Patients(db.Model):
     __tablename__ = "T_Patients"
-    id = db.Column(db.String, db.ForeignKey('Request.id'), primary_key = True)
-    t_id = db.Column(db.String, db.ForeignKey('Therapist.id'))
-    p_id = db.Column(db.String, db.ForeignKey('Patient.id'))
+    id = db.Column(db.Integer, db.ForeignKey('Request.id'), primary_key = True)
+    t_id = db.Column(db.Integer, db.ForeignKey('Therapist.id'))
+    p_id = db.Column(db.Integer, db.ForeignKey('Patient.id'))
     response = db.Column(db.String, default = "Sent") #options are sent, accepted, denied

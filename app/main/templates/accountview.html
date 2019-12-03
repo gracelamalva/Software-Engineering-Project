@@ -38,6 +38,14 @@
           {% endfor %}
         </ul>
 
+        {% if patient.hasTherapist == True %}
+        <ul>My therapist:
+            <li>Name: {{mytherapist.therapistName}}</li>
+            <li>Contact</li>
+            <li>Remove</li>
+        </ul>
+        {% endif %}
+
 
         <p><a href = "{{url_for('main.findtherapist')}}">find therapist</a></p>
         <p><a href = "{{url_for('main.revertaccount')}}">revert account</a></p>
