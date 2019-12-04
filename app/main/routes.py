@@ -273,14 +273,6 @@ def populate():
     return render_template('analyze.html', analyzed_text = analyzed_text, text = text)
 
 
-@bp.route('/file-downloads/', methods=['GET','POST'])
-def file_downloads():
-    try:
-        return render_template('downloads.html')
-    except Exception as e:
-        return str(e)
-
-
 @bp.route('/dummyprofile/<string:Username>', methods = ['GET','POST'])
 def profile(Username):
 
