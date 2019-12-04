@@ -62,11 +62,11 @@
         {% endfor %}
       </ul>
 
-      {% for mypatient in mypatients%}
+      {% for mypatient in mypatients %}
       <ul>My patients:
-          <li>Name: {{mypatient.patientName}}</li>
+          <li>Name: {{mypatient.patientName}} </li>
           <li>Contact</li>
-          <a href = "{{url_for(main.removePatient)}}">Remove </li>
+          <a href = "{{url_for('main.removePatient')}}">Remove </li>
       </ul>
       {% endfor %}
       

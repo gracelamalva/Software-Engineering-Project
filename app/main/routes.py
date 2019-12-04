@@ -84,10 +84,11 @@ def update():
 @login_required
 def accountview():
     #user = current_user
+    requests = Request.query.filter_by(to = current_user.id)
 
     if current_user.userstatus == "Patient":
         patient = Patient.query.get(current_user.id)
-        requests = Request.query.filter_by(to = current_user.id)
+        #requests = Request.query.filter_by(to = current_user.id)
         #therapist = T_Patients.query.filter_by(p_id = current_user.id)
         mytherapist = T_Patients.query.filter_by(p_id = current_user.id)
 
@@ -95,7 +96,10 @@ def accountview():
         therapist = Therapist.query.get(current_user.id)
         requests = Request.query.filter_by(to = current_user.id)
         mypatients = T_Patients.query.filter_by(t_id = current_user.id)
+
+        return render_template('accountview.html', requests = requests, mytherapist = mytherapist, mypatients = mypatients, patient = patient)
     
+
     return render_template('accountview.html', requests = requests, mytherapist = mytherapist, patient = patient)
 
 @bp.route('/reset', methods=['post', 'get'])
