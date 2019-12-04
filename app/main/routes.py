@@ -17,18 +17,14 @@ from flask_sqlalchemy import SQLAlchemy
 # from app.api.request import *
 from app.api.request import analyze
 from flask_login import login_required, current_user, logout_user, login_user
-<<<<<<< HEAD
 from .forms import RegisterForm, LoginForm, ChangePasswordForm, UpdateAccountInfo, createAEntry, HelpDeskForm
 from flask_mail import Message, Mail
 
 
 app = Flask(__name__)
-=======
 from .forms import RegisterForm, LoginForm, ChangePasswordForm, UpdateAccountInfo, createAEntry
 from flask import send_file
 from flask import Response
-
->>>>>>> be0c30f2e3496758c3741ce59670dde7c7654119
 
 app.config.update(
     DEBUG=True,
@@ -391,7 +387,6 @@ def affirmationview():
     affirmationEntries=AffirmationEntry.query.all()
     return render_template('affirmationview.html', entries=affirmationEntries)
 
-<<<<<<< HEAD
 @bp.route('/contact', methods = ['GET', 'POST'])
 def contact():
     form = HelpDeskForm()
@@ -414,8 +409,6 @@ def contact():
     elif request.method == 'GET':
         return render_template('contact.html', form=form)
 
-=======
-HEAD
 #chatbot files
 bot = ChatBot("Chatbot Therapist")
 conversation = [
@@ -449,5 +442,3 @@ def chat():
 def get_bot_response():
     userText = request.args.get('msg')
     return str(bot.get_response(userText))
->>>>>>> be0c30f2e3496758c3741ce59670dde7c7654119
-
