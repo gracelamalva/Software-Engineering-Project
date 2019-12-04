@@ -16,6 +16,7 @@ basequery = "*"
 hashlib = "*"
 chatterbot = "*"
 chatterbot-corpus = "*"
+spacy = "*"
 
 [requires]
 python_version = "3.7"
