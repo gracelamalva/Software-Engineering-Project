@@ -5,7 +5,6 @@ from datetime import datetime
 from hashlib import md5
 from . import db
 from flask_sqlalchemy import SQLAlchemy
-#from .import db
 
 
 db = SQLAlchemy()
@@ -56,7 +55,6 @@ class Users(db.Model):
     def is_authenticated(self):
         return True
 
-
 @login.user_loader
 def load_user(id):
     if isinstance(id, int):
@@ -71,14 +69,6 @@ def load_user(id):
     return Users.query.get(id)
 
     #T_ID = db.Column(db.Integer, db.ForeignKey ('Therapist.TherapistID')
-#class User(db.Model):
-#    __tablename__ = "User"
-#    Username = db.Column(db.String, primary_key=True, nullable = False)
-#    fullName = db.Column(db.String, nullable = False)
-#    passwordHash = db.Column(db.String, nullable = False)
-#    Email = db.Column(db.String, nullable = False)
-#
-#    journal = db.relationship("Journal", uselist=False, backref="User")
 
 class Journal(db.Model):
     __tablename__ = "Journal"
@@ -114,20 +104,50 @@ class AffirmationEntry(db.Model):
         db.session.add(new_AffirmationEntry)
         db.session.commit()
 
-
 class Therapist(db.Model):
     __tablename__ = "Therapist"
     id = db.Column(db.Integer, db.ForeignKey('Users.id'), primary_key=True)
     therapistName = db.Column(db.String, db.ForeignKey('Users.fullname'))
     TherapistID = db.Column(db.String, unique = True)
+    numPatients = db.Column(db.Integer, default = 0) # <10
 
-    myPatients = db.relationship("Patient", backref = "Therapist")
-
+    #requests = db.relationship("Request", backref = "Patient")
 
 class Patient(db.Model):
     __tablename__ = "Patient"
-    id = db.Column(db.String, db.ForeignKey('Users.id'), primary_key=True)
+    id = db.Column(db.Integer, db.ForeignKey('Users.id'), primary_key=True)
     #insuranceProvider = db.Column(db.String)
     patientName = db.Column(db.String, db.ForeignKey('Users.fullname'))
+    hasTherapist = db.Column(db.Boolean)
     T_ID = db.Column(db.Integer, db.ForeignKey ('Therapist.TherapistID'))
 
+    #requests = db.relationship("Request", backref = "Patient")
+
+class Request(db.Model):
+    __tablename__ = "Request"
+    id = db.Column(db.Integer, primary_key = True, autoincrement = True)
+    origin = db.Column(db.Integer, db.ForeignKey('Users.id'))
+    to = db.Column(db.Integer, db.ForeignKey('Users.id'))
+    status = db.Column(db.String, default = "Sent") #options are sent, accepted, denied
+    #response = db.Column(db.String, default = "none")
+
+    #responses = db.relationship("RequestResponse", backref = "Request")
+    responses = db.relationship("T_Patients", backref="Request")
+
+    def sendRequest(self, origin, to):
+        new_request = Request(origin = origin, to = to)
+        db.session.add(new_request)
+        db.session.commit()
+
+    
+    #def respondRequest(self, response):
+    #    Request.response = response
+    #    db.session.commit()
+
+
+class T_Patients(db.Model):
+    __tablename__ = "T_Patients"
+    id = db.Column(db.Integer, db.ForeignKey('Request.id'), primary_key = True)
+    t_id = db.Column(db.Integer, db.ForeignKey('Therapist.id'))
+    p_id = db.Column(db.Integer, db.ForeignKey('Patient.id'))
+    response = db.Column(db.String, default = "Sent") #options are sent, accepted, denied
