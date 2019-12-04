@@ -1,6 +1,7 @@
 import sys, csv, os, datetime
 from datetime import timedelta
-from sqlalchemy.testing import db
+
+from bin.ud.conll17_ud_eval import HEAD
 from werkzeug.urls import url_parse
 from app.main import bp, models
 from flask import Flask, redirect, render_template, request, Blueprint, url_for, jsonify, flash
@@ -15,10 +16,19 @@ from flask_sqlalchemy import SQLAlchemy
 from app.main.config import Config
 # from app.api.request import *
 from app.api.request import analyze
-
 from flask_login import login_required, current_user, logout_user, login_user
 from .forms import RegisterForm, LoginForm, ChangePasswordForm, UpdateAccountInfo, createAEntry
+from flask import send_file
+from flask import Response
 
+
+
+#import chatbot files
+from chatterbot import ChatBot
+from chatterbot.trainers import ChatterBotCorpusTrainer
+from chatterbot.trainers import ListTrainer
+import spacy
+nlp = spacy.load('en')
 
 @bp.route('/', methods=['GET','POST'])
 def index():
@@ -145,12 +155,44 @@ def journal():
     entries = JournalEntry.query.all()
     return render_template('journal.html', journal = journal, entries=entries)
 
+<<<<<<< HEAD
+=======
+@bp.route('/journal/downloadcsv', methods = ['GET', 'POST'])
+def journal_downloadcsv():
+    # entry = request.form.get("entry")
+    entries = JournalEntry.query.all()
+    csvLines = []
+    # csv header
+    csvLines.append("ID,Title,Text,DateTime")
+    for entry in entries:
+        # in order to escape double quotes, we should double the double quotes
+        csvLine = []
+        # ID
+        csvLine.append("\"" + str(entry.EntryID).replace("\"", "\"\"") + "\"")
+        # Title
+        csvLine.append("\"" + entry.EntryTitle.replace("\"", "\"\"") + "\"")
+        # Text
+        csvLine.append("\"" + entry.EntryText.replace("\"", "\"\"") + "\"")
+        # DateTime
+        csvLine.append("\"" + str(entry.Date_Time).replace("\"", "\"\"") + "\"")
+
+        csvLines.append(",".join(csvLine))
+
+    return Response("\n".join(csvLines),
+                    mimetype="text/csv",
+                    headers={
+                        "Content-Disposition":
+                            "attachment;filename=entries.csv"
+                    })
+
+
+>>>>>>> feature_three
 @bp.route('/search', methods=['GET', 'POST'])
 def search():#JournalID):
     dt = request.args.get("date")
     ft = '%Y-%m-%d'
     date = datetime.strptime(dt, ft)
-    entries = JournalEntry.query.filter(JournalEntry.Date_Time.between(date, date + datetime.timedelta(days=1))).all()
+    entries = JournalEntry.query.filter(JournalEntry.Date_Time.between(date, date + timedelta(days=1))).all()
     return render_template('search.html', entries=entries)
 
 @bp.route('/createjournal', methods=['POST', 'GET'])
@@ -194,7 +236,7 @@ def add(JournalID):
         result = datetime.strptime(dt, ft)
 
         journal.add_entry(entrytitle, entrytext, result)
-       
+
         #entries = journal.entries
         #entry = JournalEntry(EntryTitle = entrytitle, EntryText = entrytext, Date_Time = datetime)
         #entry = journal.add_entry(entrytitle, entrytext, result)
@@ -219,7 +261,7 @@ def delete(EntryID):
 
 @bp.route('/analyze/<int:EntryID>', methods = ['GET', 'POST'])
 def analyze_entry(EntryID):
-   
+
     emotion = ""
     entry = JournalEntry.query.get(EntryID)
 
@@ -235,7 +277,7 @@ def analyze_entry(EntryID):
 
 @bp.route('/analyze', methods = ['GET', 'POST'])
 def analyze_text():
- 
+
     analyzed_text = ""
     text = request.form['entry']
 
@@ -287,7 +329,7 @@ def patient():
 def therapist():
 
     user = current_user
-    
+
     user.become_Therapist()
     current_user.userstatus = "Therapist"
     db.session.commit()
@@ -303,7 +345,7 @@ def account():
     
     user = current_user
     flag = 0
- 
+
     return render_template('account.html', user = user)
 
 @bp.route('/findtherapist')
@@ -339,7 +381,11 @@ def findpatient():
 @bp.route('/revertaccount')
 @login_required
 def revertaccount():
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> feature_three
     id = current_user.id
     user = current_user
     if current_user.userstatus == "Patient":
@@ -348,10 +394,14 @@ def revertaccount():
     if current_user.userstatus == "Therapist":
         therapist = Therapist.query.get(id)
         db.session.delete(therapist)
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> feature_three
     current_user.userstatus = "User"
     db.session.commit()
-    
+
     return render_template('revertaccount.html')
 
 @bp.route('/sendrequest/<int:to>')
@@ -512,7 +562,44 @@ def affirmation():
         return redirect(url_for('main.index'))
     return render_template('affirmation.html', AffirmationEntry=AffirmationEntry, form=form)
 
+
 @bp.route('/viewAffirmation')
 def affirmationview():
     affirmationEntries=AffirmationEntry.query.all()
     return render_template('affirmationview.html', entries=affirmationEntries)
+
+HEAD
+#chatbot files
+bot = ChatBot("Chatbot Therapist")
+conversation = [
+    "Hello",
+    "Hi there!",
+    "How are you doing?",
+    "I'm doing great.",
+    "That is good to hear",
+    "Thank you.",
+    "You're welcome."
+    "What is your name?",
+    "My name is Bot Therapist.",
+    "Who are you?",
+    "I am your private mental health therapist."
+]
+trainer = ListTrainer(bot)
+trainer.train(conversation)
+#training on english dataset
+#for files in os.listdir('./english/'):
+#    data=open('./english/'+files,'r').readlines()
+#    bot.train(data)
+
+trainer = ChatterBotCorpusTrainer(bot)
+trainer.train('chatterbot.corpus.english')
+
+@bp.route("/chat")
+def chat():
+    return render_template("chat.html")
+
+@bp.route("/get")
+def get_bot_response():
+    userText = request.args.get('msg')
+    return str(bot.get_response(userText))
+

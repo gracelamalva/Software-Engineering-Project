@@ -25,3 +25,17 @@ You can start the basic application by issuing the command.
 ```shell
 flask run
 ```
+
+#### install libs
+```shell
+pip install -r requirements.txt
+```
+
+#### if chatterbot is not loading correctly
+#### try the following in admin cmd
+```shell
+python -m spacy download en
+python -m spacy download en_core_web_sm
+python -m spacy link en_core_web_sm en
+```
+#### or try install chatterbot in python 64bit
