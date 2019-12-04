@@ -1,5 +1,7 @@
 import sys, csv, os, datetime
 from datetime import timedelta
+
+from bin.ud.conll17_ud_eval import HEAD
 from werkzeug.urls import url_parse
 from app.main import bp, models
 from flask import Flask, redirect, render_template, request, Blueprint, url_for, jsonify, flash

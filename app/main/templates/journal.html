@@ -50,6 +50,8 @@
     </div>
 
     <ul>List of Entries
+        <br/>
+        <a href=""{{url_for('main.journal_downloadcsv')}}" target="_blank"><button>Download csv</button></a>
         {% for entry in entries %}
         <li>Entry title: {{entry.EntryTitle}} <a type="button"
                 href="{{url_for('main.edit' , EntryID = entry.EntryID )}}">Edit </a>
