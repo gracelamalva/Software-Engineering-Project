@@ -43,12 +43,12 @@
      
   </ul>
 
-  
+  {% if me %}
   <ul>My therapist:
     <li>Name {{me.T_ID}}</li>
     <li>Contact</li>
   </ul>
-  
+  {% endif %}
 
 
   <p><a href="{{url_for('main.findtherapist')}}">find therapist</a></p>

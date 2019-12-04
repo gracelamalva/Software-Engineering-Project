@@ -28,7 +28,9 @@ from chatterbot import ChatBot
 from chatterbot.trainers import ChatterBotCorpusTrainer
 from chatterbot.trainers import ListTrainer
 import spacy
-nlp = spacy.load('en')
+#nlp = spacy.load('en_core_web_sm')
+#import en_core_web_sm
+#nlp = en_core_web_sm.load()
 
 @bp.route('/', methods=['GET','POST'])
 def index():
@@ -96,6 +98,8 @@ def accountview():
     #user = current_user
     requests = Request.query.filter_by(to = current_user.id)
     me = Patient.query.get(current_user.id)
+    patient = Patient.query.get(current_user.id)
+    mytherapist = 0
 
     if current_user.userstatus == "Patient":
         me = Patient.query.get(current_user.id)
@@ -120,9 +124,9 @@ def accountview():
         #return render_template('accountview.html', requests = requests, patients = patients)
         return render_template('accountview.html', requests = requests, me = me, mytherapist = mytherapist, patient = patient, patients = patients)
     
-    print (patient, patients, requests)
+    #print (patient, patients, requests)
     
-    return render_template('accountview.html', requests = requests, mytherapist = mytherapist, patient = patient, patients = patients, me = me)
+    return render_template('accountview.html', requests = requests, mytherapist = mytherapist) #, patient = patient, patients = patients, me = me)
 
 @bp.route('/reset', methods=['post', 'get'])
 @login_required
@@ -555,7 +559,7 @@ def affirmationview():
     affirmationEntries=AffirmationEntry.query.all()
     return render_template('affirmationview.html', entries=affirmationEntries)
 
-
+"""
 #chatbot files
 bot = ChatBot("Chatbot Therapist")
 conversation = [
@@ -580,13 +584,14 @@ trainer.train(conversation)
 
 trainer = ChatterBotCorpusTrainer(bot)
 trainer.train('chatterbot.corpus.english')
+"""
 
 @bp.route("/chat")
 def chat():
     return render_template("chat.html")
-
+"""
 @bp.route("/get")
 def get_bot_response():
     userText = request.args.get('msg')
     return str(bot.get_response(userText))
-
+"""
