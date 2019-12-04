@@ -80,3 +80,10 @@ class createAEntry(FlaskForm):
     EntryTitle = StringField('Affirmation Entry Title', validators=[DataRequired()])
     EntryText = StringField('Affirmation Entry Text', validators=[DataRequired()])
     submit = SubmitField('Create')
+
+class HelpDeskForm(FlaskForm):
+    Name = StringField('Full Name', validators=[DataRequired("Please enter your name.")])
+    Email = StringField('Email', validators=[DataRequired("Please enter your email address")])
+    Subject = StringField('Subject', validators=[DataRequired("Please enter a subject")])
+    Message = TextAreaField('Message', validators=[DataRequired("Please enter a message")])
+    submit = SubmitField('Send')

@@ -1,3 +1,4 @@
+import os
 from . import flask_bcrypt
 from . import login
 from datetime import datetime
@@ -130,4 +131,3 @@ class Patient(db.Model):
     patientName = db.Column(db.String, db.ForeignKey('Users.fullname'))
     T_ID = db.Column(db.Integer, db.ForeignKey ('Therapist.TherapistID'))
 
-    
