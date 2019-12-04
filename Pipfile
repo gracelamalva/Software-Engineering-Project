@@ -15,6 +15,7 @@ flask-login = "*"
 basequery = "*"
 hashlib = "*"
 chatterbot = "*"
+chatterbot-corpus = "*"
 
 [requires]
 python_version = "3.7"
