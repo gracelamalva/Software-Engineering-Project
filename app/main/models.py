@@ -125,8 +125,8 @@ class Patient(db.Model):
 class Request(db.Model):
     __tablename__ = "Request"
     id = db.Column(db.Integer, primary_key = True, autoincrement = True)
-    origin = db.Column(db.Integer)#, db.ForeignKey('Users.id'))
-    to = db.Column(db.Integer)#, db.ForeignKey('Users.id'))
+    origin = db.Column(db.Integer, db.ForeignKey('Users.id'))
+    to = db.Column(db.Integer, db.ForeignKey('Users.id'))
     status = db.Column(db.String, default = "Sent") #options are sent, accepted, denied
     #response = db.Column(db.String, default = "none")
 

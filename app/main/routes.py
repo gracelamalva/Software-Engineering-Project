@@ -89,7 +89,7 @@ def accountview():
         patient = Patient.query.get(current_user.id)
         requests = Request.query.filter_by(to = current_user.id)
         #therapist = T_Patients.query.filter_by(p_id = current_user.id)
-        mytherapist = Patient.query.filter_by(T_ID = requests.to)
+        mytherapist = T_Patients.query.filter_by(p_id = current_user.id)
 
     if current_user.userstatus == "Therapist":
         therapist = Therapist.query.get(current_user.id)
@@ -149,7 +149,6 @@ def create_journal():
 
     return render_template('journal.html', journal=journal)
 
-
 @bp.route('/edit/<int:EntryID>', methods=['GET', 'POST', 'PUT'])
 def edit(EntryID):
     entry = JournalEntry.query.get(EntryID)
@@ -164,7 +163,6 @@ def edit(EntryID):
         return render_template('journal.html', entries=entries)
 
     return render_template('edit.html', entries=entries)
-
 
 @bp.route('/add/<int:JournalID>', methods=['GET', 'POST'])
 def add(JournalID):
@@ -298,7 +296,7 @@ def findtherapist():
     #requests = Request.query.filter_by(to = current_user.id)
     #patient = Patient.query.get(id = current_user.id)
     #therapists = Therapist.query.filter_by(numPatients< 10, request.to != therapist.id)
-    available = Patient.query.join(Request).filter_by(hasTherapist == False, to != therapist.id)
+    availables = Patient.query.join(Request, Patient.id == Request.p_id).filter(Patient.hasTherapist == True, Request.to != current_user.id)
 
     return render_template('findtherapist.html', therapists = therapists, requests = requests)
 
@@ -438,10 +436,24 @@ def decline(id,origin):
 
 
 
+@bp.route('/removeTherapist')
+@login_required
+def removeTherapist(id,origin):
 
+    therapist = Therapist.query.filter_by()
 
+    return render_template('accountview.html') 
 
+@bp.route('/removePatient/<int:id>')
+@login_required
+def removePatient(id):
 
+    #patients = Patient.query.filter_by()
+    patients = Patients.query.filter_by(T_ID = current_user.id)
+    patient = Patient.query.get(id)
+    db.session.delete(patient)
+
+    return render_template('accountview.html', patients = patients) 
 
 @bp.route('/affirmation', methods = ['GET', 'POST'])
 @login_required
