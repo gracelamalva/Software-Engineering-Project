@@ -6,10 +6,6 @@ from app.main.config import Config
 from app.main.models import *
 
 
-
-app = Flask(__name__)
-#app = create_app()
-
 app = create_app()
 #migrations
 
