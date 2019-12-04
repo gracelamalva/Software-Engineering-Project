@@ -155,8 +155,6 @@ def journal():
     entries = JournalEntry.query.all()
     return render_template('journal.html', journal = journal, entries=entries)
 
-<<<<<<< HEAD
-=======
 @bp.route('/journal/downloadcsv', methods = ['GET', 'POST'])
 def journal_downloadcsv():
     # entry = request.form.get("entry")
@@ -186,7 +184,6 @@ def journal_downloadcsv():
                     })
 
 
->>>>>>> feature_three
 @bp.route('/search', methods=['GET', 'POST'])
 def search():#JournalID):
     dt = request.args.get("date")
@@ -381,11 +378,6 @@ def findpatient():
 @bp.route('/revertaccount')
 @login_required
 def revertaccount():
-<<<<<<< HEAD
-      
-=======
-
->>>>>>> feature_three
     id = current_user.id
     user = current_user
     if current_user.userstatus == "Patient":
@@ -394,11 +386,6 @@ def revertaccount():
     if current_user.userstatus == "Therapist":
         therapist = Therapist.query.get(id)
         db.session.delete(therapist)
-<<<<<<< HEAD
-    
-=======
-
->>>>>>> feature_three
     current_user.userstatus = "User"
     db.session.commit()
 
@@ -568,7 +555,7 @@ def affirmationview():
     affirmationEntries=AffirmationEntry.query.all()
     return render_template('affirmationview.html', entries=affirmationEntries)
 
-HEAD
+
 #chatbot files
 bot = ChatBot("Chatbot Therapist")
 conversation = [
