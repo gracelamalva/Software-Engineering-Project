@@ -34,22 +34,21 @@
   <ul>My requests
   
     {% for request in requests %}
-    
+    {% if request.status != accepted %}
     <li>name: {{request.origin}} </li>
      <a href="{{url_for('main.accept', id = request.id, origin = request.origin)}}">Accept</a>
      <a href="{{url_for('main.decline', id = request.id, origin = request.origin)}}">Decline</a>
-     
+    {% endif %}
      {% endfor %}
      
   </ul>
 
-  {% if patient.hasTherapist == True %}
+  
   <ul>My therapist:
-    <li>Name: {{mytherapist.therapistName}}</li>
+    <li>Name {{me.T_ID}}</li>
     <li>Contact</li>
-    <a href="{{url_for(main.removetherapist, id = mytherapist.id)}}"> Remove </a>
   </ul>
-  {% endif %}
+  
 
 
   <p><a href="{{url_for('main.findtherapist')}}">find therapist</a></p>
@@ -78,7 +77,7 @@
     {% for mypatient in patients %}
     <li>Name: {{mypatient.patientName}} </li>
     <li>Contact</li>
-    <a href="{{url_for('main.removepatient', id = mypatient.id)}}">Remove </a>
+    <li><a href="{{url_for('main.removepatient', id = mypatient.id)}}">Remove </a></li>
     {% endfor %}
   </ul>
 
@@ -99,7 +98,7 @@
   {% else %}
   <h4>Dear You:</h4>
   <p>
-    Please <a href="{{ url_for('main.login') }}">Login</a> or <a href="{{ url_for('main.register') }}">Register</a>
+    Please <a href="{{url_for('main.login') }}">Login</a> or <a href="{{url_for('main.register') }}">Register</a>
   </p>
   {% endif %}
 </div>

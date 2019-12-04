@@ -84,31 +84,35 @@ def update():
 @login_required
 def accountview():
     #user = current_user
-    #requests = Request.query.filter_by(to = current_user.id)
+    requests = Request.query.filter_by(to = current_user.id)
+    me = Patient.query.get(current_user.id)
 
     if current_user.userstatus == "Patient":
-        patient = Patient.query.get(current_user.id)
+        me = Patient.query.get(current_user.id)
         requests = Request.query.filter_by(to = current_user.id)
         patients = Patient.query.join(T_Patients, Patient.id == T_Patients.p_id).filter(T_Patients.t_id == current_user.id).all()
         #requests = Request.query.filter_by(to = current_user.id)
         #therapist = T_Patients.query.filter_by(p_id = current_user.id)
-        mytherapist = T_Patients.query.filter_by(p_id = current_user.id)
-
-        return render_template('accountview.html', requests = requests, mytherapist = mytherapist, patient = patient, patients = patients)
+        mytherapist = me.T_ID#Patient.query.filter_by(T_ID = me.T_ID)
+        print(me.T_ID)
+        print (patients, requests)
+        return render_template('accountview.html', requests = requests, mytherapist = mytherapist, me = me, patients = patients)
   
     if current_user.userstatus == "Therapist":
-        therapist = Therapist.query.get(current_user.id)
+        me = Therapist.query.get(current_user.id)
         requests = Request.query.filter_by(to = current_user.id)
         mypatients = T_Patients.query.filter_by(t_id = current_user.id)
         patients = Patient.query.join(T_Patients, Patient.id == T_Patients.p_id).filter(T_Patients.t_id == current_user.id).all()
         mytherapist = T_Patients.query.filter_by(p_id = 0)
         patient = Patient.query.get(0)
 
+
         #return render_template('accountview.html', requests = requests, patients = patients)
-        return render_template('accountview.html', requests = requests, mytherapist = mytherapist, patient = patient, patients = patients)
+        return render_template('accountview.html', requests = requests, me = me, mytherapist = mytherapist, patient = patient, patients = patients)
     
     print (patient, patients, requests)
-    return render_template('accountview.html', requests = requests, mytherapist = mytherapist, patient = patient, patients = patients)
+    
+    return render_template('accountview.html', requests = requests, mytherapist = mytherapist, patient = patient, patients = patients, me = me)
 
 @bp.route('/reset', methods=['post', 'get'])
 @login_required
@@ -308,10 +312,11 @@ def findtherapist():
     #user = current_user
     #requests = Request.query.filter_by(to = current_user.id)
     #patient = Patient.query.get(id = current_user.id)
+    therapists= Therapist.query.all()
     #therapists = Therapist.query.filter_by(numPatients< 10, request.to != therapist.id)
     availables = Therapist.query.join(Request, Therapist.id == Request.origin).filter(Therapist.numPatients < 10 , Request.to != current_user.id)
 
-    return render_template('findtherapist.html',  availables = availables)
+    return render_template('findtherapist.html',  therapists = therapists, availables = availables)
 
 @bp.route('/findpatient')
 @login_required
@@ -319,7 +324,7 @@ def findpatient():
 
     patients = Patient.query.all()
     requests = Request.query.filter_by(to = current_user.id)
-    """
+    
     if (requests):
         print(requests)
    
@@ -327,7 +332,7 @@ def findpatient():
         print(availables, current_user.id)
 
         return render_template('findpatient.html', patients = patients, requests = requests, availables = availables)
-    """
+    
     return render_template('findpatient.html', patients = patients, requests = requests)
 
 
@@ -425,6 +430,7 @@ def accept(id,origin):
         db.session.add(accepted_request)
         db.session.commit()
 
+    request.status = "accepted"
     flash('you have accepted the request')
 
     return render_template('accountview.html')
@@ -465,6 +471,7 @@ def removetherapist(id):
     therapist = Therapist.query.get(id = id)
     therapist.numPatients -=1 
     patient = Patient.query.get(id = current_user.id)
+    patient.T_ID = None
     patient.hasTherapist = False
     db.session.delete(mytherapist)
     db.session.commit()
