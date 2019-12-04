@@ -49,10 +49,17 @@ dotenv = "*"
 self = "*"
 flask-mail = "*"
 message = "*"
+<<<<<<< HEAD
+=======
+
+>>>>>>> feature_three
 chatterbot = "*"
 chatterbot-corpus = "*"
 spacy = "*"
 en-core-web-sm = "*"
+
+flask-bcrypt = "*"
+
 
 [requires]
 python_version = "3.7"

@@ -1,3 +1,4 @@
+import os
 from . import flask_bcrypt
 from . import login
 from datetime import datetime
@@ -120,6 +121,7 @@ class Patient(db.Model):
     hasTherapist = db.Column(db.Boolean)
     T_ID = db.Column(db.Integer, db.ForeignKey ('Therapist.TherapistID'))
 
+<<<<<<< HEAD
     #requests = db.relationship("Request", backref = "Patient")
 
 class Request(db.Model):
@@ -150,3 +152,5 @@ class T_Patients(db.Model):
     t_id = db.Column(db.Integer, db.ForeignKey('Therapist.id'))
     p_id = db.Column(db.Integer, db.ForeignKey('Patient.id'))
     response = db.Column(db.String, default = "Sent") #options are sent, accepted, denied
+=======
+>>>>>>> feature_three

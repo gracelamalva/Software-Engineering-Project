@@ -11,17 +11,31 @@ from app.main.models import *
 from .models import Users
 from .models import Journal
 from .models import JournalEntry
+from .models import AffirmationEntry
 from flask import flash
 from flask_sqlalchemy import SQLAlchemy
-from app.main.config import Config
 # from app.api.request import *
 from app.api.request import analyze
 from flask_login import login_required, current_user, logout_user, login_user
+from .forms import RegisterForm, LoginForm, ChangePasswordForm, UpdateAccountInfo, createAEntry, HelpDeskForm
+from flask_mail import Message, Mail
+
+
+app = Flask(__name__)
 from .forms import RegisterForm, LoginForm, ChangePasswordForm, UpdateAccountInfo, createAEntry
 from flask import send_file
 from flask import Response
 
-
+app.config.update(
+    DEBUG=True,
+    #EMAIL SETTINGS
+    MAIL_SERVER='smtp.gmail.com',
+    MAIL_PORT=465,
+    MAIL_USE_SSL=True,
+    MAIL_USERNAME = 'sentijournalapp@gmail.com',
+    MAIL_PASSWORD = 'sentijournalapp'
+)
+mail=Mail(app)
 
 #import chatbot files
 from chatterbot import ChatBot
@@ -559,7 +573,32 @@ def affirmationview():
     affirmationEntries=AffirmationEntry.query.all()
     return render_template('affirmationview.html', entries=affirmationEntries)
 
+<<<<<<< HEAD
 """
+=======
+@bp.route('/contact', methods = ['GET', 'POST'])
+def contact():
+    form = HelpDeskForm()
+
+    if request.method == 'POST':
+        if form.validate() == False:
+            flash('All fields are required.')
+            return render_template('contact.html', form=form)
+        else:
+            msg = Message(form.Subject.data, sender='sentijournalapp@gmail.com', recipients=['incoming+sentijournal-supportticketing-15617391-issue-@incoming.gitlab.com'])
+            msg.body = """
+            From: %s <%s>
+            %s
+            """ % (form.Name.data, form.Email.data, form.Message.data)
+            mail.send(msg)
+            flash('Thank you for your message! We will get back to you shortly', category='success')
+            return redirect(url_for('main.contact'))
+            return render_template('contact.html', success=True, form=form)
+
+    elif request.method == 'GET':
+        return render_template('contact.html', form=form)
+
+>>>>>>> feature_three
 #chatbot files
 bot = ChatBot("Chatbot Therapist")
 conversation = [
@@ -594,4 +633,7 @@ def chat():
 def get_bot_response():
     userText = request.args.get('msg')
     return str(bot.get_response(userText))
+<<<<<<< HEAD
 """
+=======
+>>>>>>> feature_three

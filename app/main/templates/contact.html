@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<header class="masthead" style="background-image: url('/static/img/entry-b.jpg')">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="site-heading">
+            <h1>Help Desk</h1>
+            <span class="subheading">We are here to help! Leave us a message!</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+<h4>Write Your Issue:</h4>
+    {% if success %}
+        <p>Thank you for your message. We'll get back to you shortly.</p>
+    {% else %}
+        {% for message in form.Name.errors %}
+            <div class="flash">{{ message }}</div>
+        {% endfor %}
+
+        {% for message in form.Email.errors %}
+            <div class="flash">{{ message }}</div>
+        {% endfor %}
+
+        {% for message in form.Subject.errors %}
+            <div class="flash">{{ message }}</div>
+        {% endfor %}
+
+        {% for message in form.Message.errors %}
+            <div class="flash">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+    <form action="{{ url_for('main.contact') }}" method="post">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            {{ form.Name.label }}
+            {% if form.Name.errors %}
+                {% for e in form.Name.errors %}
+                    <p class="help-block text-danger">{{ e }}</p>
+                {% endfor %}
+            {% endif %}
+            {{ form.Name(class_='form-control') }}
+        </div>
+      <div class="form-group">
+            {{ form.Email.label }}
+            {% if form.Email.errors %}
+                {% for e in form.Email.errors %}
+                    <p class="help-block text-danger">{{ e }}</p>
+                {% endfor %}
+            {% endif %}
+            {{ form.Email(class_='form-control') }}
+        </div>
+        <div class="form-group">
+            {{ form.Subject.label }}
+            {% if form.Subject.errors %}
+                {% for e in form.Subject.errors %}
+                    <p class="help-block text-danger">{{ e }}</p>
+                {% endfor %}
+            {% endif %}
+            {{ form.Subject(class_='form-control') }}
+        </div>
+        <div class="form-group">
+            {{ form.Message.label }}
+            {% if form.Message.errors %}
+                {% for e in form.Message.errors %}
+                    <p class="help-block text-danger">{{ e }}</p>
+                {% endfor %}
+            {% endif %}
+            {{ form.Message(class_='form-control') }}
+        </div>
+        <div class="form-group">
+            {{ form.submit(class_='btn btn-primary') }}
+        </div>
+        <a type = "button" href="{{ url_for('main.contact') }}">Write another message</a></p>
+    </form>
+</div>
+{% endblock content %}
