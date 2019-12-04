@@ -6,7 +6,6 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-<<<<<<< HEAD
 pytest = "==5.2.1"
 ibm-watson = "==4.0.1"
 basequery = "*"
@@ -50,23 +49,13 @@ dotenv = "*"
 self = "*"
 flask-mail = "*"
 message = "*"
-=======
-pytest = "*"
-flask = "*"
-flask-sqlalchemy = "*"
-ibm-watson = "*"
-flask-wtf = "*"
-flask-login = "*"
-<<<<<<< HEAD
-basequery = "*"
-hashlib = "*"
+
 chatterbot = "*"
 chatterbot-corpus = "*"
 spacy = "*"
-=======
+
 flask-bcrypt = "*"
->>>>>>> origin
->>>>>>> 01e4762fdda6696861610a59f2f955c5793e39e7
+
 
 [requires]
 python_version = "3.7"
