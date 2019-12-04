@@ -84,10 +84,12 @@ def update():
 @login_required
 def accountview():
     #user = current_user
-    requests = Request.query.filter_by(to = current_user.id)
+    #requests = Request.query.filter_by(to = current_user.id)
 
     if current_user.userstatus == "Patient":
         patient = Patient.query.get(current_user.id)
+        requests = Request.query.filter_by(to = current_user.id)
+        patients = Patient.query.join(T_Patients, Patient.id == T_Patients.p_id).filter(T_Patients.t_id == current_user.id).all()
         #requests = Request.query.filter_by(to = current_user.id)
         #therapist = T_Patients.query.filter_by(p_id = current_user.id)
         mytherapist = T_Patients.query.filter_by(p_id = current_user.id)
@@ -96,11 +98,14 @@ def accountview():
         therapist = Therapist.query.get(current_user.id)
         requests = Request.query.filter_by(to = current_user.id)
         mypatients = T_Patients.query.filter_by(t_id = current_user.id)
+        patients = Patient.query.join(T_Patients, Patient.id == T_Patients.p_id).filter(T_Patients.t_id == current_user.id).all()
+        mytherapist = T_Patients.query.filter_by(p_id = 0)
+        patient = Patient.query.get(0)
 
-        return render_template('accountview.html', requests = requests, mytherapist = mytherapist, mypatients = mypatients, patient = patient)
+        #return render_template('accountview.html', requests = requests, patients = patients)
     
 
-    return render_template('accountview.html', requests = requests, mytherapist = mytherapist, patient = patient)
+    return render_template('accountview.html', requests = requests, mytherapist = mytherapist, patient = patient, patients = patients)
 
 @bp.route('/reset', methods=['post', 'get'])
 @login_required
@@ -268,6 +273,7 @@ def patient():
     db.session.commit()
 
     user = current_user
+
     return render_template('accountview.html', user = user)
 
 @bp.route('/therapist' , methods = ['GET', 'POST'])
@@ -300,9 +306,9 @@ def findtherapist():
     #requests = Request.query.filter_by(to = current_user.id)
     #patient = Patient.query.get(id = current_user.id)
     #therapists = Therapist.query.filter_by(numPatients< 10, request.to != therapist.id)
-    availables = Patient.query.join(Request, Patient.id == Request.p_id).filter(Patient.hasTherapist == True, Request.to != current_user.id)
+    availables = Therapist.query.join(Request, Therapist.id == Request.t_id).filter(Therapist.numPatients < 10 , Request.to != current_user.id)
 
-    return render_template('findtherapist.html', therapists = therapists, requests = requests)
+    return render_template('findtherapist.html', therapists = therapists, requests = requests, availables = availables)
 
 @bp.route('/findpatient')
 @login_required
@@ -310,8 +316,9 @@ def findpatient():
 
     patients = Patient.query.all()
     requests = Request.query.filter_by(to = current_user.id)
+    availables = Patient.query.join(Request, Patient.id == Request.origin).filter(Patient.hasTherapist == True, Request.to != current_user.id)
 
-    return render_template('findpatient.html', patients = patients, requests = requests)
+    return render_template('findpatient.html', patients = patients, requests = requests, availables = availables)
 
 
 @bp.route('/revertaccount')
@@ -378,7 +385,7 @@ def requestresponse(id,to):
 def accept(id,origin):
 
     request = Request.query.get(id)
-    origin = Request.query.get(origin)
+    #origin = Request.query.get(origin)
 
     id = current_user.id
     user = current_user
@@ -440,24 +447,40 @@ def decline(id,origin):
 
 
 
-@bp.route('/removeTherapist')
+@bp.route('/removetherapist/<int:id>')
 @login_required
-def removeTherapist(id,origin):
+def removetherapist(id):
 
-    therapist = Therapist.query.filter_by()
+    mytherapist = T_Patients.query.filter_by(t_id = id).one()
+    therapist = Therapist.query.get(id = id)
+    therapist.numPatients -=1 
+    patient = Patient.query.get(id = current_user.id)
+    patient.hasTherapist = False
+    db.session.delete(mytherapist)
+    db.session.commit()
+
+    flash('you have deleted your therapist')
 
     return render_template('accountview.html') 
 
-@bp.route('/removePatient/<int:id>')
+@bp.route('/removepatient/<int:id>')
 @login_required
-def removePatient(id):
+def removepatient(id):
 
     #patients = Patient.query.filter_by()
-    patients = Patients.query.filter_by(T_ID = current_user.id)
-    patient = Patient.query.get(id)
-    db.session.delete(patient)
+    #mypatientT_Patients.query.filter_by(p_id = id)
+    #patients = Patients.query.filter_by(T_ID = current_user.id)
+    mypatient = T_Patients.query.filter_by(p_id = id).one()
+    therapist = Therapist.query.get(id = current_user.id)
+    therapist.numPatients -=1 
+    patient = Patient.query.get(id = id )
+    patient.hasTherapist = False
+    db.session.delete(mypatient)
+    db.session.commit()
 
-    return render_template('accountview.html', patients = patients) 
+    flash('you have deleted your patient')
+
+    return render_template('accountview.html') 
 
 @bp.route('/affirmation', methods = ['GET', 'POST'])
 @login_required

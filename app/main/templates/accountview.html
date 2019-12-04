@@ -1,94 +1,99 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <header class="masthead" style="background-image: url('/static/img/home-bg.jpg')">
-    <div class="overlay"></div>
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-8 col-md-10 mx-auto">
-          <div class="site-heading">
-            <h1>Account Info</h1>
-            <span class="subheading">Welcome {{ current_user.Username }}!</span>
-          </div>
+<header class="masthead" style="background-image: url('/static/img/home-bg.jpg')">
+  <div class="overlay"></div>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-md-10 mx-auto">
+        <div class="site-heading">
+          <h1>Account Info</h1>
+          <span class="subheading">Welcome {{ current_user.Username }}!</span>
         </div>
       </div>
     </div>
-  </header>
+  </div>
+</header>
 {% endblock %}
 
 {% block content %}
-  <div class="container">
-      {% if current_user.is_authenticated %}
-      <h4>{{ current_user.Username }}'s Account:</h4>
-      <p>Full Name: {{ current_user.fullname }}</p>
-      <p>Username: {{ current_user.Username }}</p>
-      <p>Email: {{ current_user.email }}</p>
-      <p>User status: {{current_user.userstatus}} </p>
-      <p><a href="{{ url_for('main.reset') }}">Click Here to Reset Your Password</a></p>
-      <p><a href="{{ url_for('main.update') }}">Click Here to Update Your Account Information</a></p>
-      <p>Member Since: {{ current_user.register_date.strftime("%A %B %d, %Y") }}</p>
+<div class="container">
+  {% if current_user.is_authenticated %}
+  <h4>{{ current_user.Username }}'s Account:</h4>
+  <p>Full Name: {{ current_user.fullname }}</p>
+  <p>Username: {{ current_user.Username }}</p>
+  <p>Email: {{ current_user.email }}</p>
+  <p>User status: {{current_user.userstatus}} </p>
+  <p><a href="{{ url_for('main.reset') }}">Click Here to Reset Your Password</a></p>
+  <p><a href="{{ url_for('main.update') }}">Click Here to Update Your Account Information</a></p>
+  <p>Member Since: {{ current_user.register_date.strftime("%A %B %d, %Y") }}</p>
 
-      {% if current_user.userstatus == "Patient" %}
-      <h3>Patient Features</h3>
+  {% if current_user.userstatus == "Patient" %}
+  <h3>Patient Features</h3>
 
-        <ul>My requests
-          {% for request in requests %}
-          <li>name: {{request.origin}} </li> <a href = "{{url_for('main.accept', id = request.id, origin = request.origin)}}">Accept</a>
-          <a href = "{{url_for('main.decline', id = request.id, origin = request.origin)}}">Decline</a>
-          {% endfor %}
-        </ul>
+  <ul>My requests
+    {% for request in requests %}
+    <li>name: {{request.origin}} </li>
+     <a href="{{url_for('main.accept', id = request.id, origin = request.origin)}}">Accept</a>
+    <a href="{{url_for('main.decline', id = request.id, origin = request.origin)}}">Decline</a>
+    {% endfor %}
+  </ul>
 
-        {% if patient.hasTherapist == True %}
-        <ul>My therapist:
-            <li>Name: {{mytherapist.therapistName}}</li>
-            <li>Contact</li>
-            <a href = "{{url_for(main.removeTherapist)}}">Remove </li>
-        </ul>
-        {% endif %}
-
-
-        <p><a href = "{{url_for('main.findtherapist')}}">find therapist</a></p>
-        <p><a href = "{{url_for('main.revertaccount')}}">revert account</a></p>
-      {% endif %}
-  
-
-      {% if current_user.userstatus == "Therapist" %}
-      <h3>Therapist Features</h3>
-
-      <ul>My requests
-        {% for request in requests %}
-        <li>name: {{request.origin}} </li> <a href = "{{url_for('main.accept', id = request.id, origin = request.origin)}}">Accept</a>
-        <a href = "{{url_for('main.decline', id = request.id, origin = request.origin)}}">Decline</a>
-        {% endfor %}
-      </ul>
-
-      {% for mypatient in mypatients %}
-      <ul>My patients:
-          <li>Name: {{mypatient.patientName}} </li>
-          <li>Contact</li>
-          <a href = "{{url_for('main.removePatient')}}">Remove </li>
-      </ul>
-      {% endfor %}
-      
-
-        <p><a href = "{{url_for('main.findpatient')}}">find Patient</a></p>
-        <p><a href = "{{url_for('main.revertaccount')}}">revert account</a></p>
-      {% endif %}
-  
-    
-      {% if current_user.userstatus == "User" %}
-      <h3>User Features</h3>
-
-        <p><a href = "{{url_for('main.journal')}}">manage journal</a></p>
-        
-      {% endif %}
-  
-  {% else %}
-      <h4>Dear You:</h4>
-        <p>
-        Please <a href="{{ url_for('main.login') }}">Login</a> or <a href="{{ url_for('main.register') }}">Register</a>
-        </p>
+  {% if patient.hasTherapist != True %}
+  <ul>My therapist:
+    <li>Name: {{mytherapist.therapistName}}</li>
+    <li>Contact</li>
+    <a href="{{url_for(main.removetherapist, id = mytherapist.id)}}"> Remove </a>
+  </ul>
   {% endif %}
-  </div>
+
+
+  <p><a href="{{url_for('main.findtherapist')}}">find therapist</a></p>
+  <p><a href="{{url_for('main.revertaccount')}}">revert account</a></p>
+  {% endif %}
+
+
+
+  {% if current_user.userstatus == "Therapist" %}
+  <h3>Therapist Features</h3>
+
+  <ul>My requests
+    {% for request in requests %}
+    <li>name: {{request.origin}} </li>
+     <a href="{{url_for('main.accept', id = request.id, origin = request.origin)}}"> Accept </a>
+    <a href="{{url_for('main.decline', id = request.id, origin = request.origin)}}"> Decline </a>
+    {% endfor %}
+  </ul>
+
+
+  <ul>My patients:
+    {% for patient in patients %}
+    <li>Name: {{patient.patientName}} </li>
+    <li>Contact</li>
+    <a href="{{url_for('main.removepatient', id = patient.id)}}">Remove </a>
+    {% endfor %}
+  </ul>
+
+
+
+  <p><a href="{{url_for('main.findpatient')}}">find Patient</a></p>
+  <p><a href="{{url_for('main.revertaccount')}}">revert account</a></p>
+  {% endif %}
+
+
+  {% if current_user.userstatus == "User" %}
+  <h3>User Features</h3>
+
+  <p><a href="{{url_for('main.journal')}}">manage journal</a></p>
+
+  {% endif %}
+
+  {% else %}
+  <h4>Dear You:</h4>
+  <p>
+    Please <a href="{{ url_for('main.login') }}">Login</a> or <a href="{{ url_for('main.register') }}">Register</a>
+  </p>
+  {% endif %}
+</div>
 
 {% endblock %}
