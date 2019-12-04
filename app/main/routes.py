@@ -1,5 +1,7 @@
 import sys, csv, os, datetime
 from datetime import timedelta
+
+from bin.ud.conll17_ud_eval import HEAD
 from werkzeug.urls import url_parse
 from app.main import bp, models
 from flask import Flask, redirect, render_template, request, Blueprint, url_for, jsonify, flash
@@ -271,14 +273,6 @@ def populate():
     analyzed_text =  analyze(text)
 
     return render_template('analyze.html', analyzed_text = analyzed_text, text = text)
-
-
-@bp.route('/file-downloads/', methods=['GET','POST'])
-def file_downloads():
-    try:
-        return render_template('downloads.html')
-    except Exception as e:
-        return str(e)
 
 
 @bp.route('/dummyprofile/<string:Username>', methods = ['GET','POST'])
