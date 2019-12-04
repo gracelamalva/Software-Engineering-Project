@@ -32,14 +32,18 @@
   <h3>Patient Features</h3>
 
   <ul>My requests
+  
     {% for request in requests %}
+    
     <li>name: {{request.origin}} </li>
      <a href="{{url_for('main.accept', id = request.id, origin = request.origin)}}">Accept</a>
-    <a href="{{url_for('main.decline', id = request.id, origin = request.origin)}}">Decline</a>
-    {% endfor %}
+     <a href="{{url_for('main.decline', id = request.id, origin = request.origin)}}">Decline</a>
+     
+     {% endfor %}
+     
   </ul>
 
-  {% if patient.hasTherapist != True %}
+  {% if patient.hasTherapist == True %}
   <ul>My therapist:
     <li>Name: {{mytherapist.therapistName}}</li>
     <li>Contact</li>
@@ -58,19 +62,23 @@
   <h3>Therapist Features</h3>
 
   <ul>My requests
+   
     {% for request in requests %}
+    
     <li>name: {{request.origin}} </li>
      <a href="{{url_for('main.accept', id = request.id, origin = request.origin)}}"> Accept </a>
     <a href="{{url_for('main.decline', id = request.id, origin = request.origin)}}"> Decline </a>
+    
     {% endfor %}
+  
   </ul>
 
 
   <ul>My patients:
-    {% for patient in patients %}
-    <li>Name: {{patient.patientName}} </li>
+    {% for mypatient in patients %}
+    <li>Name: {{mypatient.patientName}} </li>
     <li>Contact</li>
-    <a href="{{url_for('main.removepatient', id = patient.id)}}">Remove </a>
+    <a href="{{url_for('main.removepatient', id = mypatient.id)}}">Remove </a>
     {% endfor %}
   </ul>
 

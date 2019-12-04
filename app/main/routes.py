@@ -94,6 +94,8 @@ def accountview():
         #therapist = T_Patients.query.filter_by(p_id = current_user.id)
         mytherapist = T_Patients.query.filter_by(p_id = current_user.id)
 
+        return render_template('accountview.html', requests = requests, mytherapist = mytherapist, patient = patient, patients = patients)
+  
     if current_user.userstatus == "Therapist":
         therapist = Therapist.query.get(current_user.id)
         requests = Request.query.filter_by(to = current_user.id)
@@ -103,8 +105,9 @@ def accountview():
         patient = Patient.query.get(0)
 
         #return render_template('accountview.html', requests = requests, patients = patients)
+        return render_template('accountview.html', requests = requests, mytherapist = mytherapist, patient = patient, patients = patients)
     
-
+    print (patient, patients, requests)
     return render_template('accountview.html', requests = requests, mytherapist = mytherapist, patient = patient, patients = patients)
 
 @bp.route('/reset', methods=['post', 'get'])
@@ -306,9 +309,9 @@ def findtherapist():
     #requests = Request.query.filter_by(to = current_user.id)
     #patient = Patient.query.get(id = current_user.id)
     #therapists = Therapist.query.filter_by(numPatients< 10, request.to != therapist.id)
-    availables = Therapist.query.join(Request, Therapist.id == Request.t_id).filter(Therapist.numPatients < 10 , Request.to != current_user.id)
+    availables = Therapist.query.join(Request, Therapist.id == Request.origin).filter(Therapist.numPatients < 10 , Request.to != current_user.id)
 
-    return render_template('findtherapist.html', therapists = therapists, requests = requests, availables = availables)
+    return render_template('findtherapist.html',  availables = availables)
 
 @bp.route('/findpatient')
 @login_required
@@ -316,9 +319,16 @@ def findpatient():
 
     patients = Patient.query.all()
     requests = Request.query.filter_by(to = current_user.id)
-    availables = Patient.query.join(Request, Patient.id == Request.origin).filter(Patient.hasTherapist == True, Request.to != current_user.id)
+    """
+    if (requests):
+        print(requests)
+   
+        availables = Patient.query.join(Request, Patient.id == Request.origin).filter(Patient.hasTherapist == False, Request.to != current_user.id).all()
+        print(availables, current_user.id)
 
-    return render_template('findpatient.html', patients = patients, requests = requests, availables = availables)
+        return render_template('findpatient.html', patients = patients, requests = requests, availables = availables)
+    """
+    return render_template('findpatient.html', patients = patients, requests = requests)
 
 
 @bp.route('/revertaccount')
