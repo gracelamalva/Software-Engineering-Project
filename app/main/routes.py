@@ -364,7 +364,10 @@ def contact():
             %s
             """ % (form.Name.data, form.Email.data, form.Message.data)
             mail.send(msg)
+            flash('Thank you for your message! We will get back to you shortly', category='success')
+            return redirect(url_for('main.contact'))
             return render_template('contact.html', success=True, form=form)
+
     elif request.method == 'GET':
         return render_template('contact.html', form=form)
 
