@@ -42,9 +42,9 @@ from chatterbot import ChatBot
 from chatterbot.trainers import ChatterBotCorpusTrainer
 from chatterbot.trainers import ListTrainer
 import spacy
-#nlp = spacy.load('en_core_web_sm')
-#import en_core_web_sm
-#nlp = en_core_web_sm.load()
+nlp = spacy.load('en_core_web_sm')
+import en_core_web_sm
+nlp = en_core_web_sm.load()
 
 @bp.route('/', methods=['GET','POST'])
 def index():
@@ -604,9 +604,27 @@ trainer.train('chatterbot.corpus.english')
 def chat():
     return render_template("chat.html")
 
-@bp.route("/contact")
+@bp.route('/contact', methods = ['GET', 'POST'])
 def contact():
-    return render_template("contact.html")
+    form = HelpDeskForm()
+
+    if request.method == 'POST':
+        if form.validate() == False:
+            flash('All fields are required.')
+            return render_template('contact.html', form=form)
+        else:
+            msg = Message(form.Subject.data, sender='sentijournalapp@gmail.com', recipients=['incoming+sentijournal-supportticketing-15617391-issue-@incoming.gitlab.com'])
+            msg.body = """
+            From: %s <%s>
+            %s
+            """ % (form.Name.data, form.Email.data, form.Message.data)
+            mail.send(msg)
+            flash('Thank you for your message! We will get back to you shortly', category='success')
+            return redirect(url_for('main.contact'))
+            return render_template('contact.html', success=True, form=form)
+
+    elif request.method == 'GET':
+        return render_template('contact.html', form=form)
 """
 @bp.route("/get")
 def get_bot_response():

@@ -89,7 +89,7 @@ class JournalEntry(db.Model):
     EntryTitle = db.Column(db.String)
     EntryText = db.Column(db.String)
     Date_Time = db.Column(db.DateTime, nullable = False)
-    #EntryEmotion = db.Column(db.Integer, db.ForeignKey('Journal.JournalID'), nullable=False)
+    EntryEmotion = db.Column(db.Integer, db.ForeignKey('Journal.JournalID'), nullable=False)
     J_ID = db.Column(db.Integer, db.ForeignKey('Journal.JournalID'), nullable = False)
 
 class AffirmationEntry(db.Model):
@@ -138,11 +138,6 @@ class Request(db.Model):
         new_request = Request(origin = origin, to = to)
         db.session.add(new_request)
         db.session.commit()
-
-    
-    #def respondRequest(self, response):
-    #    Request.response = response
-    #    db.session.commit()
 
 
 class T_Patients(db.Model):
