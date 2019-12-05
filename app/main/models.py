@@ -1,13 +1,16 @@
 import os
 from . import flask_bcrypt
-from . import login
 from datetime import datetime
+<<<<<<< HEAD
 from hashlib import md5
 from . import db
 from flask_sqlalchemy import SQLAlchemy
 
 
 db = SQLAlchemy()
+=======
+from . import db, login
+>>>>>>> feature_three_grace
 
 class Users(db.Model):
     __tablename__ = "Users"
@@ -139,6 +142,14 @@ class Request(db.Model):
         db.session.add(new_request)
         db.session.commit()
 
+<<<<<<< HEAD
+=======
+    
+    #def respondRequest(self, response):
+    #    Request.response = response
+    #    db.session.commit()
+
+>>>>>>> feature_three_grace
 
 class T_Patients(db.Model):
     __tablename__ = "T_Patients"

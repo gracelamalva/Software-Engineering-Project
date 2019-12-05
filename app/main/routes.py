@@ -3,16 +3,13 @@ from datetime import timedelta
 
 from bin.ud.conll17_ud_eval import HEAD
 from werkzeug.urls import url_parse
-from app.main import bp, models
+from app.main import bp, models, mail
 from flask import Flask, redirect, render_template, request, Blueprint, url_for, jsonify, flash
-from app.main import bp, models
-from flask import Flask, redirect, render_template, request, Blueprint, url_for, jsonify
 from app.main.models import *
 from .models import Users
 from .models import Journal
 from .models import JournalEntry
 from .models import AffirmationEntry
-from flask import flash
 from flask_sqlalchemy import SQLAlchemy
 # from app.api.request import *
 from app.api.request import analyze
@@ -21,30 +18,23 @@ from .forms import RegisterForm, LoginForm, ChangePasswordForm, UpdateAccountInf
 from flask_mail import Message, Mail
 
 
-app = Flask(__name__)
 from .forms import RegisterForm, LoginForm, ChangePasswordForm, UpdateAccountInfo, createAEntry
 from flask import send_file
 from flask import Response
 
-app.config.update(
-    DEBUG=True,
-    #EMAIL SETTINGS
-    MAIL_SERVER='smtp.gmail.com',
-    MAIL_PORT=465,
-    MAIL_USE_SSL=True,
-    MAIL_USERNAME = 'sentijournalapp@gmail.com',
-    MAIL_PASSWORD = 'sentijournalapp'
-)
-mail=Mail(app)
 
 #import chatbot files
 from chatterbot import ChatBot
 from chatterbot.trainers import ChatterBotCorpusTrainer
 from chatterbot.trainers import ListTrainer
+
 import spacy
 nlp = spacy.load('en_core_web_sm')
+<<<<<<< HEAD
 import en_core_web_sm
 nlp = en_core_web_sm.load()
+=======
+>>>>>>> feature_three_grace
 
 @bp.route('/', methods=['GET','POST'])
 def index():
@@ -169,7 +159,7 @@ def logout():
 
 @bp.route('/journal', methods = ['GET', 'POST'])
 def journal():
-    # entry = request.form.get("entry")
+    
     entries = JournalEntry.query.all()
     return render_template('journal.html', journal = journal, entries=entries)
 
@@ -201,9 +191,8 @@ def journal_downloadcsv():
                             "attachment;filename=entries.csv"
                     })
 
-
 @bp.route('/search', methods=['GET', 'POST'])
-def search():#JournalID):
+def search():
     dt = request.args.get("date")
     ft = '%Y-%m-%d'
     date = datetime.strptime(dt, ft)
@@ -240,7 +229,6 @@ def edit(EntryID):
 @bp.route('/add/<int:JournalID>', methods=['GET', 'POST'])
 def add(JournalID):
     journal = Journal.query.get(JournalID)
-    # entries = JournalEntry.query.all()
 
     if request.method == "POST":
         # journal =Journal.query.get(JournalID)
@@ -252,11 +240,6 @@ def add(JournalID):
 
         journal.add_entry(entrytitle, entrytext, result)
 
-        #entries = journal.entries
-        #entry = JournalEntry(EntryTitle = entrytitle, EntryText = entrytext, Date_Time = datetime)
-        #entry = journal.add_entry(entrytitle, entrytext, result)
-        #db.session.add(entry)
-        #db.session.commit()
     entries = JournalEntry.query.all()
     return render_template('journal.html', journal=journal, entries=entries)
 
@@ -264,7 +247,6 @@ def add(JournalID):
 def delete(EntryID):
     #entry = JournalEntry.query.get(EntryID)
 
-    #JournalEntry.query.filter_by(EntryID = EntryID).delete()
     entry = JournalEntry.query.filter_by(EntryID = EntryID).first()
 
     db.session.delete(entry)
@@ -372,6 +354,7 @@ def findtherapist():
     therapists= Therapist.query.all()
     #therapists = Therapist.query.filter_by(numPatients< 10, request.to != therapist.id)
     availables = Therapist.query.join(Request, Therapist.id == Request.origin).filter(Therapist.numPatients < 10 , Request.to != current_user.id)
+<<<<<<< HEAD
 
     return render_template('findtherapist.html',  therapists = therapists, availables = availables)
 
@@ -388,6 +371,24 @@ def findpatient():
         availables = Patient.query.join(Request, Patient.id == Request.origin).filter(Patient.hasTherapist == False, Request.to != current_user.id).all()
         print(availables, current_user.id)
 
+=======
+
+    return render_template('findtherapist.html',  therapists = therapists, availables = availables)
+
+@bp.route('/findpatient')
+@login_required
+def findpatient():
+
+    patients = Patient.query.all()
+    requests = Request.query.filter_by(to = current_user.id)
+    
+    if (requests):
+        print(requests)
+   
+        availables = Patient.query.join(Request, Patient.id == Request.origin).filter(Patient.hasTherapist == False, Request.to != current_user.id).all()
+        print(availables, current_user.id)
+
+>>>>>>> feature_three_grace
         return render_template('findpatient.html', patients = patients, requests = requests, availables = availables)
     
     return render_template('findpatient.html', patients = patients, requests = requests)
@@ -573,7 +574,11 @@ def affirmationview():
     affirmationEntries=AffirmationEntry.query.all()
     return render_template('affirmationview.html', entries=affirmationEntries)
 
+<<<<<<< HEAD
 """
+=======
+
+>>>>>>> feature_three_grace
 #chatbot files
 bot = ChatBot("Chatbot Therapist")
 conversation = [
@@ -600,6 +605,7 @@ trainer = ChatterBotCorpusTrainer(bot)
 trainer.train('chatterbot.corpus.english')
 """
 
+
 @bp.route("/chat")
 def chat():
     return render_template("chat.html")
@@ -625,9 +631,17 @@ def contact():
 
     elif request.method == 'GET':
         return render_template('contact.html', form=form)
+<<<<<<< HEAD
 """
+=======
+
+>>>>>>> feature_three_grace
 @bp.route("/get")
 def get_bot_response():
     userText = request.args.get('msg')
     return str(bot.get_response(userText))
+<<<<<<< HEAD
 """
+=======
+
+>>>>>>> feature_three_grace
