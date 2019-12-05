@@ -2,11 +2,15 @@
 <module version="4">
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$" />
-<<<<<<< HEAD
-    <orderEntry type="jdk" jdkName="Pipenv (Software-Engineering-Project) (6)" jdkType="Python SDK" />
-=======
     <orderEntry type="jdk" jdkName="Pipenv (Software-Engineering-Project)" jdkType="Python SDK" />
->>>>>>> origin
     <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+  <component name="TemplatesService">
+    <option name="TEMPLATE_CONFIGURATION" value="Jinja2" />
+    <option name="TEMPLATE_FOLDERS">
+      <list>
+        <option value="$MODULE_DIR$/app/main/templates" />
+      </list>
+    </option>
   </component>
 </module>

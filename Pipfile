@@ -8,17 +8,16 @@ verify_ssl = true
 [packages]
 pytest = "*"
 ibm-watson = "*"
-Flask = "*"
-Flask-SQLAlchemy = "*"
-Flask-WTF = "*"
-Flask-Login = "*"
-Flask-Bcrypt = "*"
+flask = "*"
+flask-sqlalchemy = "*"
+flask-wtf = "*"
 flask-mail = "*"
+flask-login = "*"
+flask-bcrypt = "*"
+chatterbot = "==1.0.0"
+chatterbot-corpus = "==1.2.0"
 spacy = "*"
 pytz = "*"
-chatterbot = "*"
-chatterbot-corpus = "*"
-
 
 [requires]
 python_version = "3.7"

@@ -33,6 +33,11 @@ Install the required dependencies for the project by typing...
 pipenv install
 ```
 
+Download and install the required Spacy dependency...
+```shell
+pipenv run python -m spacy download en
+```
+
 Specify some virtual environment variables...
 ```shell  
 export FLASK_APP=app.py             # May be required to run flask
@@ -44,16 +49,17 @@ You can start the basic application using the command..
 flask run
 ```
 
-#### install libs
+##### Troubleshooting Pipenv
+
+If there are issues installing dependencies or the above steps are failing, try all or one of the following.
+
+Remove your current `pipenv` virtual environment and start fresh with the above commands...
 ```shell
-pip install -r requirements.txt
+pipenv --rm
 ```
 
-#### if chatterbot is not loading correctly
-#### try the following in admin cmd
+Update your `pip` command and `pipenv` commands...
 ```shell
-python -m spacy download en
-python -m spacy download en_core_web_sm
-python -m spacy link en_core_web_sm en
+python -m pip install --upgrade pip pipenv          # This is for administrator accounts
+python -m pip install --upgrade --user pip pipenv   # This is for user accounts
 ```
-#### or try install chatterbot in python 64bit
