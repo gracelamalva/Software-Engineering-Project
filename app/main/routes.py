@@ -42,9 +42,9 @@ from chatterbot import ChatBot
 from chatterbot.trainers import ChatterBotCorpusTrainer
 from chatterbot.trainers import ListTrainer
 import spacy
-#nlp = spacy.load('en_core_web_sm')
-#import en_core_web_sm
-#nlp = en_core_web_sm.load()
+nlp = spacy.load('en_core_web_sm')
+import en_core_web_sm
+nlp = en_core_web_sm.load()
 
 @bp.route('/', methods=['GET','POST'])
 def index():
