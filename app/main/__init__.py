@@ -30,8 +30,6 @@ from app.main import config
 def create_app():
     app = Flask(__name__)
     
-    # db.init_app(app)
-
     app.config.from_object(config)
     
     db.init_app(app)

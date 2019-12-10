@@ -18,7 +18,10 @@
 
 {% block content %}
 <h2>Find a patient</h2>
+
 {% for patient in patients %}
+
 <p> {{patient.patientName}}</p> <a href = "{{url_for('main.sendrequest', to = patient.id )}}"> Invite to be my patient</a>
 {% endfor %}
+
 {% endblock %}
