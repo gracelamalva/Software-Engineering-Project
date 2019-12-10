@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block body %}
+<body class="body">
+   <div class="container" align="left">
+    <h3>Search</h3>
+    <form action="{{url_for('main.fil-downloads')}}" method="get">
+        <button type="download"> Download </button>
+    </form>   </div>
+</body>
+{% endblock %}

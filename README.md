@@ -33,6 +33,11 @@ Install the required dependencies for the project by typing...
 pipenv install
 ```
 
+Download and install the required Spacy dependency...
+```shell
+pipenv run python -m spacy download en
+```
+
 Specify some virtual environment variables...
 ```shell  
 export FLASK_APP=app.py             # May be required to run flask
@@ -42,4 +47,19 @@ export PYTHONDONTWRITEBYTECODE=1    # Prevents .pyc and __pycache__ creation
 You can start the basic application using the command..
 ```shell
 flask run
+```
+
+##### Troubleshooting Pipenv
+
+If there are issues installing dependencies or the above steps are failing, try all or one of the following.
+
+Remove your current `pipenv` virtual environment and start fresh with the above commands...
+```shell
+pipenv --rm
+```
+
+Update your `pip` command and `pipenv` commands...
+```shell
+python -m pip install --upgrade pip pipenv          # This is for administrator accounts
+python -m pip install --upgrade --user pip pipenv   # This is for user accounts
 ```
