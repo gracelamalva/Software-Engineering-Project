@@ -11,6 +11,7 @@ def main():
         print(sys.argv)
 
     if sys.argv[1] == 'createdb':
+        from app.main import models
         db.create_all()
     # if sys.argv[1] == 'populate':
     #     populate()

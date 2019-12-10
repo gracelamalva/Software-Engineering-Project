@@ -7,7 +7,7 @@ from . import db
 from flask_sqlalchemy import SQLAlchemy
 
 
-db = SQLAlchemy()
+#db = SQLAlchemy()
 
 class Users(db.Model):
     __tablename__ = "Users"
