@@ -30,11 +30,6 @@ from chatterbot.trainers import ListTrainer
 
 import spacy
 nlp = spacy.load('en_core_web_sm')
-<<<<<<< HEAD
-import en_core_web_sm
-nlp = en_core_web_sm.load()
-=======
->>>>>>> feature_three_grace
 
 @bp.route('/', methods=['GET','POST'])
 def index():
@@ -354,7 +349,6 @@ def findtherapist():
     therapists= Therapist.query.all()
     #therapists = Therapist.query.filter_by(numPatients< 10, request.to != therapist.id)
     availables = Therapist.query.join(Request, Therapist.id == Request.origin).filter(Therapist.numPatients < 10 , Request.to != current_user.id)
-<<<<<<< HEAD
 
     return render_template('findtherapist.html',  therapists = therapists, availables = availables)
 
@@ -371,24 +365,6 @@ def findpatient():
         availables = Patient.query.join(Request, Patient.id == Request.origin).filter(Patient.hasTherapist == False, Request.to != current_user.id).all()
         print(availables, current_user.id)
 
-=======
-
-    return render_template('findtherapist.html',  therapists = therapists, availables = availables)
-
-@bp.route('/findpatient')
-@login_required
-def findpatient():
-
-    patients = Patient.query.all()
-    requests = Request.query.filter_by(to = current_user.id)
-    
-    if (requests):
-        print(requests)
-   
-        availables = Patient.query.join(Request, Patient.id == Request.origin).filter(Patient.hasTherapist == False, Request.to != current_user.id).all()
-        print(availables, current_user.id)
-
->>>>>>> feature_three_grace
         return render_template('findpatient.html', patients = patients, requests = requests, availables = availables)
     
     return render_template('findpatient.html', patients = patients, requests = requests)
@@ -574,11 +550,6 @@ def affirmationview():
     affirmationEntries=AffirmationEntry.query.all()
     return render_template('affirmationview.html', entries=affirmationEntries)
 
-<<<<<<< HEAD
-"""
-=======
-
->>>>>>> feature_three_grace
 #chatbot files
 bot = ChatBot("Chatbot Therapist")
 conversation = [
@@ -603,7 +574,7 @@ trainer.train(conversation)
 
 trainer = ChatterBotCorpusTrainer(bot)
 trainer.train('chatterbot.corpus.english')
-"""
+
 
 
 @bp.route("/chat")
@@ -631,17 +602,8 @@ def contact():
 
     elif request.method == 'GET':
         return render_template('contact.html', form=form)
-<<<<<<< HEAD
-"""
-=======
-
->>>>>>> feature_three_grace
+        
 @bp.route("/get")
 def get_bot_response():
     userText = request.args.get('msg')
     return str(bot.get_response(userText))
-<<<<<<< HEAD
-"""
-=======
-
->>>>>>> feature_three_grace

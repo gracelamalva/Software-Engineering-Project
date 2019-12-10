@@ -1,16 +1,7 @@
 import os
 from . import flask_bcrypt
 from datetime import datetime
-<<<<<<< HEAD
-from hashlib import md5
-from . import db
-from flask_sqlalchemy import SQLAlchemy
-
-
-db = SQLAlchemy()
-=======
 from . import db, login
->>>>>>> feature_three_grace
 
 class Users(db.Model):
     __tablename__ = "Users"
@@ -92,7 +83,7 @@ class JournalEntry(db.Model):
     EntryTitle = db.Column(db.String)
     EntryText = db.Column(db.String)
     Date_Time = db.Column(db.DateTime, nullable = False)
-    EntryEmotion = db.Column(db.Integer, db.ForeignKey('Journal.JournalID'), nullable=False)
+    # EntryEmotion = db.Column(db.Integer, db.ForeignKey('Journal.JournalID'), nullable=False)
     J_ID = db.Column(db.Integer, db.ForeignKey('Journal.JournalID'), nullable = False)
 
 class AffirmationEntry(db.Model):
@@ -141,15 +132,6 @@ class Request(db.Model):
         new_request = Request(origin = origin, to = to)
         db.session.add(new_request)
         db.session.commit()
-
-<<<<<<< HEAD
-=======
-    
-    #def respondRequest(self, response):
-    #    Request.response = response
-    #    db.session.commit()
-
->>>>>>> feature_three_grace
 
 class T_Patients(db.Model):
     __tablename__ = "T_Patients"

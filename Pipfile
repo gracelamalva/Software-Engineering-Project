@@ -8,18 +8,6 @@ verify_ssl = true
 [packages]
 pytest = "*"
 ibm-watson = "*"
-<<<<<<< HEAD
-flask = "*"
-flask-sqlalchemy = "*"
-flask-wtf = "*"
-flask-mail = "*"
-flask-login = "*"
-flask-bcrypt = "*"
-chatterbot = "==1.0.0"
-chatterbot-corpus = "==1.2.0"
-spacy = "*"
-pytz = "*"
-=======
 Flask = "*"
 Flask-SQLAlchemy = "*"
 Flask-WTF = "*"
@@ -31,7 +19,6 @@ pytz = "*"
 chatterbot = "==1.0.0"
 chatterbot-corpus = "==1.2.0"
 
->>>>>>> feature_three_grace
 
 [requires]
 python_version = "3.7"
