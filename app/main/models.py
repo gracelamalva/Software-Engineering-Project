@@ -89,7 +89,7 @@ class JournalEntry(db.Model):
     EntryTitle = db.Column(db.String)
     EntryText = db.Column(db.String)
     Date_Time = db.Column(db.DateTime, nullable = False)
-    EntryEmotion = db.Column(db.Integer, db.ForeignKey('Journal.JournalID'), nullable=False)
+    EntryEmotion = db.Column(db.String)
     J_ID = db.Column(db.Integer, db.ForeignKey('Journal.JournalID'), nullable = False)
 
 class AffirmationEntry(db.Model):
