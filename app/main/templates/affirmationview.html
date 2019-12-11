@@ -123,10 +123,11 @@ background-color:#666;
     <ul>
         <li>
             <a href="#">
-                <h2><span><b>{{entry.AffirmationEntryTitle}}</b></span><br>
-</h2>
-      <p><span> {{entry.AffirmationEntryText}}</span><br>
-</p>
+                <form name="formtext" method="DELETE" action="{{url_for('main.deleteAffirmation', AffirmationEntryID = entry.AffirmationEntryID)}}">
+                    <button type="submit" action="{{url_for('main.deleteAffirmation', AffirmationEntryID = entry.AffirmationEntryID)}}">X</button>
+                </form>
+                <h2><span><b>{{entry.AffirmationEntryTitle}}</b></span><br></h2>
+                <p><span> {{entry.AffirmationEntryText}}</span><br></p>
             </a>
         </li>
     </ul>

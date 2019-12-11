@@ -550,6 +550,18 @@ def affirmationview():
     affirmationEntries=AffirmationEntry.query.all()
     return render_template('affirmationview.html', entries=affirmationEntries)
 
+@bp.route('/deleteAffirmation/<int:AffirmationEntryID>', methods=['POST', 'GET', 'DELETE'])
+def deleteAffirmation(AffirmationEntryID):
+
+    entry = AffirmationEntry.query.filter_by(AffirmationEntryID = AffirmationEntryID).first()
+
+    db.session.delete(entry)
+    db.session.commit()
+    entries = AffirmationEntry.query.all()
+
+    return render_template('affirmationview.html', entries=entries)
+    entry = JournalEntry.query.get(EntryID)
+
 #chatbot files
 bot = ChatBot("Chatbot Therapist")
 conversation = [
