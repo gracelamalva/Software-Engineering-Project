@@ -26,11 +26,13 @@
   <p>User status: {{current_user.userstatus}} </p>
   <p><a href="{{ url_for('main.reset') }}">Click Here to Reset Your Password</a></p>
   <p><a href="{{ url_for('main.update') }}">Click Here to Update Your Account Information</a></p>
+
   <p>Would You Like to Delete Your Account?
         <form action="{{ url_for('main.delete_user', id=current_user.id) }}" method="POST" class="delete_user">
             <button type="submit" action="{{ url_for('main.delete_user', id=current_user.id) }}" value="DELETE"> Delete </button>
         </form>
-  </p>
+      </p>
+
   <p>Member Since: {{ current_user.register_date.strftime("%A %B %d, %Y") }}</p>
 
   {% if current_user.userstatus == "Patient" %}
