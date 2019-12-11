@@ -348,9 +348,9 @@ def findtherapist():
     #patient = Patient.query.get(id = current_user.id)
     therapists= Therapist.query.all()
     #therapists = Therapist.query.filter_by(numPatients< 10, request.to != therapist.id)
-    availables = Therapist.query.join(Request, Therapist.id == Request.origin).filter(Therapist.numPatients < 10 , Request.to != current_user.id)
+    therapists = Therapist.query.join(Request, Therapist.id == Request.origin).filter(Therapist.numPatients < 10 , Request.to != current_user.id)
 
-    return render_template('findtherapist.html',  therapists = therapists, availables = availables)
+    return render_template('findtherapist.html',  therapists = therapists)#, availables = availables)
 
 @bp.route('/findpatient')
 @login_required
@@ -362,10 +362,10 @@ def findpatient():
     if (requests):
         print(requests)
    
-        availables = Patient.query.join(Request, Patient.id == Request.origin).filter(Patient.hasTherapist == False, Request.to != current_user.id).all()
-        print(availables, current_user.id)
+        patients = Patient.query.join(Request, Patient.id == Request.origin).filter(Patient.hasTherapist == False, Request.to != current_user.id).all()
+        #print(availables, current_user.id)
 
-        return render_template('findpatient.html', patients = patients, requests = requests, availables = availables)
+        return render_template('findpatient.html', patients = patients, requests = requests)#, availables = availables)
     
     return render_template('findpatient.html', patients = patients, requests = requests)
 
@@ -412,20 +412,6 @@ def sendrequest(to):
 
     return render_template('accountview.html')
 
-@bp.route('/requestresponse/<int:id>/<string:to>')
-@login_required
-def requestresponse(id,to):
-
-    request = Request.query.get(id)
-
-    id = current_user.id
-    user = current_user
-
-
-    request.respondRequest()
-
-    return render_template('accountview.html')
-
 
 @bp.route('/accept/<int:id>/<int:origin>')
 @login_required
@@ -438,8 +424,7 @@ def accept(id,origin):
     user = current_user
 
     if current_user.userstatus == "Therapist":
-        #therapist = Therapist.query.get(current_user.id)
-        #patient = Patient.query.get()
+
         accepted_request = T_Patients(id = request.id, t_id = current_user.id , p_id = request.origin, response = "accepted")
         therapist = Therapist.query.get(current_user.id)
         therapist.numPatients += 1
@@ -453,6 +438,7 @@ def accept(id,origin):
         #patient = Patient.query.get(current_user.id)
         #therapist = Therapist.query.get()
         #request.acceptRequest(therapist.id, patient.id)
+        request.status = "accepted"
         accepted_request = T_Patients(id = request.id, t_id = request.origin , p_id = current_user.id, response = "accepted")
         therapist = Therapist.query.get(request.origin)
         therapist.numPatients += 1
