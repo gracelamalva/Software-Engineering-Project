@@ -102,7 +102,7 @@ def accountview():
 
     if current_user.userstatus == "Patient":
         me = Patient.query.get(current_user.id)
-        requests = Request.query.filter_by(to = current_user.id)
+        requests = Request.query.filter_by(to = current_user.id, status = "Sent")
         patients = Patient.query.join(T_Patients, Patient.id == T_Patients.p_id).filter(T_Patients.t_id == current_user.id).all()
         #requests = Request.query.filter_by(to = current_user.id)
         #therapist = T_Patients.query.filter_by(p_id = current_user.id)
@@ -343,9 +343,7 @@ def account():
 @bp.route('/findtherapist')
 @login_required
 def findtherapist():
-    #user = current_user
-    #requests = Request.query.filter_by(to = current_user.id)
-    #patient = Patient.query.get(id = current_user.id)
+
     therapists= Therapist.query.all()
     #therapists = Therapist.query.filter_by(numPatients< 10, request.to != therapist.id)
     therapists = Therapist.query.join(Request, Therapist.id == Request.origin).filter(Therapist.numPatients < 10 , Request.to != current_user.id)
@@ -377,9 +375,15 @@ def revertaccount():
     user = current_user
     if current_user.userstatus == "Patient":
         patient = Patient.query.get(id)
+        if patient.hasTherapist == True:
+            flash('YOU CANNOT REVERT WHILE YOU HAVE A THERAPIST')
+            return render_template('account.html')
         db.session.delete(patient)
     if current_user.userstatus == "Therapist":
         therapist = Therapist.query.get(id)
+        if patient.hasTherapist == True:
+            flash('YOU CANNOT REVERT WHILE YOU HAVE A PATIENT')
+            return render_template('account.html')
         db.session.delete(therapist)
     current_user.userstatus = "User"
     db.session.commit()
