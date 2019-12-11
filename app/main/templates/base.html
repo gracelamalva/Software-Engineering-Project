@@ -43,28 +43,30 @@
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
               <a class="dropdown-item" href="{{ url_for('main.journal') }}">Journal List</a>
               <a class="dropdown-item" href="{{ url_for('main.journal') }}">Create Journal</a>
+              <a class="dropdown-item" href="{{ url_for('main.journal') }}">Entry Search</a>
             </div>
           <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Affirmation</a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="nav-link" href="{{ url_for('main.affirmation') }}">Create</a>
-            <a class="nav-link" href="{{ url_for('main.affirmationview') }}">View</a>
+            <a class="dropdown-item" href="{{ url_for('main.affirmation') }}">Create</a>
+            <a class="dropdown-item" href="{{ url_for('main.affirmationview') }}">View</a>
             </div>
           </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link" href="{{ url_for('main.journal') }}">Entry Search</a>
-          </li>
-          <li class="nav-item">
+           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <a class="nav-link" href="{{ url_for('main.contact') }}">Help Desk</a>
+          </div>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <a class="nav-link" href="{{ url_for('main.chat') }}">Chat</a>
-          </li>
+          </div>
             {% if current_user.is_authenticated %}
             <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown-user" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                Welcome {{ current_user.Username }}</a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown-user">
               <a class="dropdown-item" href="{{url_for('main.account') }}">Account</a>
+              <a class="dropdown-item" href="{{url_for('main.accountview') }}">View Account</a>
+              <a class="dropdown-item" href="{{url_for('main.update') }}">Update Account</a>
               <a class="dropdown-item" href="{{ url_for('main.logout') }}">Logout</a>
             </div>
               </li>
