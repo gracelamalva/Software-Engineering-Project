@@ -128,6 +128,7 @@ class Request(db.Model):
     id = db.Column(db.Integer, primary_key = True, autoincrement = True)
     origin = db.Column(db.Integer, db.ForeignKey('Users.id'))
     to = db.Column(db.Integer, db.ForeignKey('Users.id'))
+    fromName = db.Column (db.String)
     status = db.Column(db.String, default = "Sent") #options are sent, accepted, denied
     #response = db.Column(db.String, default = "none")
 

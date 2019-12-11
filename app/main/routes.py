@@ -6,12 +6,9 @@ from werkzeug.urls import url_parse
 from app.main import bp, models, mail
 from flask import Flask, redirect, render_template, request, Blueprint, url_for, jsonify, flash
 from app.main.models import *
-from .models import Users
-from .models import Journal
-from .models import JournalEntry
-from .models import AffirmationEntry
 from flask_sqlalchemy import SQLAlchemy
-# from app.api.request import *
+from sqlalchemy import and_, or_
+
 from app.api.request import analyze
 from flask_login import login_required, current_user, logout_user, login_user
 from .forms import RegisterForm, LoginForm, ChangePasswordForm, UpdateAccountInfo, createAEntry, HelpDeskForm
@@ -317,9 +314,7 @@ def patient():
         flash('you cannot become a patient again')
         render_template('accountview.html')
 
-    #user = Users.query.get(Username)
-    user = current_user
-
+    
     user.become_Patient()
     current_user.userstatus = "Patient"
     db.session.commit()
@@ -357,7 +352,13 @@ def findtherapist():
 
     therapists= Therapist.query.all()
     #therapists = Therapist.query.filter_by(numPatients< 10, request.to != therapist.id)
-    therapists = Therapist.query.join(Request, Therapist.id == Request.origin).filter(Therapist.numPatients < 10 , Request.to != current_user.id)
+    #therapists = Therapist.query.join(Request, Therapist.id == Request.origin).filter(Therapist.numPatients < 10 , Request.to != current_user.id)
+  #  therapists = Users.query \
+  #      .join(Therapist, Therapist.id == Users.id, isouter = True) \
+  #      .join(Request, Request.origin == Users.id, isouter = True) \
+  #      .add_columns(Users.id, Users.Username, Users.fullname) \
+  #      .filter(and_(Therapist.numPatients < 10, or_(Request.id == None, Request.origin != current_user.id))) \
+  #      .all()
 
     return render_template('findtherapist.html',  therapists = therapists)#, availables = availables)
 
@@ -371,8 +372,14 @@ def findpatient():
     if (requests):
         print(requests)
    
-        patients = Patient.query.join(Request, Patient.id == Request.origin).filter(Patient.hasTherapist == False, Request.to != current_user.id).all()
-        #print(availables, current_user.id)
+        #patients = Patient.query.join(Request, Patient.id == Request.origin).filter(Patient.hasTherapist == False, Request.to != current_user.id).all()
+        #print(availables, current_user.id) 
+    #    patients = Users.query \
+    #    .join(Patient, Patient.id == Users.id, isouter = True) \
+    #    .join(Request, Request.origin == Users.id, isouter = True) \
+    #    .add_columns(Users.id, Users.Username, Users.fullname, Patient.hasTherapist) \
+    #    .filter(and_(or_(Patient.hasTherapist == None, Patient.hasTherapist == False), or_(Request.id == None, Request.id != current_user.id))) \
+    #   .all()
 
         return render_template('findpatient.html', patients = patients, requests = requests)#, availables = availables)
     
@@ -407,25 +414,26 @@ def sendrequest(to):
 
     id = current_user.id
     user = current_user
+    requests = Request.query.filter_by(to = current_user.id)
 
     if current_user.userstatus == "Therapist":
         therapist = Therapist.query.get(id)
         patient = Patient.query.get(to)
-        request = Request(origin = therapist.id, to = patient.id)
+        request = Request(origin = therapist.id, to = patient.id, fromName = therapist.therapistName)
         db.session.add(request)
         db.session.commit()
 
     if current_user.userstatus == "Patient":
         patient = Patient.query.get(id)
         therapist = Therapist.query.get(to)
-        request = Request(origin = patient.id, to = therapist.id)
+        request = Request(origin = patient.id, to = therapist.id, fromName = patient.patientName)
         db.session.add(request)
         db.session.commit()
 
 
     flash('Your request has been sent')
 
-    return render_template('accountview.html')
+    return render_template('accountview.html', requests = requests)
 
 
 @bp.route('/accept/<int:id>/<int:origin>')
@@ -434,7 +442,7 @@ def accept(id,origin):
 
     request = Request.query.get(id)
     #origin = Request.query.get(origin)
-
+    requests = Request.query.filter_by(to = current_user.id)
     id = current_user.id
     user = current_user
 
@@ -450,9 +458,7 @@ def accept(id,origin):
         db.session.commit()
 
     if current_user.userstatus == "Patient":
-        #patient = Patient.query.get(current_user.id)
-        #therapist = Therapist.query.get()
-        #request.acceptRequest(therapist.id, patient.id)
+    
         request.status = "accepted"
         accepted_request = T_Patients(id = request.id, t_id = request.origin , p_id = current_user.id, response = "accepted")
         therapist = Therapist.query.get(request.origin)
@@ -466,7 +472,7 @@ def accept(id,origin):
     request.status = "accepted"
     flash('you have accepted the request')
 
-    return render_template('accountview.html')
+    return render_template('accountview.html', requests = requests)
 
 @bp.route('/decline/<int:id>/<int:origin>')
 @login_required
