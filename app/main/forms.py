@@ -7,7 +7,7 @@ from wtforms import (
 from wtforms.fields.html5 import TelField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, NumberRange
 from flask_login import current_user
-from .models import Users, AffirmationEntry
+from .models import Users, AffirmationEntry, MentalHealthGoal
 from . import db
 
 from dateutil.tz import tz, tzlocal, tzutc
@@ -79,4 +79,9 @@ class UpdateAccountInfo(FlaskForm):
 class createAEntry(FlaskForm):
     EntryTitle = StringField('Affirmation Entry Title', validators=[DataRequired()])
     EntryText = StringField('Affirmation Entry Text', validators=[DataRequired()])
+    submit = SubmitField('Create')
+
+class createMentalHealthGoal(FlaskForm):
+    GoalTitle = StringField('Mental Health Goal Title', validators =[DataRequired()])
+    GoalText = StringField('Mental Health Goal Text', validators = [DataRequired()])
     submit = SubmitField('Create')

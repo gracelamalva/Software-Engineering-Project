@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<header class="masthead" style="background-image: url('/static/img/entry-b.jpg')">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="site-heading">
+            <h1>Mental Health Goals</h1>
+            <span class="subheading">Create a Goal!</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+<h4>List Your Goals:</h4>
+   <!--  <p><a href="{{ url_for('main.goalview') }}">View Goals</a></p> -->
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            {{ form.GoalTitle.label }}
+            {% if form.GoalTitle.errors %}
+                {% for e in form.GoalTitle.errors %}
+                    <p class="help-block text-danger">{{ e }}</p>
+                {% endfor %}
+            {% endif %}
+            {{ form.GoalTitle(class_='form-control') }}
+        </div>
+        <div class="form-group">
+            {{ form.GoalText.label }}
+            {% if form.GoalText.errors %}
+                {% for e in form.GoalText.errors %}
+                    <p class="help-block text-danger">{{ e }}</p>
+                {% endfor %}
+            {% endif %}
+            {{ form.GoalText(class_='form-control') }}
+        </div>
+
+        <div class="form-group">
+            {{ form.submit(class_='btn btn-primary') }}
+        </div>
+        
+        <a type = "button" href="{{ url_for('main.goalview') }}">View All Goals</a></p>
+    </form>
+</div>
+{% endblock content %}

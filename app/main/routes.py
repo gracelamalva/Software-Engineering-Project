@@ -17,7 +17,7 @@ from app.main.config import Config
 from app.api.request import analyze
 
 from flask_login import login_required, current_user, logout_user, login_user
-from .forms import RegisterForm, LoginForm, ChangePasswordForm, UpdateAccountInfo, createAEntry
+from .forms import RegisterForm, LoginForm, ChangePasswordForm, UpdateAccountInfo, createAEntry, createMentalHealthGoal
 
 
 @bp.route('/', methods=['GET','POST'])
@@ -175,7 +175,7 @@ def add(JournalID):
         result = datetime.strptime(dt, ft)
 
         journal.add_entry(entrytitle, entrytext, result)
-       
+
         #entries = journal.entries
         #entry = JournalEntry(EntryTitle = entrytitle, EntryText = entrytext, Date_Time = datetime)
         #entry = journal.add_entry(entrytitle, entrytext, result)
@@ -201,7 +201,7 @@ def delete(EntryID):
 
 @bp.route('/analyze/<int:EntryID>', methods = ['GET', 'POST'])
 def analyze_entry(EntryID):
-   
+
     emotion = ""
     entry = JournalEntry.query.get(EntryID)
 
@@ -218,7 +218,7 @@ def analyze_entry(EntryID):
 
 @bp.route('/analyze', methods = ['GET', 'POST'])
 def analyze_text():
- 
+
     analyzed_text = ""
     text = request.form['entry']
 
@@ -271,7 +271,7 @@ def patient():
 def therapist():
 
     user = current_user
-    
+
     user.become_Therapist()
     current_user.userstatus = "Therapist"
     db.session.commit()
@@ -287,7 +287,7 @@ def account():
     #user = Users.query.filter(id)
     user = current_user
     flag = 0
- 
+
     return render_template('account.html', user = user)
 
 @bp.route('/findtherapist')
@@ -301,8 +301,8 @@ def findtherapist():
 @bp.route('/revertaccount')
 @login_required
 def revertaccount():
-    
-    
+
+
     id = current_user.id
     user = current_user
     if current_user.userstatus == "Patient":
@@ -311,11 +311,11 @@ def revertaccount():
     if current_user.userstatus == "Therapist":
         therapist = Therapist.query.get(id)
         db.session.delete(therapist)
-    
- 
+
+
     current_user.userstatus = "User"
     db.session.commit()
-    
+
     return render_template('revertaccount.html')
 
 @bp.route('/affirmation', methods = ['GET', 'POST'])
@@ -335,3 +335,37 @@ def affirmation():
 def affirmationview():
     affirmationEntries=AffirmationEntry.query.all()
     return render_template('affirmationview.html', entries=affirmationEntries)
+
+
+@bp.route('/mentalhealthgoal', methods = ['GET', 'POST'])
+@login_required
+def mentalhealthgoal():
+    form = createMentalHealthGoal()
+
+    if form.validate_on_submit():
+        m = models.MentalHealthGoal(GoalEntryTitle=form.GoalTitle.data, GoalEntryText=form.GoalText.data)
+        db.session.add(m)
+        db.session.commit()
+        flash('Mental Health Goal has been created', category = 'success')
+        return redirect(url_for('main.index'))
+    return render_template('mentalhealthgoal.html', MentalHealthGoal = MentalHealthGoal, form=form)
+
+@bp.route('/viewMentalHealthGoal')
+def goalview():
+    goalEntries=MentalHealthGoal.query.all()
+    return render_template('goalview.html', entries=goalEntries)
+
+bp.route('/completed/<int:GoalEntryID>', methods=['GET', 'POST', 'PUT'])
+def completed(GoalEntryID):
+    goalEntry = MentalHealthGoal.query.filter_by(GoalEntryID=GoalEntryID)
+    goalEntry.complete = True
+    db.session.commit()
+    return render_template('mentalhealthgoal.html', entries=goalEntries)
+
+bp.route('/deleteMentalHealthGoal')
+def deletegoal(GoalEntryID):
+    goalEntry = MentalHealthGoal.query.filter_by(GoalEntryID=GoalEntryID)
+    db.session.delete(entry)
+    db.session.commit()
+    goalEntries = MentalHealthGoal.query.all()
+    return render_template('mentalhealthgoal.html', entries = goalEntries)

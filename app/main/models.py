@@ -26,12 +26,12 @@ class Users(db.Model):
         new_journal = Journal(title = title, UserID = self.id)
         db.session.add(new_journal)
         db.session.commit()
-    
+
     def become_Patient(self):
         new_patient = Patient(id = self.id, patientName = self.fullname)
         db.session.add(new_patient)
         db.session.commit()
-    
+
     def become_Therapist(self):
         new_therapist = Therapist(id = self.id, therapistName = self.fullname)
         db.session.add(new_therapist)
@@ -130,4 +130,13 @@ class Patient(db.Model):
     patientName = db.Column(db.String, db.ForeignKey('Users.fullname'))
     T_ID = db.Column(db.Integer, db.ForeignKey ('Therapist.TherapistID'))
 
-    
+class MentalHealthGoal(db.Model):
+    __tablename__ = "MentalHealthGoal"
+    GoalEntryID = db.Column(db.Integer, primary_key=True,nullable=False, autoincrement=True)
+    GoalEntryTitle = db.Column(db.String)
+    GoalEntryText = db.Column(db.String)
+
+    def add_Goal(self, goalTitle, goalText):
+        new_MentalHealthGoal = MentalHealthGoal(GoalEntryTitle=goalTitle, GoalEntryText=goalText)
+        db.session.add(new_MentalHealthGoal)
+        db.session.commit()
