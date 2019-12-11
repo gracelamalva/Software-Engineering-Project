@@ -146,6 +146,17 @@ def reset():
 
     return render_template('user_reset.html', form=form)
 
+@bp.route('/deleteU/<int:id>', methods=['POST', 'DELETE'])
+@login_required
+def delete_user(id):
+    user = models.Users.query.get(id)
+    if request.method == 'POST':
+        db.session.delete(user)
+        db.session.commit()
+        flash('Your Account Has Been Deleted!', category='success')
+        return redirect(url_for('main.index'))
+    return render_template('accountview.html', id=id)
+
 @bp.route('/logout')
 @login_required
 def logout():
@@ -539,6 +550,18 @@ def affirmation():
 def affirmationview():
     affirmationEntries=AffirmationEntry.query.all()
     return render_template('affirmationview.html', entries=affirmationEntries)
+
+@bp.route('/deleteAffirmation/<int:AffirmationEntryID>', methods=['POST', 'GET', 'DELETE'])
+def deleteAffirmation(AffirmationEntryID):
+
+    entry = AffirmationEntry.query.filter_by(AffirmationEntryID = AffirmationEntryID).first()
+
+    db.session.delete(entry)
+    db.session.commit()
+    entries = AffirmationEntry.query.all()
+
+    return render_template('affirmationview.html', entries=entries)
+    entry = JournalEntry.query.get(EntryID)
 
 #chatbot files
 bot = ChatBot("Chatbot Therapist")
