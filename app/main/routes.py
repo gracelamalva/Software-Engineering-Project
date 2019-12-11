@@ -110,7 +110,7 @@ def accountview():
   
     if current_user.userstatus == "Therapist":
         me = Therapist.query.get(current_user.id)
-        requests = Request.query.filter_by(to = current_user.id)
+        requests = Request.query.filter_by(to = current_user.id, status = "Sent")
         mypatients = T_Patients.query.filter_by(t_id = current_user.id)
         patients = Patient.query.join(T_Patients, Patient.id == T_Patients.p_id).filter(T_Patients.t_id == current_user.id).all()
         mytherapist = T_Patients.query.filter_by(p_id = 0)
@@ -314,7 +314,7 @@ def patient():
         flash('you cannot become a patient again')
         render_template('accountview.html')
 
-    
+    user = current_user
     user.become_Patient()
     current_user.userstatus = "Patient"
     db.session.commit()
@@ -447,7 +447,7 @@ def accept(id,origin):
     user = current_user
 
     if current_user.userstatus == "Therapist":
-
+        request.status = "accepted"
         accepted_request = T_Patients(id = request.id, t_id = current_user.id , p_id = request.origin, response = "accepted")
         therapist = Therapist.query.get(current_user.id)
         therapist.numPatients += 1
